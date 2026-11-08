@@ -12,6 +12,7 @@ import com.diabdata.core.model.Treatment
 import com.diabdata.core.model.UserDetails
 import com.diabdata.core.model.UserPreferences
 import com.diabdata.core.model.Weight
+import com.diabdata.core.model.newEntryUuid
 import com.diabdata.core.model.nowMillisInLong
 import com.diabdata.core.utils.data.GsonFactory
 import com.diabdata.feature.appointments.data.AppointmentDao
@@ -323,11 +324,19 @@ class DataRepository(
      */
     suspend fun importWeights(weights: List<Weight>) = withContext(Dispatchers.IO) {
         weights.forEach { backupEntry ->
-            val localEntry = weightDao.getByUuid(backupEntry.entryUuid)
+            val backupUuid: String? = backupEntry.entryUuid   // Gson may leave it null for old backups
+            val hasUuid = !backupUuid.isNullOrBlank()
+
+            val localEntry = when {
+                hasUuid -> weightDao.getByUuid(backupEntry.entryUuid)
+                else -> weightDao.getByContent(backupEntry.createdAt, backupEntry.date, backupEntry.value)
+            }
+
+            val uuidForInsert = if (hasUuid) backupUuid else newEntryUuid()
 
             when {
-                localEntry == null -> insertWeight(backupEntry.copy(id = 0))
-                backupEntry.updatedAt > localEntry.updatedAt -> updateWeight(backupEntry.copy(id = localEntry.id))
+                localEntry == null -> insertWeight(backupEntry.copy(id = 0, entryUuid = uuidForInsert))
+                backupEntry.updatedAt > localEntry.updatedAt -> updateWeight(backupEntry.copy(id = localEntry.id, entryUuid = localEntry.entryUuid))
                 else -> Unit // local entry is same or newer: keep it
             }
         }

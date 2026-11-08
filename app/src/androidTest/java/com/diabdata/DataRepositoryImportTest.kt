@@ -10,11 +10,13 @@ import com.diabdata.core.model.MedicalDevice
 import com.diabdata.core.model.UserDetails
 import com.diabdata.core.model.UserPreferences
 import com.diabdata.core.model.Weight
+import com.diabdata.core.utils.data.GsonFactory
 import com.diabdata.shared.utils.dataTypes.MedicalDeviceInfoType
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -82,6 +84,21 @@ class DataRepositoryImportTest {
             updatedAt = updatedAt,
             entryUuid = entryUuid
         )
+    }
+
+    private fun legacyWeight(updatedAt: String = "2026-01-15", isArchived: Boolean = false): Weight {
+        val json = """
+            {
+                "id": 1,
+                "date": "2026-01-15",
+                "is_archived": $isArchived,
+                "value": 67.0,
+                "created_at": "2026-01-15",
+                "updated_at": "$updatedAt"
+            }
+        """.trimIndent()
+
+        return GsonFactory.create().fromJson(json, Weight::class.java)
     }
 
     @Before
@@ -215,5 +232,60 @@ class DataRepositoryImportTest {
         val allWeights = db.weightDao().getAllWeightsFlow().first()
 
         assertEquals(0, allWeights.size)
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun importingLegacyWeightWithoutUuidDoesNotCrash() = runBlocking {
+        val json = """
+            {
+                "id": 0,
+                "date": "2026-01-15",
+                "is_archived": false,
+                "value": 67.0,
+                "created_at": "2026-01-15",
+                "updated_at": "2026-01-15"
+            }
+        """.trimIndent()
+
+        val legacyWeight = GsonFactory.create().fromJson(json, Weight::class.java)
+
+        repository.importWeights(listOf(legacyWeight))
+
+        val allWeights = db.weightDao().getAllWeightsFlow().first()
+        val result = allWeights.single()
+
+        assertEquals(67f, result.value)
+        assertFalse(result.entryUuid.isBlank())
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun legacyBackupReimportedTwiceDoesNotDuplicate() = runBlocking {
+        val backup = listOf(legacyWeight())
+
+        repository.importWeights(backup)
+        repository.importWeights(backup)
+
+        val allWeights = db.weightDao().getAllWeightsFlow().first()
+
+        assertEquals(1, allWeights.size)
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun newerLegacyBackupUpdatesLocalEntryAndKeepsItsUuid() = runBlocking {
+        val backup = listOf(legacyWeight())
+
+        repository.importWeights(backup)
+
+        val uuid = db.weightDao().getAllWeightsFlow().first().single().entryUuid
+
+        repository.importWeights(listOf(legacyWeight(updatedAt = "2026-02-01", isArchived = true)))
+
+        val result = db.weightDao().getAllWeightsFlow().first().single()
+
+        assertEquals(true, result.isArchived)
+        assertEquals(uuid, result.entryUuid)
     }
 }

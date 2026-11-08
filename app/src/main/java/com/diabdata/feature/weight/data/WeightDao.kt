@@ -8,6 +8,7 @@ import com.diabdata.core.model.Weight
 import com.diabdata.feature.graphs.classes.PlotPoint
 import kotlinx.coroutines.flow.Flow
 import java.time.LocalDate
+import kotlin.time.Instant
 
 @Dao
 interface WeightDao {
@@ -22,6 +23,9 @@ interface WeightDao {
 
     @Query("SELECT * FROM weight_entries WHERE entryUuid = :uuid")
     suspend fun getByUuid(uuid: String): Weight?
+
+    @Query("SELECT * FROM weight_entries WHERE createdAt = :createdAt AND date = :date AND value = :value LIMIT 1")
+    suspend fun getByContent(createdAt: Instant, date: LocalDate, value: Float): Weight?
 
     @Query("SELECT * FROM weight_entries ORDER BY date DESC")
     fun getAllWeightsFlow(): Flow<List<Weight>>
