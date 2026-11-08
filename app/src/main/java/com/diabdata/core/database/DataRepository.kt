@@ -443,20 +443,30 @@ class DataRepository(
     /**
      * Import user details [UserDetails]
      *
+     * User details are stored as a single row (id 0): the imported details
+     * always replace the local ones, without comparing `updatedAt` (unlike [importWeights]).
+     * The id is forced to 0 because the app always reads the row with id 0,
+     * whatever id the backup contains.
+     *
      * @param userDetails User details to import
      */
     suspend fun importUserDetails(userDetails: UserDetails) = withContext(Dispatchers.IO) {
-        updateUserDetails(userDetails.copy())
+        updateUserDetails(userDetails.copy(id = 0))
     }
 
     /**
      * Import user preferences [UserPreferences]
      *
+     * User preferences are stored as a single row (id 0): the imported preferences
+     * always replace the local ones, without comparing `updatedAt` (unlike [importWeights]).
+     * The id is forced to 0 because backups made with v4.9.76 may contain id 1,
+     * a row the app would never read (see #121).
+     *
      * @param userPreferences User preferences to import
      */
     suspend fun importUserPreferences(userPreferences: UserPreferences) =
         withContext(Dispatchers.IO) {
-            insertOrUpdate(userPreferences.copy())
+            insertOrUpdate(userPreferences.copy(id = 0))
         }
 
     /**

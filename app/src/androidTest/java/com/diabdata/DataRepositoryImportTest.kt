@@ -144,6 +144,25 @@ class DataRepositoryImportTest {
         assertEquals(2, allDevices.size)
     }
 
+    @Test
+    @Throws(Exception::class)
+    fun importedPreferencesWithLegacyIdAreReadable() = runBlocking {
+        repository.importUserPreferences(UserPreferences(id = 1, frequency = "monthly"))
+
+        val prefs = repository.getUserPreferences().first()
+
+        assertEquals("monthly", prefs?.frequency)
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun importedUserDetailsWithLegacyIdAreReadable() = runBlocking {
+        repository.importUserDetails(UserDetails(id = 1, firstName = "ImportTest"))
+
+        val details = repository.getUserDetails().first()
+
+        assertEquals("ImportTest", details?.firstName)
+    }
 
     @Test
     @Throws(Exception::class)
