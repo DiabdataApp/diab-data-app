@@ -18,6 +18,9 @@ interface MedicalDeviceDao {
     @Update
     suspend fun update(device: MedicalDevice)
 
+    @Query("SELECT * FROM medical_devices WHERE entryUuid = :uuid")
+    suspend fun getByUuid(uuid: String): MedicalDevice?
+
     @Query("DELETE FROM medical_devices WHERE id = :id")
     suspend fun deleteById(id: Int)
 

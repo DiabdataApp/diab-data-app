@@ -6,11 +6,11 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.diabdata.core.database.DataRepository
 import com.diabdata.core.database.DiabDataDatabase
+import com.diabdata.core.model.MedicalDevice
+import com.diabdata.core.model.UserDetails
+import com.diabdata.core.model.UserPreferences
 import com.diabdata.core.model.Weight
-import com.diabdata.core.model.newEntryUuid
-import com.diabdata.core.model.nowMillis
-import com.diabdata.core.model.toLocalDate
-import com.diabdata.feature.weight.data.WeightDao
+import com.diabdata.shared.utils.dataTypes.MedicalDeviceInfoType
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.After
@@ -49,6 +49,41 @@ class DataRepositoryImportTest {
         )
     }
 
+    private fun device(
+        entryUuid: String,
+        id: Int = 0,
+        date: LocalDate = LocalDate.of(2026, 1, 15),
+        lifeSpan: Int = 3,
+        deviceType: MedicalDeviceInfoType = MedicalDeviceInfoType.WIRELESS_PATCH,
+        name: String = "Omnipod 1",
+        isFaulty: Boolean = false,
+        isReported: Boolean = false,
+        isArchived: Boolean = false,
+        isLifeSpanOver: Boolean = false,
+        createdAt: Instant = older,
+        updatedAt: Instant = older,
+    ): MedicalDevice {
+        return MedicalDevice(
+            id = id,
+            date = date,
+            lifeSpanEndDate = date.plusDays(lifeSpan.toLong()),
+            name = name,
+            batchNumber = "12345678",
+            serialNumber = "12345678",
+            referenceNumber = "12345678",
+            manufacturer = "Insulet",
+            deviceType = deviceType,
+            createdAt = createdAt,
+            isArchived = isArchived,
+            lifeSpan = lifeSpan,
+            isFaulty = isFaulty,
+            isReported = isReported,
+            isLifeSpanOver = isLifeSpanOver,
+            updatedAt = updatedAt,
+            entryUuid = entryUuid
+        )
+    }
+
     @Before
     fun createDb() {
         val context = ApplicationProvider.getApplicationContext<Context>()
@@ -79,19 +114,36 @@ class DataRepositoryImportTest {
 
     @Test
     @Throws(Exception::class)
-    fun reimportingSameBackupTwiceDoesNotDuplicate() = runBlocking {
-        val backup = listOf(
+    fun reimportingSameWeightsBackupTwiceDoesNotDuplicate() = runBlocking {
+        val weightsBackup = listOf(
             weight(entryUuid = "weight-1", id = 1),
             weight(entryUuid = "weight-2", id = 2, value = 76f),
         )
 
-        repository.importWeights(backup)
-        repository.importWeights(backup)
+        repository.importWeights(weightsBackup)
+        repository.importWeights(weightsBackup)
 
         val allWeights = db.weightDao().getAllWeightsFlow().first()
 
         assertEquals(2, allWeights.size)
     }
+
+    @Test
+    @Throws(Exception::class)
+    fun reimportingSameDevicesBackupTwiceDoesNotDuplicate() = runBlocking {
+        val devicesBackup = listOf(
+            device(entryUuid = "device-1", id = 1),
+            device(entryUuid = "device-2", id = 2, name = "Omnipod 2"),
+        )
+
+        repository.importMedicalDevices(devicesBackup)
+        repository.importMedicalDevices(devicesBackup)
+
+        val allDevices = db.medicalDevicesDao().getAllMedicalDevices().first()
+
+        assertEquals(2, allDevices.size)
+    }
+
 
     @Test
     @Throws(Exception::class)

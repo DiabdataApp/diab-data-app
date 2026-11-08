@@ -422,12 +422,22 @@ class DataRepository(
 
     /**
      * Import medical devices from a list of [MedicalDevice]
+     * Compares uuid and updatedAt to insert new entry if none exist or
+     * the most recent one in cases of conflicts
      *
      * @param medicalDevices List of medical devices to import
      */
     suspend fun importMedicalDevices(medicalDevices: List<MedicalDevice>) =
         withContext(Dispatchers.IO) {
-            medicalDevices.forEach { insertDevice(it.copy()) }
+            medicalDevices.forEach { backupEntry ->
+                val localEntry = medicalDevicesDao.getByUuid(backupEntry.entryUuid)
+
+                when {
+                    localEntry == null -> insertDevice(backupEntry.copy(id = 0))
+                    backupEntry.updatedAt > localEntry.updatedAt -> updateDevice(backupEntry.copy(id = localEntry.id))
+                    else -> Unit // local entry is same or newer: keep it
+                }
+            }
         }
 
     /**
