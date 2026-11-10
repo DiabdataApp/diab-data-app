@@ -6,6 +6,7 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.diabdata.core.database.DataRepository
 import com.diabdata.core.database.DiabDataDatabase
+import com.diabdata.core.model.Hba1c
 import com.diabdata.core.model.MedicalDevice
 import com.diabdata.core.model.UserDetails
 import com.diabdata.core.model.UserPreferences
@@ -28,6 +29,8 @@ import kotlin.time.Instant
 class DataRepositoryImportTest {
     private lateinit var db: DiabDataDatabase
     private lateinit var repository: DataRepository
+
+    private val gson = GsonFactory.create()
 
     private val older = Instant.fromEpochMilliseconds(1_000)
     private val newer = Instant.fromEpochMilliseconds(2_000)
@@ -98,7 +101,22 @@ class DataRepositoryImportTest {
             }
         """.trimIndent()
 
-        return GsonFactory.create().fromJson(json, Weight::class.java)
+        return gson.fromJson(json, Weight::class.java)
+    }
+
+    private fun legacyHba1c(updatedAt: String = "2026-01-15", isArchived: Boolean = false): Hba1c {
+        val json = """
+            {
+                "id": 1,
+                "date": "2026-01-15",
+                "is_archived": $isArchived,
+                "value": 6.0,
+                "created_at": "2026-01-15",
+                "updated_at": "$updatedAt"
+            }
+        """.trimIndent()
+
+        return gson.fromJson(json, Hba1c::class.java)
     }
 
     @Before
@@ -270,6 +288,19 @@ class DataRepositoryImportTest {
         val allWeights = db.weightDao().getAllWeightsFlow().first()
 
         assertEquals(1, allWeights.size)
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun legacyHba1cBackupReimportedTwiceDoesNotDuplicate() = runBlocking {
+        val backup = listOf(legacyHba1c())
+
+        repository.importHba1c(backup)
+        repository.importHba1c(backup)
+
+        val allHba1c = db.hba1cDao().getAllHBA1CFlow().first()
+
+        assertEquals(1, allHba1c.size)
     }
 
     @Test

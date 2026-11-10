@@ -351,11 +351,19 @@ class DataRepository(
      */
     suspend fun importHba1c(hba1c: List<Hba1c>) = withContext(Dispatchers.IO) {
         hba1c.forEach { backupEntry ->
-            val localEntry = hba1cDao.getByUuid(backupEntry.entryUuid)
+            val backupUuid: String? = backupEntry.entryUuid   // Gson may leave it null for old backups
+            val hasUuid = !backupUuid.isNullOrBlank()
+
+            val localEntry = when {
+                hasUuid -> hba1cDao.getByUuid(backupEntry.entryUuid)
+                else -> hba1cDao.getByContent(backupEntry.createdAt, backupEntry.date, backupEntry.value)
+            }
+
+            val uuidForInsert = if (hasUuid) backupUuid else newEntryUuid()
 
             when {
-                localEntry == null -> insertHba1c(backupEntry.copy(id = 0))
-                backupEntry.updatedAt > localEntry.updatedAt -> updateHBA1C(backupEntry.copy(id = localEntry.id))
+                localEntry == null -> insertHba1c(backupEntry.copy(id = 0, entryUuid = uuidForInsert))
+                backupEntry.updatedAt > localEntry.updatedAt -> updateHBA1C(backupEntry.copy(id = localEntry.id, entryUuid = localEntry.entryUuid))
                 else -> Unit // local entry is same or newer: keep it
             }
         }
