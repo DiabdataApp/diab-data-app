@@ -422,16 +422,19 @@ class DataRepository(
     suspend fun importImportantDates(importantDates: List<ImportantDate>) =
         withContext(Dispatchers.IO) {
             importantDates.forEach { backupEntry ->
-                val localEntry = importantDateDao.getByUuid(backupEntry.entryUuid)
+                val backupUuid: String? = backupEntry.entryUuid   // Gson may leave it null for old backups
+                val hasUuid = !backupUuid.isNullOrBlank()
+
+                val localEntry = when {
+                    hasUuid -> importantDateDao.getByUuid(backupEntry.entryUuid)
+                    else -> importantDateDao.getByContent(backupEntry.createdAt, backupEntry.date, backupEntry.importantDate)
+                }
+
+                val uuidForInsert = if (hasUuid) backupUuid else newEntryUuid()
 
                 when {
-                    localEntry == null -> insertImportantDate(backupEntry.copy(id = 0))
-                    backupEntry.updatedAt > localEntry.updatedAt -> updateImportantDate(
-                        backupEntry.copy(
-                            id = localEntry.id
-                        )
-                    )
-
+                    localEntry == null -> insertImportantDate(backupEntry.copy(id = 0, entryUuid = uuidForInsert))
+                    backupEntry.updatedAt > localEntry.updatedAt -> updateImportantDate(backupEntry.copy(id = localEntry.id, entryUuid = localEntry.entryUuid))
                     else -> Unit // local entry is same or newer: keep it
                 }
             }
