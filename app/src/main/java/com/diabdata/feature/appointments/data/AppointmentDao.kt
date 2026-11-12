@@ -5,8 +5,10 @@ import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
 import com.diabdata.core.model.Appointment
+import com.diabdata.shared.utils.dataTypes.AppointmentType
 import kotlinx.coroutines.flow.Flow
 import java.time.LocalDateTime
+import kotlin.time.Instant
 
 @Dao
 interface AppointmentDao {
@@ -18,6 +20,9 @@ interface AppointmentDao {
 
     @Query("SELECT * FROM appointments WHERE entryUuid = :uuid")
     suspend fun getByUuid(uuid: String): Appointment?
+
+    @Query("SELECT * FROM appointments WHERE createdAt = :createdAt AND date = :date AND type = :type LIMIT 1")
+    suspend fun getByContent(createdAt: Instant, date: LocalDateTime, type: AppointmentType): Appointment?
 
     @Update
     suspend fun update(appointment: Appointment)

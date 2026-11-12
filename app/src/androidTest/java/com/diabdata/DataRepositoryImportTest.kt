@@ -6,6 +6,7 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.diabdata.core.database.DataRepository
 import com.diabdata.core.database.DiabDataDatabase
+import com.diabdata.core.model.Appointment
 import com.diabdata.core.model.Hba1c
 import com.diabdata.core.model.ImportantDate
 import com.diabdata.core.model.MedicalDevice
@@ -133,6 +134,23 @@ class DataRepositoryImportTest {
         """.trimIndent()
 
         return gson.fromJson(json, ImportantDate::class.java)
+    }
+
+    private fun legacyAppointment(updatedAt: String = "2026-01-15", isArchived: Boolean = false): Appointment {
+        val json = """
+            {
+                "id": 1,
+                "date": "2026-01-15T10:30:00",
+                "doctor": "Pr. John Doe",
+                "notes": "",
+                "type": "appointment",
+                "is_archived": $isArchived,
+                "created_at": "2026-01-15",
+                "updated_at": "$updatedAt"
+            }
+        """.trimIndent()
+
+        return gson.fromJson(json, Appointment::class.java)
     }
 
     @Before
@@ -347,5 +365,18 @@ class DataRepositoryImportTest {
         val allImportantDates = db.importantDateDao().getAllImportantDates().first()
 
         assertEquals(1, allImportantDates.size)
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun legacyAppointmentBackupReimportedTwiceDoesNotDuplicate() = runBlocking {
+        val backup = listOf(legacyAppointment())
+
+        repository.importAppointments(backup)
+        repository.importAppointments(backup)
+
+        val allApppointments = db.appointmentDao().getAllAppointmentsFlow().first()
+
+        assertEquals(1, allApppointments.size)
     }
 }
