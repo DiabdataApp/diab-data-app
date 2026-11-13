@@ -13,7 +13,7 @@ import com.diabdata.core.model.MedicalDevice
 import com.diabdata.core.model.Treatment
 import com.diabdata.core.model.UserDetails
 import com.diabdata.core.model.Weight
-import com.diabdata.core.workManager.WorkManagerModule
+import com.diabdata.core.model.nowMillis
 import com.diabdata.feature.graphs.classes.PlotPoint
 import com.diabdata.shared.R
 import com.diabdata.shared.utils.dataTypes.AddableType
@@ -32,6 +32,8 @@ import kotlinx.coroutines.withContext
 import java.time.LocalDate
 import java.time.LocalDateTime
 import javax.inject.Inject
+import kotlin.time.Clock
+import kotlin.time.Instant
 
 @HiltViewModel
 class DataViewModel @Inject constructor(
@@ -172,7 +174,7 @@ class DataViewModel @Inject constructor(
                 AddableType.WEIGHT -> repository.updateWeight(
                     (entry.toEntity() as Weight).copy(
                         isArchived = archived,
-                        updatedAt = LocalDate.now()
+                        updatedAt = nowMillis()
                     )
 
                 )
@@ -180,7 +182,7 @@ class DataViewModel @Inject constructor(
                 AddableType.HBA1C -> repository.updateHBA1C(
                     (entry.toEntity() as Hba1c).copy(
                         isArchived = archived,
-                        updatedAt = LocalDate.now()
+                        updatedAt = nowMillis()
                     )
 
                 )
@@ -188,7 +190,7 @@ class DataViewModel @Inject constructor(
                 AddableType.APPOINTMENT -> repository.updateAppointment(
                     (entry.toEntity() as Appointment).copy(
                         isArchived = archived,
-                        updatedAt = LocalDate.now()
+                        updatedAt = nowMillis()
                     )
 
                 )
@@ -196,7 +198,7 @@ class DataViewModel @Inject constructor(
                 AddableType.TREATMENT -> repository.updateTreatment(
                     (entry.toEntity() as Treatment).copy(
                         isArchived = archived,
-                        updatedAt = LocalDate.now()
+                        updatedAt = nowMillis()
                     )
 
                 )
@@ -204,7 +206,7 @@ class DataViewModel @Inject constructor(
                 AddableType.IMPORTANT_DATE -> repository.updateImportantDate(
                     (entry.toEntity() as ImportantDate).copy(
                         isArchived = archived,
-                        updatedAt = LocalDate.now()
+                        updatedAt = nowMillis()
                     )
 
                 )
@@ -212,7 +214,7 @@ class DataViewModel @Inject constructor(
                 AddableType.DEVICE -> repository.updateDevice(
                     (entry.toEntity() as MedicalDevice).copy(
                         isArchived = archived,
-                        updatedAt = LocalDate.now()
+                        updatedAt = nowMillis()
                     )
                 )
             }
@@ -267,9 +269,10 @@ class DataViewModel @Inject constructor(
 
         abstract val icon: Int
         abstract val isArchived: Boolean
-        abstract val createdAt: LocalDate
+        abstract val createdAt: Instant
 
-        abstract val updatedAt: LocalDate
+        abstract val updatedAt: Instant
+        abstract val entryUuid: String
 
         data class AppointmentEntry(
             override val id: Int,
@@ -280,8 +283,9 @@ class DataViewModel @Inject constructor(
             val notes: String?,
             override val icon: Int,
             override val isArchived: Boolean,
-            override val createdAt: LocalDate,
-            override val updatedAt: LocalDate
+            override val createdAt: Instant,
+            override val updatedAt: Instant,
+            override val entryUuid: String
         ) : MixedDbEntry()
 
         data class ImportantDateEntry(
@@ -291,8 +295,9 @@ class DataViewModel @Inject constructor(
             val importantDate: String,
             override val icon: Int,
             override val isArchived: Boolean,
-            override val createdAt: LocalDate,
-            override val updatedAt: LocalDate
+            override val createdAt: Instant,
+            override val updatedAt: Instant,
+            override val entryUuid: String
         ) : MixedDbEntry()
 
         data class Hba1cEntry(
@@ -302,8 +307,9 @@ class DataViewModel @Inject constructor(
             val value: Float,
             override val icon: Int,
             override val isArchived: Boolean,
-            override val createdAt: LocalDate,
-            override val updatedAt: LocalDate
+            override val createdAt: Instant,
+            override val updatedAt: Instant,
+            override val entryUuid: String
         ) : MixedDbEntry()
 
         data class TreatmentEntry(
@@ -314,8 +320,9 @@ class DataViewModel @Inject constructor(
             val treatmentType: TreatmentType,
             override val icon: Int,
             override val isArchived: Boolean,
-            override val createdAt: LocalDate,
-            override val updatedAt: LocalDate
+            override val createdAt: Instant,
+            override val updatedAt: Instant,
+            override val entryUuid: String
         ) : MixedDbEntry()
 
         data class WeightEntry(
@@ -325,8 +332,9 @@ class DataViewModel @Inject constructor(
             val value: Float,
             override val icon: Int,
             override val isArchived: Boolean,
-            override val createdAt: LocalDate,
-            override val updatedAt: LocalDate
+            override val createdAt: Instant,
+            override val updatedAt: Instant,
+            override val entryUuid: String
         ) : MixedDbEntry()
 
         data class DeviceEntry(
@@ -346,8 +354,9 @@ class DataViewModel @Inject constructor(
             val isLifeSpanOver: Boolean,
             override val icon: Int,
             override val isArchived: Boolean,
-            override val createdAt: LocalDate,
-            override val updatedAt: LocalDate
+            override val createdAt: Instant,
+            override val updatedAt: Instant,
+            override val entryUuid: String
         ) : MixedDbEntry()
     }
 
@@ -414,7 +423,8 @@ class DataViewModel @Inject constructor(
                         ),
                         isArchived = it.isArchived,
                         createdAt = it.createdAt,
-                        updatedAt = it.updatedAt
+                        updatedAt = it.updatedAt,
+                        entryUuid = it.entryUuid
                     )
                 )
             }
@@ -428,7 +438,8 @@ class DataViewModel @Inject constructor(
                         icon = getIconForMixedEntry(AddableType.IMPORTANT_DATE),
                         isArchived = it.isArchived,
                         createdAt = it.createdAt,
-                        updatedAt = it.updatedAt
+                        updatedAt = it.updatedAt,
+                        entryUuid = it.entryUuid
                     )
                 )
             }
@@ -442,7 +453,8 @@ class DataViewModel @Inject constructor(
                         icon = getIconForMixedEntry(AddableType.HBA1C),
                         isArchived = it.isArchived,
                         createdAt = it.createdAt,
-                        updatedAt = it.updatedAt
+                        updatedAt = it.updatedAt,
+                        entryUuid = it.entryUuid
                     )
                 )
             }
@@ -457,7 +469,8 @@ class DataViewModel @Inject constructor(
                         icon = getIconForMixedEntry(AddableType.TREATMENT, treatmentType = it.type),
                         isArchived = it.isArchived,
                         createdAt = it.createdAt,
-                        updatedAt = it.updatedAt
+                        updatedAt = it.updatedAt,
+                        entryUuid = it.entryUuid
                     )
                 )
             }
@@ -471,7 +484,8 @@ class DataViewModel @Inject constructor(
                         icon = getIconForMixedEntry(AddableType.WEIGHT),
                         isArchived = it.isArchived,
                         createdAt = it.createdAt,
-                        updatedAt = it.updatedAt
+                        updatedAt = it.updatedAt,
+                        entryUuid = it.entryUuid
                     )
                 )
             }
@@ -497,6 +511,7 @@ class DataViewModel @Inject constructor(
                         isArchived = it.isArchived,
                         createdAt = it.createdAt,
                         updatedAt = it.updatedAt,
+                        entryUuid = it.entryUuid
                     )
                 )
             }

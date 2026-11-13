@@ -1,5 +1,6 @@
 package com.diabdata.core.model
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.diabdata.shared.utils.dataTypes.BloodType
@@ -8,6 +9,7 @@ import com.diabdata.shared.utils.dataTypes.Gender
 import com.diabdata.shared.utils.dataTypes.GlucoseUnit
 import com.google.gson.annotations.SerializedName
 import java.time.LocalDate
+import kotlin.time.Instant
 
 @Entity(tableName = "user_details")
 data class UserDetails(
@@ -67,4 +69,8 @@ data class UserDetails(
     val emergencyContactName: String? = null,
     @SerializedName("emergency_contact_phone", alternate = ["emergencyContactPhone"])
     val emergencyContactPhone: String? = null,
+
+    @SerializedName("updated_at")
+    @ColumnInfo(defaultValue = "0")
+    val updatedAt: Instant = UNKNOWN_TIME_DEFAULT,
 )

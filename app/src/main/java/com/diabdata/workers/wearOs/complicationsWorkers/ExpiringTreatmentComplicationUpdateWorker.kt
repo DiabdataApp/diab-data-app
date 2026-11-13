@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
+import com.diabdata.core.model.toLocalDate
 import com.diabdata.feature.treatments.data.TreatmentDao
 import com.diabdata.shared.utils.dateUtils.getNumberOfDaysUntil
 import com.google.android.gms.wearable.PutDataMapRequest
@@ -38,7 +39,7 @@ class ExpiringTreatmentComplicationUpdateWorker @AssistedInject constructor(
             val dataMapRequest = PutDataMapRequest.create("/complications/treatment_expiry")
 
             if (nextTreatment != null) {
-                val elapsed = nextTreatment.createdAt.getNumberOfDaysUntil()
+                val elapsed = nextTreatment.createdAt.toLocalDate().getNumberOfDaysUntil()
                 val numberOfDays = nextTreatment.expirationDate.getNumberOfDaysUntil()
                 val nextTreatmentIcon = nextTreatment.type.toString()
 

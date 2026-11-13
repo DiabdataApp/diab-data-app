@@ -38,7 +38,7 @@ import com.diabdata.feature.weight.data.WeightDao
         UserDetails::class,
         UserPreferences::class
     ],
-    version = 24,
+    version = 25,
     exportSchema = true
 )
 

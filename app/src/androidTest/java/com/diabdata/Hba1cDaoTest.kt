@@ -6,6 +6,7 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.diabdata.core.database.DiabDataDatabase
 import com.diabdata.core.model.Hba1c
+import com.diabdata.core.model.nowMillis
 import com.diabdata.feature.hba1c.data.HBA1CDao
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
@@ -26,6 +27,7 @@ class Hba1cDaoTest {
     private lateinit var db: DiabDataDatabase
 
     val today: LocalDate = LocalDate.now()
+    val now = nowMillis()
 
     @Before
     fun createDb() {
@@ -48,10 +50,11 @@ class Hba1cDaoTest {
     fun insertAndGetHba1c() = runBlocking {
         val hba1c: Hba1c = Hba1c(
             date = today,
-            createdAt = today,
+            createdAt = now,
             isArchived = false,
             value = 7.0f,
-            updatedAt = today
+            updatedAt = now,
+            entryUuid = "hba1c-1"
         )
 
         hba1cDao.insert(hba1c)
@@ -68,10 +71,11 @@ class Hba1cDaoTest {
         val hba1c: Hba1c = Hba1c(
             id=1,
             date = today,
-            createdAt = today,
+            createdAt = now,
             isArchived = false,
             value = 7.0f,
-            updatedAt = today
+            updatedAt = now,
+            entryUuid = "hba1c-2"
         )
 
         hba1cDao.insert(hba1c)
@@ -90,10 +94,11 @@ class Hba1cDaoTest {
         val hba1c: Hba1c = Hba1c(
             id = 1,
             date = today,
-            createdAt = today,
+            createdAt = now,
             isArchived = false,
             value = 7.0f,
-            updatedAt = today
+            updatedAt = now,
+            entryUuid = "hba1c-3"
         )
 
         hba1cDao.insert(hba1c)
@@ -114,24 +119,27 @@ class Hba1cDaoTest {
         val hba1cs: List<Hba1c> = listOf(
             Hba1c(
                 date = third,
-                createdAt = today,
+                createdAt = now,
                 isArchived = false,
                 value = 6.8f,
-                updatedAt = today
+                updatedAt = now,
+                entryUuid = "hba1c-4"
             ),
             Hba1c(
                 date = first,
-                createdAt = today,
+                createdAt = now,
                 isArchived = false,
                 value = 7.1f,
-                updatedAt = today
+                updatedAt = now,
+                entryUuid = "hba1c-5"
             ),
             Hba1c(
                 date = second,
-                createdAt = today,
+                createdAt = now,
                 isArchived = false,
                 value = 6.7f,
-                updatedAt = today
+                updatedAt = now,
+                entryUuid = "hba1c-6"
             )
         )
 
@@ -149,10 +157,11 @@ class Hba1cDaoTest {
         val hba1c: Hba1c = Hba1c(
             id = 1,
             date = today,
-            createdAt = today,
+            createdAt = now,
             isArchived = false,
             value = 7.0f,
-            updatedAt = today
+            updatedAt = now,
+            entryUuid = "hba1c-7"
         )
 
         hba1cDao.insert(hba1c)
@@ -162,14 +171,14 @@ class Hba1cDaoTest {
         assertEquals(1, allHba1c.size)
         assertEquals(false, allHba1c[0].isArchived)
 
-        hba1cDao.setArchived(hba1c.id, true)
+        hba1cDao.update(hba1c.copy(isArchived = true))
 
         allHba1c = hba1cDao.getAllHBA1CFlow().first()
 
         assertEquals(1, allHba1c.size)
         assertEquals(true, allHba1c[0].isArchived)
 
-        hba1cDao.setArchived(hba1c.id, false)
+        hba1cDao.update(hba1c.copy(isArchived = false))
 
         allHba1c = hba1cDao.getAllHBA1CFlow().first()
 
@@ -191,31 +200,35 @@ class Hba1cDaoTest {
         val hba1cs: List<Hba1c> = listOf(
             Hba1c(
                 date = third,
-                createdAt = today,
+                createdAt = now,
                 isArchived = false,
                 value = 7.3f,
-                updatedAt = today
+                updatedAt = now,
+                entryUuid = "hba1c-8"
             ),
             Hba1c(
                 date = first,
-                createdAt = today,
+                createdAt = now,
                 isArchived = false,
                 value = 7.0f,
-                updatedAt = today
+                updatedAt = now,
+                entryUuid = "hba1c-9"
             ),
             Hba1c(
                 date = second,
-                createdAt = today,
+                createdAt = now,
                 isArchived = false,
                 value = 6.8f,
-                updatedAt = today
+                updatedAt = now,
+                entryUuid = "hba1c-10"
             ),
             Hba1c(
                 date = fourth,
-                createdAt = today,
+                createdAt = now,
                 isArchived = true,
                 value = 7.4f,
-                updatedAt = today
+                updatedAt = now,
+                entryUuid = "hba1c-11"
             )
         )
 
@@ -240,31 +253,35 @@ class Hba1cDaoTest {
         val hba1cs: List<Hba1c> = listOf(
             Hba1c(
                 date = third,
-                createdAt = today,
+                createdAt = now,
                 isArchived = false,
                 value = 7.3f,
-                updatedAt = today
+                updatedAt = now,
+                entryUuid = "hba1c-12"
             ),
             Hba1c(
                 date = first,
-                createdAt = today,
+                createdAt = now,
                 isArchived = false,
                 value = 7.0f,
-                updatedAt = today
+                updatedAt = now,
+                entryUuid = "hba1c-13"
             ),
             Hba1c(
                 date = second,
-                createdAt = today,
+                createdAt = now,
                 isArchived = false,
                 value = 6.8f,
-                updatedAt = today
+                updatedAt = now,
+                entryUuid = "hba1c-14"
             ),
             Hba1c(
                 date = fourth,
-                createdAt = today,
+                createdAt = now,
                 isArchived = true,
                 value = 7.4f,
-                updatedAt = today
+                updatedAt = now,
+                entryUuid = "hba1c-15"
             )
         )
 

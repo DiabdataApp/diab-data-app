@@ -32,6 +32,8 @@ import javax.inject.Inject
 import kotlin.coroutines.cancellation.CancellationException
 import kotlin.time.Clock
 
+private const val PROFILE_PHOTO_ENTRY = "profile_photo.jpg"
+
 /**
  * Handles reading and writing backup archives for the app's user data.
  *
@@ -46,9 +48,10 @@ class BackupArchiveManager @Inject constructor(
     private val repository: DataRepository,
     private val application: Application,
     private val backupEncryptionKeyManager: BackupEncryptionKeyManager,
-    private val backupScheduleCoordinator: BackupScheduleCoordinator
+    private val backupScheduleCoordinator: BackupScheduleCoordinator,
 ) {
     private val backupManagerTag = "BackupArchiveManager"
+
     private val gson = GsonFactory.create(prettyPrint = true)
 
     /** Serializes [list] to a JSON array string. */
@@ -226,7 +229,7 @@ class BackupArchiveManager @Inject constructor(
                 val photoToEncrypt: Triple<String, ByteArray, Boolean>? = userDetails?.profilePhotoPath?.let { path ->
                     val photoFile = File(path)
                     if (photoFile.exists()) {
-                        Triple("profile_photo.jpg", photoFile.readBytes(), isEncrypted)
+                        Triple(PROFILE_PHOTO_ENTRY, photoFile.readBytes(), isEncrypted)
                     } else {
                         null
                     }
@@ -357,9 +360,10 @@ class BackupArchiveManager @Inject constructor(
             }
 
             val jsonContent = entries["data.json"]!!.toString(Charsets.UTF_8)
-            val photoBytes: ByteArray? = entries["profile_photo.jpg"]
+            val photoBytes: ByteArray? = entries[PROFILE_PHOTO_ENTRY]
 
             repository.importDataFromJsonString(jsonContent)
+
             photoBytes?.let { repository.saveProfilePhotoBytes(it, application.filesDir) }
 
             Result.success(Unit)
@@ -385,7 +389,7 @@ class BackupArchiveManager @Inject constructor(
         "medical_devices.json" to { bytes -> repository.importMedicalDevices(gson.fromJsonList(bytes.toString(Charsets.UTF_8))) },
         "user_preferences.json" to { bytes -> repository.importUserPreferences(gson.fromJson(bytes.toString(Charsets.UTF_8), UserPreferences::class.java)) },
         "user_profile.json" to { bytes -> repository.importUserDetails(gson.fromJson(bytes.toString(Charsets.UTF_8), UserDetails::class.java)) },
-        "profile_photo.jpg" to { bytes -> repository.saveProfilePhotoBytes(bytes, application.filesDir) }
+        PROFILE_PHOTO_ENTRY to { bytes -> repository.saveProfilePhotoBytes(bytes, application.filesDir) }
     )
 
     /**
@@ -410,14 +414,22 @@ class BackupArchiveManager @Inject constructor(
                 }
             }
 
-            importHandlers.forEach { (fileName, handler) ->
-                entries[fileName]?.let { handler(it) }
+            repository.inTransaction {
+                importHandlers.forEach { (fileName, handler) ->
+                    if (fileName != PROFILE_PHOTO_ENTRY) {
+                        entries[fileName]?.let { handler(it) }
+                    }
+                }
             }
+
+            entries[PROFILE_PHOTO_ENTRY]?.let { importHandlers[PROFILE_PHOTO_ENTRY]?.invoke(it) }
 
             val importedPrefs = repository.getUserPreferences().first()
 
             importedPrefs?.let {
-                val scheduleResult = backupScheduleCoordinator.applyBackupSchedule(it.automaticBackupEnabled, BackupFrequency.fromKey(it.frequency), it.backupPath)
+                val scheduleResult = backupScheduleCoordinator.applyBackupSchedule(
+                    it.automaticBackupEnabled, BackupFrequency.fromKey(it.frequency), it.backupPath
+                )
                 scheduleResult.onSuccess { didSchedule ->
                     if (it.automaticBackupEnabled && !didSchedule) {
                         repository.setAutoBackupEnabled(false)
@@ -428,7 +440,8 @@ class BackupArchiveManager @Inject constructor(
             Result.success(Unit)
         } catch (e: ZipException) {
             if (e.type == ZipException.Type.WRONG_PASSWORD) return Result.failure(
-                BackupImportException.WrongPassword())
+                BackupImportException.WrongPassword()
+            )
             Result.failure(e)
         } catch (e: Exception) {
             Log.e(backupManagerTag, "zipImport Exception: ${e.message}", e)

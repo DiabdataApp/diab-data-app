@@ -5,10 +5,13 @@
     <!-- SETTINGS -->
     <!-- ============================================= -->
     <!-- Section headings -->
+    <string name="settings_about_app_label">About</string>
     <string name="settings_application_information_section_title">Application</string>
     <string name="settings_notifications_section_title">Reminder notifications</string>
     <string name="settings_changelogs_chip_label" translatable="false">Changelog</string>
     <string name="settings_website_chip_label">Website</string>
+    <string name="settings_licenses_chip_label">Licenses</string>
+    <string name="settings_licenses_dialog_title">Open-source licenses</string>
 
     <!-- ============================================= -->
     <!-- SETTINGS > DATA -->

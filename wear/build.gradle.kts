@@ -30,7 +30,7 @@ android {
         applicationId = "com.diabdata"
         minSdk = 26
         targetSdk = 36
-        versionCode = System.getenv("VERSION_CODE")?.toIntOrNull() ?: 4
+        versionCode = 15
         versionName = "1.7"
 
     }

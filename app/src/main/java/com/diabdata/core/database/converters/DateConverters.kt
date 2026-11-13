@@ -4,6 +4,7 @@ import androidx.room.TypeConverter
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import kotlin.time.Instant
 
 class DateConverters {
 
@@ -32,5 +33,18 @@ class DateConverters {
     fun toLocalDateTime(dateTimeString: String?): LocalDateTime? {
         return if (dateTimeString.isNullOrBlank()) LocalDateTime.now()
         else LocalDateTime.parse(dateTimeString, dateTimeFormatter)
+    }
+
+    // Instant
+    @TypeConverter
+    fun fromInstant(dateInstant: Instant?): Long? {
+        return dateInstant?.toEpochMilliseconds()
+    }
+
+    @TypeConverter
+    fun toInstant(longInstant: Long?): Instant? {
+        return longInstant?.let {
+            Instant.fromEpochMilliseconds(it)
+        }
     }
 }

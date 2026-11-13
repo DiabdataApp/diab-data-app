@@ -26,6 +26,8 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.diabdata.core.database.DataViewModel
 import com.diabdata.core.model.MedicalDevice
 import com.diabdata.core.model.MedicalDeviceInfoEntity
+import com.diabdata.core.model.newEntryUuid
+import com.diabdata.core.model.nowMillis
 import com.diabdata.feature.devices.ui.components.AddDeviceFab
 import com.diabdata.feature.devices.ui.components.CurrentConsumableDevicesList
 import com.diabdata.feature.devices.ui.components.CurrentNonConsumableDevicesList
@@ -131,6 +133,7 @@ fun generateMedicalDeviceEntry(
     scanResult: ScanResult.Device, medicalDeviceInfo: MedicalDeviceInfoEntity
 ): MedicalDevice {
     val today = LocalDate.now()
+    val now = nowMillis()
 
     val deviceEntry = MedicalDevice(
         date = today,
@@ -140,14 +143,15 @@ fun generateMedicalDeviceEntry(
         serialNumber = scanResult.data.serialNumber,
         manufacturer = medicalDeviceInfo.manufacturer,
         deviceType = medicalDeviceInfo.deviceType,
-        createdAt = today,
+        createdAt = now,
         isArchived = false,
         lifeSpan = medicalDeviceInfo.daysLifespan,
         isFaulty = false,
         isReported = false,
         isLifeSpanOver = false,
-        updatedAt = today,
+        updatedAt = now,
         referenceNumber = scanResult.data.referenceNumber,
+        entryUuid = newEntryUuid()
     )
 
     return deviceEntry

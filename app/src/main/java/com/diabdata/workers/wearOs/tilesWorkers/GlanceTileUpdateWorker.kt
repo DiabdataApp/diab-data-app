@@ -6,6 +6,7 @@ import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.diabdata.core.database.DiabDataDatabase
+import com.diabdata.core.model.toLocalDate
 import com.diabdata.shared.utils.dateUtils.getNumberOfDaysUntil
 import com.google.android.gms.wearable.PutDataMapRequest
 import com.google.android.gms.wearable.Wearable
@@ -89,7 +90,7 @@ class GlanceTileUpdateWorker @AssistedInject constructor(
             TreatmentInfo(
                 type = it.type.toString(),
                 daysUntilExpiry = it.expirationDate.getNumberOfDaysUntil(),
-                daysSinceCreation = it.createdAt.getNumberOfDaysUntil()
+                daysSinceCreation = it.createdAt.toLocalDate().getNumberOfDaysUntil()
             )
         }
     }

@@ -17,7 +17,8 @@ fun DataViewModel.MixedDbEntry.toEntity(): Any = when (this) {
         createdAt = createdAt,
         isArchived = isArchived,
         notes = notes,
-        updatedAt = updatedAt
+        updatedAt = updatedAt,
+        entryUuid = entryUuid
     )
 
     is DataViewModel.MixedDbEntry.ImportantDateEntry -> ImportantDate(
@@ -26,7 +27,8 @@ fun DataViewModel.MixedDbEntry.toEntity(): Any = when (this) {
         createdAt = createdAt,
         isArchived = isArchived,
         importantDate = importantDate,
-        updatedAt = updatedAt
+        updatedAt = updatedAt,
+        entryUuid = entryUuid
     )
 
     is DataViewModel.MixedDbEntry.Hba1cEntry -> Hba1c(
@@ -35,7 +37,8 @@ fun DataViewModel.MixedDbEntry.toEntity(): Any = when (this) {
         createdAt = createdAt,
         isArchived = isArchived,
         value = value,
-        updatedAt = updatedAt
+        updatedAt = updatedAt,
+        entryUuid = entryUuid
     )
 
     is DataViewModel.MixedDbEntry.TreatmentEntry -> Treatment(
@@ -45,7 +48,8 @@ fun DataViewModel.MixedDbEntry.toEntity(): Any = when (this) {
         createdAt = createdAt,
         isArchived = isArchived,
         type = treatmentType,
-        updatedAt = updatedAt
+        updatedAt = updatedAt,
+        entryUuid = entryUuid
     )
 
     is DataViewModel.MixedDbEntry.WeightEntry -> Weight(
@@ -54,7 +58,8 @@ fun DataViewModel.MixedDbEntry.toEntity(): Any = when (this) {
         createdAt = createdAt,
         isArchived = isArchived,
         value = value,
-        updatedAt = updatedAt
+        updatedAt = updatedAt,
+        entryUuid = entryUuid
     )
 
     is DataViewModel.MixedDbEntry.DeviceEntry -> MedicalDevice(
@@ -73,6 +78,7 @@ fun DataViewModel.MixedDbEntry.toEntity(): Any = when (this) {
         lifeSpan = lifeSpan,
         isFaulty = isFaulty,
         isReported = isReported,
-        isLifeSpanOver = isLifeSpanOver
+        isLifeSpanOver = isLifeSpanOver,
+        entryUuid = entryUuid
     )
 }

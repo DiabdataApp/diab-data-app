@@ -11,13 +11,19 @@ import androidx.test.platform.app.InstrumentationRegistry
 import com.diabdata.core.database.DiabDataDatabase
 import com.diabdata.core.database.migrations.ALL_MIGRATIONS
 import com.diabdata.core.database.migrations.MIGRATION_20_21
+import com.diabdata.core.database.migrations.MIGRATION_21_22
 import com.diabdata.core.database.migrations.MIGRATION_22_23
 import com.diabdata.core.database.migrations.MIGRATION_23_24
+import com.diabdata.core.database.migrations.MIGRATION_24_25
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotEquals
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.io.IOException
+import java.time.LocalDate
+import java.time.ZoneId
+import java.util.UUID
 
 @RunWith(AndroidJUnit4::class)
 class MigrationTest {
@@ -41,6 +47,9 @@ class MigrationTest {
                 is Int -> cv.put(k, v)
                 is String -> cv.put(k, v)
                 is Long -> cv.put(k, v)
+                is Float -> cv.put(k, v)
+                is Double -> cv.put(k, v)
+                else -> error($$"MIGRATION TEST ERROR - UNSUPPORTED TYPE: ${v::class}")
             }
         }
         insert(
@@ -86,6 +95,28 @@ class MigrationTest {
 
                     assertEquals(1, updatedAppointment.count)
                     assertEquals("2026-01-15T00:00", updatedAppointment.getString(0))
+                }
+            }
+    }
+
+    @Test
+    @Throws(IOException::class)
+    fun migrate21TO22Test() {
+        helper.createDatabase(diabDataTestDb, 21).use { }
+
+        helper.runMigrationsAndValidate(diabDataTestDb, 22, true, MIGRATION_21_22)
+            .use { updatedDb ->
+                updatedDb.query(
+                    """
+                        SELECT id, automaticBackupEnabled, frequency FROM user_preferences
+                    """.trimIndent()
+                ).use { cursor ->
+                    assertEquals(1, cursor.count)
+
+                    cursor.moveToFirst()
+                    assertEquals(0, cursor.getInt(0)) // ID == 0
+                    assertEquals(0, cursor.getInt(1)) // automaticBackupEnabled == false
+                    assertEquals("weekly", cursor.getString(2)) // frequency == weekly
                 }
             }
     }
@@ -155,6 +186,194 @@ class MigrationTest {
                     cursor.moveToFirst()
                     assertEquals(0, cursor.getInt(0))  // id corrigé à 0
                     assertEquals(0, cursor.getInt(1))  // valeur par défaut
+                }
+            }
+    }
+
+    @Test
+    @Throws(IOException::class)
+    fun migrate24To25Test() {
+        helper.createDatabase(diabDataTestDb, 24).use { db ->
+            db.insertRow(
+                "user_preferences",
+                "id" to 0,
+                "automaticBackupEnabled" to 0,
+                "frequency" to "WEEKLY",
+                "lastBackupDate" to null,
+                "backupPath" to null,
+                "expirationReminder" to 0,
+                "appointmentReminder" to 0,
+                "backupEncryptionEnabled" to 0
+            )
+
+            db.insertRow(
+                "user_details",
+                "id" to 0,
+                "firstName" to "John",
+                "lastName" to "Doe",
+                "profilePhotoPath" to null,
+                "birthdate" to null,
+                "gender" to null,
+                "bloodType" to null,
+                "diabetesType" to null,
+                "diagnosisDate" to null,
+                "endocrinologist" to null,
+                "generalPractitioner" to null,
+                "ophthalmologist" to null,
+                "cardiologist" to null,
+                "nephrologist" to null,
+                "insulinPumpModel" to null,
+                "cgmModel" to null,
+                "insulinType" to null,
+                "basalInsulinType" to null,
+                "targetGlucoseMin" to null,
+                "targetGlucoseMax" to null,
+                "glucoseUnit" to null,
+                "emergencyContactName" to null,
+                "emergencyContactPhone" to null
+            )
+
+            db.insertRow(
+                "weight_entries",
+                "id" to 1,
+                "date" to "2023-01-01",
+                "createdAt" to "2026-01-15",
+                "isArchived" to 0,
+                "value" to 70.0,
+                "updatedAt" to "2026-01-15"
+            )
+
+            db.insertRow(
+                "weight_entries",
+                "id" to 2,
+                "date" to "2023-08-09",
+                "createdAt" to "",
+                "isArchived" to 0,
+                "value" to 72.0,
+                "updatedAt" to ""
+            )
+
+            db.insertRow(
+                "appointments",
+                "id" to 1,
+                "date" to "2023-01-01",
+                "doctor" to "Dr. Dre",
+                "type" to "APPOINTMENT",
+                "createdAt" to "2026-01-15",
+                "isArchived" to 0,
+                "notes" to null,
+                "updatedAt" to "2026-01-15"
+            )
+
+            db.insertRow(
+                "hba1c_entries",
+                "id" to 1,
+                "date" to "2023-01-01",
+                "createdAt" to "2026-01-15",
+                "isArchived" to 0,
+                "value" to 7.0,
+                "updatedAt" to "2026-01-15"
+            )
+
+            db.insertRow(
+                "treatments",
+                "id" to 1,
+                "expirationDate" to "2023-01-01",
+                "name" to "Insulin",
+                "createdAt" to "2026-01-15",
+                "isArchived" to 0,
+                "type" to "FAST_ACTING_INSULIN_VIAL",
+                "updatedAt" to "2026-01-15"
+            )
+
+            db.insertRow(
+                "important_date_entries",
+                "id" to 1,
+                "date" to "2023-01-01",
+                "createdAt" to "2026-01-15",
+                "isArchived" to 0,
+                "importantDate" to "2026-01-15",
+                "updatedAt" to "2026-01-15"
+            )
+
+            db.insertRow(
+                "medical_devices",
+                "id" to 1,
+                "date" to "2023-01-01",
+                "lifeSpanEndDate" to "2026-01-15",
+                "name" to "Insulin Pump",
+                "batchNumber" to "123456",
+                "serialNumber" to null,
+                "referenceNumber" to null,
+                "manufacturer" to null,
+                "deviceType" to "INSULIN_PUMP",
+                "createdAt" to "2026-01-15",
+                "isArchived" to 0,
+                "lifeSpan" to 365,
+                "isFaulty" to 0,
+                "isReported" to 0,
+                "isLifeSpanOver" to 0,
+                "updatedAt" to "2026-01-15"
+            )
+        }
+
+        val expectedCreatedAtMillis = LocalDate.of(2026, 1, 15).atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
+
+        val weightsUuids = mutableListOf<String>()
+
+        helper.runMigrationsAndValidate(diabDataTestDb, 25, true, MIGRATION_24_25)
+            .use { updatedDb ->
+                updatedDb.query(
+                    """
+                    SELECT * FROM weight_entries ORDER BY id
+                    """.trimIndent()
+                ).use { cursor ->
+                    assertEquals(2, cursor.count)
+                    cursor.moveToFirst()
+                    assertEquals(expectedCreatedAtMillis, cursor.getLong(cursor.getColumnIndexOrThrow("createdAt")))
+                    weightsUuids.add(cursor.getString(cursor.getColumnIndexOrThrow("entryUuid")))
+                    cursor.moveToNext()
+                    assertEquals(0L, cursor.getLong(cursor.getColumnIndexOrThrow("createdAt")))
+                    weightsUuids.add(cursor.getString(cursor.getColumnIndexOrThrow("entryUuid")))
+                }
+
+                assertEquals(36, weightsUuids[0].length)
+                assertEquals(36, weightsUuids[1].length)
+
+                val uuid1 = UUID.fromString(weightsUuids[0])
+                val uuid2 = UUID.fromString(weightsUuids[1])
+
+                assertEquals(7, uuid1.version())
+                assertEquals(7, uuid2.version())
+
+                assertNotEquals(uuid1, uuid2)
+
+                updatedDb.query(
+                    """
+                    SELECT * FROM appointments
+                    """.trimIndent()
+                ).use { cursor ->
+                    assertEquals(1, cursor.count)
+                }
+
+                updatedDb.query(
+                    """
+                    SELECT * FROM user_preferences
+                    """.trimIndent()
+                ).use { cursor ->
+                    assertEquals(1, cursor.count)
+                    cursor.moveToFirst()
+                    assertEquals(0L, cursor.getLong(cursor.getColumnIndexOrThrow("updatedAt")))
+                }
+
+                updatedDb.query(
+                    """
+                    SELECT * FROM user_details
+                    """.trimIndent()
+                ).use { cursor ->
+                    assertEquals(1, cursor.count)
+                    cursor.moveToFirst()
+                    assertEquals(0L, cursor.getLong(cursor.getColumnIndexOrThrow("updatedAt")))
                 }
             }
     }

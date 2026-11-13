@@ -40,6 +40,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.diabdata.core.model.UserDetails
+import com.diabdata.core.model.nowMillis
 import com.diabdata.core.ui.components.actionInput.EnumDropdown
 import com.diabdata.core.ui.components.date_components.DateSelector
 import com.diabdata.feature.userProfile.UserProfileViewModel
@@ -132,7 +133,8 @@ fun UserDetailsView(
         targetGlucoseMax = targetGlucoseMax.toFloatOrNull(),
         glucoseUnit = glucoseUnit,
         emergencyContactName = emergencyContactName.ifBlank { null },
-        emergencyContactPhone = emergencyContactPhone.ifBlank { null }
+        emergencyContactPhone = emergencyContactPhone.ifBlank { null },
+        updatedAt = nowMillis()
     )
 
     Scaffold(
@@ -145,7 +147,11 @@ fun UserDetailsView(
                     }
                 },
                 actions = {
-                    TextButton(onClick = { onSave(buildUpdatedUserDetails()) }) {
+                    TextButton(onClick = { onSave(
+                        buildUpdatedUserDetails().copy(
+                            updatedAt = nowMillis()
+                        )
+                    ) }) {
                         Text(stringResource(shared.string.common_save))
                     }
                 }

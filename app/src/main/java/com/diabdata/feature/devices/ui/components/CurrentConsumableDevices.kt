@@ -51,6 +51,7 @@ import com.diabdata.shared.utils.dateUtils.shortenedFormatLocalDate
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
+import kotlin.time.Instant
 import com.diabdata.shared.R as shared
 
 @Composable
@@ -90,7 +91,7 @@ fun CurrentConsumableDevicesList() {
                 coroutineScope.launch {
                     devicesViewModel.updateDevice(
                         device.copy(
-                            isFaulty = !device.isLifeSpanOver
+                            isLifeSpanOver = !device.isLifeSpanOver
                         )
                     )
                 }
@@ -355,13 +356,14 @@ fun ConsumableDevicesListPreview() {
             referenceNumber = "UTIUFYEGI",
             manufacturer = "Dexcom",
             deviceType = MedicalDeviceInfoType.CONTINUOUS_GLUCOSE_MONITORING_SYSTEM_TRANSMITTER,
-            createdAt = today.minusDays(75),
+            createdAt = Instant.parse(today.minusDays(75).toString()),
             isArchived = false,
             lifeSpan = 90,
             isFaulty = false,
             isReported = false,
             isLifeSpanOver = false,
-            updatedAt = LocalDate.of(2025, 9, 1)
+            updatedAt = Instant.parse(LocalDate.of(2025, 9, 1).toString()),
+            entryUuid = "preview-1"
         ),
         MedicalDevice(
             id = 2,
@@ -373,13 +375,14 @@ fun ConsumableDevicesListPreview() {
             referenceNumber = "1R5TFG",
             manufacturer = "Insulet",
             deviceType = MedicalDeviceInfoType.WIRELESS_PATCH,
-            createdAt = today.minusDays(27),
+            createdAt = Instant.parse(today.minusDays(27).toString()),
             isArchived = false,
             lifeSpan = 3,
             isFaulty = false,
             isReported = false,
             isLifeSpanOver = false,
-            updatedAt = LocalDate.of(2025, 9, 1)
+            updatedAt = Instant.parse(LocalDate.of(2025, 9, 1).toString()),
+            entryUuid = "preview-2"
         ),
         MedicalDevice(
             id = 2,
@@ -391,13 +394,14 @@ fun ConsumableDevicesListPreview() {
             referenceNumber = "1R5TFG",
             manufacturer = "Insulet",
             deviceType = MedicalDeviceInfoType.WIRELESS_PATCH,
-            createdAt = today.minusDays(2),
+            createdAt = Instant.parse(today.minusDays(2).toString()),
             isArchived = false,
             lifeSpan = 3,
             isFaulty = true,
             isReported = false,
             isLifeSpanOver = false,
-            updatedAt = LocalDate.of(2025, 9, 1)
+            updatedAt = Instant.parse(LocalDate.of(2025, 9, 1).toString()),
+            entryUuid = "preview-3"
         )
     )
 

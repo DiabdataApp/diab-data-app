@@ -7,6 +7,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.ksp)
     alias(libs.plugins.hilt.android)
+    alias(libs.plugins.aboutLibraries)
 }
 
 val localProperties = Properties()
@@ -35,8 +36,8 @@ android {
         testApplicationId = "com.diabdata.test"
         minSdk = 26
         targetSdk = 36
-        versionCode = System.getenv("VERSION_CODE")?.toIntOrNull() ?: getLocalVersionCode()
-        versionName = "4.9.79"
+        versionCode = 15
+        versionName = "4.9.8"
         buildConfigField("String", "RELAY_SERVER_URL","\"${localProperties.getProperty("RELAY_SERVER_URL", "")}\"")
         buildConfigField("String", "MEDICATION_GTIN_FILE_VERSION", "\"1.2.0\"")
         buildConfigField("String", "MEDICAL_DEVICES_GTIN_FILE_VERSION", "\"1.0.4\"")
@@ -91,7 +92,9 @@ android {
             excludes += setOf(
                 "META-INF/INDEX.LIST",
                 "META-INF/MANIFEST.MF",
-                "META-INF/io.netty.versions.properties"
+                "META-INF/io.netty.versions.properties",
+                "META-INF/license/**",
+                "META-INF/native-image/**"
             )
         }
     }
@@ -99,22 +102,14 @@ android {
     buildToolsVersion = "36.0.0"
 }
 
-fun getLocalVersionCode(): Int {
-    val versionFile = file("version.properties")
-    if (!versionFile.exists()) {
-        versionFile.writeText("1")
-    }
-    val current = versionFile.readText().trim().replace(
-        regex = Regex("=$"),
-        replacement = ""
-    ).toInt()
-    val newCode = current + 1
-    versionFile.writeText(newCode.toString())
-    return newCode
-}
-
 ksp {
     arg("room.schemaLocation", "$projectDir/schemas")
+}
+
+aboutLibraries {
+    collect {
+        configPath = file("config")
+    }
 }
 
 tasks.withType<KotlinCompile>().configureEach {
@@ -253,6 +248,10 @@ dependencies {
 
     // Ktor + GSON
     implementation(libs.ktor.serialization.gson)
+
+    // Licenses
+    implementation(libs.aboutlibraries.core)
+    implementation(libs.aboutlibraries.compose.m3)
 
     // Shared
     implementation(project(":shared"))

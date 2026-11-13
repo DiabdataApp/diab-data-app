@@ -6,6 +6,7 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.diabdata.core.database.DiabDataDatabase
 import com.diabdata.core.model.MedicalDevice
+import com.diabdata.core.model.nowMillis
 import com.diabdata.feature.devices.data.MedicalDeviceDao
 import com.diabdata.shared.utils.dataTypes.MedicalDeviceInfoType
 import kotlinx.coroutines.flow.first
@@ -17,6 +18,9 @@ import org.junit.runner.RunWith
 import java.io.IOException
 import java.time.LocalDate
 import org.junit.Assert.assertEquals
+import java.time.ZoneId
+import kotlin.time.Instant
+import kotlin.time.toKotlinInstant
 
 /**
  * Tests for [MedicalDeviceDao] found at [com.diabdata.feature.devices.data.MedicalDeviceDao]
@@ -27,6 +31,7 @@ class MedicalDevicesDaoTest {
     private lateinit var medicalDeviceDao: MedicalDeviceDao
 
     val today: LocalDate = LocalDate.now()
+    val now = nowMillis()
 
     val consumableDevice = MedicalDevice(
         id = 1,
@@ -38,13 +43,14 @@ class MedicalDevicesDaoTest {
         referenceNumber = null,
         manufacturer = "Insulet",
         deviceType = MedicalDeviceInfoType.WIRELESS_PATCH,
-        createdAt = today,
+        createdAt = now,
         isArchived = false,
         lifeSpan = 3,
         isFaulty = false,
         isReported = false,
         isLifeSpanOver = false,
-        updatedAt = today
+        updatedAt = now,
+        entryUuid = "device-1"
     )
 
     val consumableDeviceFaulty = consumableDevice.copy(
@@ -52,14 +58,16 @@ class MedicalDevicesDaoTest {
         name = "Dexcom G6",
         deviceType = MedicalDeviceInfoType.CONTINUOUS_GLUCOSE_MONITORING_SYSTEM_SENSOR,
         batchNumber = "B-002",
-        isFaulty = true
+        isFaulty = true,
+        entryUuid = "device-2"
     )
 
     val consumableDeviceFaultyReported = consumableDeviceFaulty.copy(
         id = 3,
         name = "Faulty dexcom",
         batchNumber = "B-002",
-        isReported = true
+        isReported = true,
+        entryUuid = "device-3"
     )
 
     val consumableDeviceExpired = consumableDevice.copy(
@@ -68,7 +76,8 @@ class MedicalDevicesDaoTest {
         deviceType = MedicalDeviceInfoType.WIRELESS_PATCH,
         batchNumber = "B-003",
         lifeSpanEndDate = today.minusDays(3),
-        isLifeSpanOver = true
+        isLifeSpanOver = true,
+        entryUuid = "device-4"
     )
 
     val nonConsumableDevice = MedicalDevice(
@@ -81,13 +90,14 @@ class MedicalDevicesDaoTest {
         referenceNumber = "R-001",
         manufacturer = "Insulet",
         deviceType = MedicalDeviceInfoType.WIRELESS_PATCH_REMOTE,
-        createdAt = today.minusYears(2),
+        createdAt = today.minusYears(2).atStartOfDay(ZoneId.systemDefault()).toInstant().toKotlinInstant(),
         isArchived = false,
         lifeSpan = 0,
         isFaulty = false,
         isReported = false,
         isLifeSpanOver = false,
-        updatedAt = today
+        updatedAt = now,
+        entryUuid = "device-5"
     )
 
     val nonConsumableDevice2 = nonConsumableDevice.copy(
@@ -99,7 +109,8 @@ class MedicalDevicesDaoTest {
         batchNumber = "B-005",
         serialNumber = "S-002",
         referenceNumber = "R-002",
-        deviceType = MedicalDeviceInfoType.WIRED_PUMP
+        deviceType = MedicalDeviceInfoType.WIRED_PUMP,
+        entryUuid = "device-6"
     )
 
     val allDevices = listOf(

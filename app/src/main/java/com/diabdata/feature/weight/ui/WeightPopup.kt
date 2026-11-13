@@ -18,6 +18,8 @@ import androidx.compose.ui.text.input.KeyboardType
 import com.diabdata.core.database.DataViewModel
 import com.diabdata.core.database.converters.toEntity
 import com.diabdata.core.model.Weight
+import com.diabdata.core.model.newEntryUuid
+import com.diabdata.core.model.nowMillis
 import com.diabdata.shared.utils.dataTypes.AddableType
 import com.diabdata.core.ui.components.addDataPopup.BasePopupLayout
 import com.diabdata.core.ui.components.date_components.DateSelector
@@ -55,6 +57,7 @@ fun WeightPopup(
         onDismiss = onDismiss,
         onConfirm = {
             weightText.replace(',', '.').toFloatOrNull()?.let { value ->
+                val now = nowMillis()
                 val entry = DataViewModel.MixedDbEntry.WeightEntry(
                     id = toUpdate?.id ?: 0,
                     date = selectedDate.atStartOfDay(),
@@ -62,8 +65,9 @@ fun WeightPopup(
                     value = value,
                     icon = AddableType.WEIGHT.iconRes,
                     isArchived = toUpdate?.isArchived ?: false,
-                    createdAt = toUpdate?.createdAt ?: today,
-                    updatedAt = today
+                    createdAt = toUpdate?.createdAt ?: now,
+                    updatedAt = now,
+                    entryUuid = toUpdate?.entryUuid ?: newEntryUuid()
                 )
                 if (toUpdate == null) {
                     dataViewModel.addWeight(entry.toEntity() as Weight)

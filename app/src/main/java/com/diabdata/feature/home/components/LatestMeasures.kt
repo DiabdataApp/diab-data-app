@@ -14,6 +14,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalLocale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -23,14 +24,14 @@ import com.diabdata.R
 import com.diabdata.core.database.DataViewModel
 import com.diabdata.core.model.Hba1c
 import com.diabdata.core.model.Weight
-import com.diabdata.shared.utils.dataTypes.AddableType
-import com.diabdata.shared.utils.dateUtils.formatLocalDate
-import com.diabdata.core.utils.ui.ColoredIconCircleProps
 import com.diabdata.core.ui.components.cardsList.CardItem
 import com.diabdata.core.ui.components.cardsList.CardsList
+import com.diabdata.core.utils.ui.ColoredIconCircleProps
 import com.diabdata.core.utils.ui.SvgIcon
+import com.diabdata.shared.utils.dataTypes.AddableType
+import com.diabdata.shared.utils.dateUtils.formatLocalDate
 import java.time.LocalDate
-import java.util.Locale
+import kotlin.time.Instant
 import com.diabdata.shared.R as shared
 
 data class MeasureCardData(
@@ -57,7 +58,7 @@ fun LatestMeasuresContent(
             add(
                 MeasureCardData(
                     textColor = primaryColor,
-                    titleText = String.format(Locale.getDefault(), "%.2f kg", latest.value),
+                    titleText = String.format(LocalLocale.current.platformLocale, "%.2f kg", latest.value),
                     dateText = stringResource(
                         shared.string.weight_on_date_text,
                         formatLocalDate(latest.date)
@@ -79,7 +80,7 @@ fun LatestMeasuresContent(
                         latest.value >= 8.6 -> MaterialTheme.colorScheme.error
                         else -> primaryColor
                     },
-                    titleText = String.format(Locale.getDefault(), "%.1f%%", latest.value),
+                    titleText = String.format(LocalLocale.current.platformLocale, "%.1f%%", latest.value),
                     dateText = stringResource(
                         shared.string.hba1c_on_date_text,
                         formatLocalDate(latest.date)
@@ -153,17 +154,19 @@ fun PreviewLatestMeasures() {
             date = LocalDate.now().minusDays(3),
             value = 88.4f,
             id = 1,
-            createdAt = LocalDate.of(2015, 3, 1),
+            createdAt = Instant.parse(LocalDate.of(2015, 3, 1).toString()),
             isArchived = false,
-            updatedAt = LocalDate.of(2015, 4, 2),
+            updatedAt = Instant.parse(LocalDate.of(2015, 4, 2).toString()),
+            entryUuid = "preview-1"
         ),
         Weight(
             date = LocalDate.now().minusDays(10),
             value = 83.7f,
             id = 2,
-            createdAt = LocalDate.of(2015, 3, 1),
+            createdAt = Instant.parse(LocalDate.of(2015, 3, 1).toString()),
             isArchived = false,
-            updatedAt = LocalDate.of(2015, 4, 2),
+            updatedAt = Instant.parse(LocalDate.of(2015, 4, 2).toString()),
+            entryUuid = "preview-2"
         )
     )
     val sampleHba1c = listOf(
@@ -171,17 +174,19 @@ fun PreviewLatestMeasures() {
             date = LocalDate.now().minusMonths(2),
             value = 6.8f,
             id = 3,
-            createdAt = LocalDate.of(2015, 3, 1),
+            createdAt = Instant.parse(LocalDate.of(2015, 3, 1).toString()),
             isArchived = false,
-            updatedAt = LocalDate.of(2015, 4, 2),
+            updatedAt = Instant.parse(LocalDate.of(2015, 4, 2).toString()),
+            entryUuid = "preview-3"
         ),
         Hba1c(
             date = LocalDate.now().minusMonths(6),
             value = 7.2f,
             id = 4,
-            createdAt = LocalDate.of(2015, 3, 1),
+            createdAt = Instant.parse(LocalDate.of(2015, 3, 1).toString()),
             isArchived = false,
-            updatedAt = LocalDate.of(2015, 4, 2),
+            updatedAt = Instant.parse(LocalDate.of(2015, 4, 2).toString()),
+            entryUuid = "preview-4"
         )
     )
     MaterialTheme {

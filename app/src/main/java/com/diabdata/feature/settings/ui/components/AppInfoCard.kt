@@ -44,7 +44,12 @@ import com.diabdata.feature.settings.sections.dataSettings.ui.components.locale
 import com.diabdata.shared.R as shared
 
 @Composable
-fun AppInfoCard(isBeta: Boolean, versionName: String, showChangeLogDialog: () -> Unit) {
+fun AppInfoCard(
+    isBeta: Boolean,
+    versionName: String,
+    showChangeLogDialog: () -> Unit,
+    showLicensesDialog: () -> Unit
+) {
     Card(
         colors = CardDefaults.cardColors(
             MaterialTheme.colorScheme.surface
@@ -212,6 +217,35 @@ fun AppInfoCard(isBeta: Boolean, versionName: String, showChangeLogDialog: () ->
             )
 
             AssistChip(
+                onClick = { showLicensesDialog() },
+                label = {
+                    Text(
+                        stringResource(shared.string.settings_licenses_chip_label),
+                        fontFamily = GoogleSansFlexFontFamily,
+                        fontWeight = FontWeight(600),
+                    )
+                },
+                leadingIcon = {
+                    SvgIcon(
+                        resId = shared.drawable.information_icon_vector,
+                        modifier = Modifier
+                            .size(18.dp)
+                            .border(
+                                0.dp,
+                                Color.Transparent,
+                                shape = RoundedCornerShape(50)
+                            ),
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                },
+                shape = RoundedCornerShape(50),
+                colors = AssistChipDefaults.assistChipColors(
+                    containerColor = MaterialTheme.colorScheme.surfaceContainer,
+                    labelColor = MaterialTheme.colorScheme.onSurface
+                ),
+            )
+
+            AssistChip(
                 onClick = {
                     uriHandler.openUri("https://app.diabdata.fr/")
                 },
@@ -264,7 +298,8 @@ fun AppInfoCardInteractivePreview() {
                 AppInfoCard(
                     isBeta = betaMode,
                     versionName = BuildConfig.VERSION_NAME,
-                    showChangeLogDialog = {}
+                    showChangeLogDialog = {},
+                    showLicensesDialog = {}
                 )
 
                 Column(

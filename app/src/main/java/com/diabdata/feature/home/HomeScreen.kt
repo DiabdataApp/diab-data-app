@@ -28,6 +28,8 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.diabdata.core.database.DataViewModel
 import com.diabdata.core.model.Medication
 import com.diabdata.core.model.Treatment
+import com.diabdata.core.model.newEntryUuid
+import com.diabdata.core.model.nowMillis
 import com.diabdata.core.ui.components.actionInput.AddDataFab
 import com.diabdata.core.ui.components.addDataPopup.AddDataPopup
 import com.diabdata.core.ui.components.noDataView.NoDataView
@@ -138,16 +140,17 @@ fun HomeScreen(
 }
 
 private fun mapToTreatment(info: MedicationInfo, entity: Medication): Treatment {
-    val today = LocalDate.now()
+    val now = nowMillis()
     val expiration =
         info.expiration?.let { runCatching { LocalDate.parse(it) }.getOrNull() } ?: LocalDate.now()
 
     return Treatment(
         expirationDate = expiration,
         name = entity.fullName,
-        createdAt = today,
+        createdAt = now,
         isArchived = false,
         type = entity.treatmentType,
-        updatedAt = LocalDate.now()
+        updatedAt = now,
+        entryUuid = newEntryUuid()
     )
 }

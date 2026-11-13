@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.diabdata.core.database.DataViewModel
 import com.diabdata.core.model.ImportantDate
+import com.diabdata.core.model.UNKNOWN_TIME_DEFAULT
 import com.diabdata.core.ui.components.cardsList.CardItem
 import com.diabdata.core.ui.components.cardsList.CardsList
 import com.diabdata.core.ui.theme.DiabDataTheme
@@ -88,8 +89,9 @@ fun ImportantDatesListContent(
                     date = diagnosisDate,
                     importantDate = diagnosisLabel,
                     isArchived = false,
-                    createdAt = diagnosisDate,
-                    updatedAt = diagnosisDate
+                    createdAt = UNKNOWN_TIME_DEFAULT,
+                    updatedAt = UNKNOWN_TIME_DEFAULT,
+                    entryUuid = "diagnosis-date"
                 )
             )
         }
@@ -196,17 +198,19 @@ fun ImportantDatesListPreview() {
             importantDate = "Diagnostic du diabète",
             date = firstDate,
             id = 1,
-            createdAt = firstDate,
+            createdAt = UNKNOWN_TIME_DEFAULT,
             isArchived = false,
-            updatedAt = firstDate,
+            updatedAt = UNKNOWN_TIME_DEFAULT,
+            entryUuid = "preview-1"
         ),
         ImportantDate(
             importantDate = "Pose de pompe à insuline",
             date = secondDate,
             id = 2,
-            createdAt = secondDate,
+            createdAt = UNKNOWN_TIME_DEFAULT,
             isArchived = false,
-            updatedAt = secondDate,
+            updatedAt = UNKNOWN_TIME_DEFAULT,
+            entryUuid = "preview-2"
         )
     )
 

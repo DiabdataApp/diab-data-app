@@ -1,0 +1,9 @@
+{
+  "uniqueId": "com.google.fonts:google-sans-flex",
+  "artifactVersion": "4.005",
+  "name": "Google Sans Flex",
+  "description": "Variable typeface used throughout the app.",
+  "website": "https://fonts.google.com/specimen/Google+Sans+Flex",
+  "developers": [{ "name": "Google" }],
+  "licenses": ["OFL-1.1"]
+}

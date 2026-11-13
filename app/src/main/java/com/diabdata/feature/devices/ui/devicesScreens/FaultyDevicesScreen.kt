@@ -51,6 +51,7 @@ import com.diabdata.core.utils.ui.getItemShape
 import com.diabdata.feature.devices.DevicesViewModel
 import kotlinx.coroutines.launch
 import java.time.LocalDate
+import kotlin.time.Instant
 import com.diabdata.shared.R as shared
 
 @Suppress("unused")
@@ -164,14 +165,15 @@ fun FaultyDevicesScreenPreview() {
             serialNumber = "SN001",
             manufacturer = "Acme",
             deviceType = MedicalDeviceInfoType.WIRED_PUMP,
-            createdAt = LocalDate.now(),
+            createdAt = Instant.parse(LocalDate.now().toString()),
             isArchived = false,
             lifeSpan = 365,
             isFaulty = true,
             isReported = false,
             isLifeSpanOver = false,
-            updatedAt = LocalDate.now(),
-            referenceNumber = "REF001"
+            updatedAt = Instant.parse(LocalDate.now().toString()),
+            referenceNumber = "REF001",
+            entryUuid = "preview-1"
         ),
         MedicalDevice(
             date = LocalDate.now(),
@@ -181,14 +183,15 @@ fun FaultyDevicesScreenPreview() {
             serialNumber = "SN002",
             manufacturer = "Acme",
             deviceType = MedicalDeviceInfoType.WIRED_PATCH,
-            createdAt = LocalDate.now(),
+            createdAt = Instant.parse(LocalDate.now().toString()),
             isArchived = false,
             lifeSpan = 365,
             isFaulty = false,
             isReported = true,
             isLifeSpanOver = false,
-            updatedAt = LocalDate.now(),
-            referenceNumber = "REF002"
+            updatedAt = Instant.parse(LocalDate.now().toString()),
+            referenceNumber = "REF002",
+            entryUuid = "preview-2"
         )
     )
     val faultyCounts = listOf(

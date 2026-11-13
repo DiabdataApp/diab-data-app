@@ -2,7 +2,7 @@
 # Android Studio / IntelliJ
 # --------------------
 *.iml
-.idea/
+.idea/*
 !.idea/codeStyles/
 !.idea/inspectionProfiles/
 

@@ -32,6 +32,7 @@ import com.diabdata.core.ui.components.cardsList.CardsList
 import com.diabdata.core.utils.ui.SvgIcon
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
+import kotlin.time.Instant
 import com.diabdata.shared.R as shared
 
 data class TreatmentCardData(
@@ -147,46 +148,51 @@ fun PreviewUpcomingTreatmentExpirationDates() {
             id = 1,
             expirationDate = LocalDate.now().plusMonths(2),
             name = "Levemir Penfill",
-            createdAt = today.minusYears(1),
-            updatedAt = today.minusMonths(7),
+            createdAt = Instant.parse(today.minusYears(1).toString()),
+            updatedAt = Instant.parse(today.minusMonths(7).toString()),
             isArchived = false,
-            type = TreatmentType.GLUCAGON_SPRAY
+            type = TreatmentType.GLUCAGON_SPRAY,
+            entryUuid = "preview-1"
         ),
         Treatment(
             id = 1,
             expirationDate = LocalDate.now().plusMonths(2),
             name = "Levemir Penfill",
-            createdAt = today.minusYears(1),
-            updatedAt = today.minusMonths(7),
+            createdAt = Instant.parse(today.minusYears(1).toString()),
+            updatedAt = Instant.parse(today.minusMonths(7).toString()),
             isArchived = false,
-            type = TreatmentType.SLOW_ACTING_INSULIN_CARTRIDGE
+            type = TreatmentType.SLOW_ACTING_INSULIN_CARTRIDGE,
+            entryUuid = "preview-2"
         ),
         Treatment(
             id = 1,
             expirationDate = LocalDate.now().plusMonths(2),
             name = "Levemir Penfill",
-            createdAt = today.minusYears(1),
-            updatedAt = today.minusMonths(7),
+            createdAt = Instant.parse(today.minusYears(1).toString()),
+            updatedAt = Instant.parse(today.minusMonths(7).toString()),
             isArchived = false,
-            type = TreatmentType.SLOW_ACTING_INSULIN_CARTRIDGE
+            type = TreatmentType.SLOW_ACTING_INSULIN_CARTRIDGE,
+            entryUuid = "preview-3"
         ),
         Treatment(
             id = 1,
             expirationDate = LocalDate.now().plusMonths(2),
             name = "Levemir Penfill",
-            createdAt = today.minusYears(1),
-            updatedAt = today.minusMonths(7),
+            createdAt = Instant.parse(today.minusYears(1).toString()),
+            updatedAt = Instant.parse(today.minusMonths(7).toString()),
             isArchived = false,
-            type = TreatmentType.SLOW_ACTING_INSULIN_CARTRIDGE
+            type = TreatmentType.SLOW_ACTING_INSULIN_CARTRIDGE,
+            entryUuid = "preview-4"
         ),
         Treatment(
             id = 2,
             expirationDate = LocalDate.now().plusDays(23),
             name = "Novorapid Penfill",
-            createdAt = today.minusYears(1),
-            updatedAt = today.minusDays(18),
+            createdAt = Instant.parse(today.minusYears(1).toString()),
+            updatedAt = Instant.parse(today.minusDays(18).toString()),
             isArchived = false,
-            type = TreatmentType.FAST_ACTING_INSULIN_CARTRIDGE
+            type = TreatmentType.FAST_ACTING_INSULIN_CARTRIDGE,
+            entryUuid = "preview-5"
         )
     )
 

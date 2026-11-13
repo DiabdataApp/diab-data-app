@@ -9,11 +9,14 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SegmentedListItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -35,9 +38,9 @@ import com.diabdata.core.ui.components.cardsList.CardListItem
 import com.diabdata.core.ui.components.cardsList.CardsList
 import com.diabdata.core.ui.theme.GoogleSansFlexFontFamily
 import com.diabdata.core.utils.ui.ColoredIconCircleProps
+import com.diabdata.core.utils.ui.SvgIcon
 import com.diabdata.core.utils.ui.darken
 import com.diabdata.feature.settings.SettingsViewModel
-import com.diabdata.feature.settings.ui.components.AppInfoCard
 import com.diabdata.feature.settings.ui.components.changelog.ChangelogDialog
 import com.diabdata.shared.theme.DataIconColor
 import com.diabdata.shared.theme.GtinFilesIconColor
@@ -57,14 +60,11 @@ import com.diabdata.shared.R as shared
 fun SettingsScreen(
     dataViewModel: DataViewModel,
     onNavigateToDataSettings: () -> Unit,
-    onNavigateToSecuritySettings: () -> Unit
+    onNavigateToSecuritySettings: () -> Unit,
+    onNavigateToAboutScreen: () -> Unit
 ) {
     val context = LocalContext.current
     val scrollState = rememberScrollState()
-    val versionName = BuildConfig.VERSION_NAME
-
-    @Suppress("KotlinConstantConditions", "SimplifyBooleanWithConstants")
-    val isBeta = BuildConfig.APP_VARIANT == "development"
 
     val medicationsGtinFileVersion = BuildConfig.MEDICATION_GTIN_FILE_VERSION
     val medicalDeviceGtinFileVersion = BuildConfig.MEDICAL_DEVICES_GTIN_FILE_VERSION
@@ -106,6 +106,9 @@ fun SettingsScreen(
         iconSize = null
     )
 
+    val containerColor = MaterialTheme.colorScheme.surface
+    val containerContentColor = MaterialTheme.colorScheme.onSurface
+
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
             modifier = Modifier
@@ -118,13 +121,6 @@ fun SettingsScreen(
                 .padding(20.dp),
             verticalArrangement = spacedBy(32.dp)
         ) {
-            @Suppress("KotlinConstantConditions")
-            AppInfoCard(
-                isBeta = isBeta,
-                versionName = versionName,
-                showChangeLogDialog = { showChangeLogDialog = true }
-            )
-
             val notificationSection: List<CardItem> = listOf(
                 CardItem(
                     leadingColoredCircleIcon = iconCircleProps,
@@ -330,6 +326,37 @@ fun SettingsScreen(
             // About app section
             CardsList(
                 cards = aboutApplicationSection
+            )
+
+            SegmentedListItem(
+                onClick = { onNavigateToAboutScreen() },
+                shapes = ListItemDefaults.segmentedShapes(0, 1).copy(
+                    shape = RoundedCornerShape(15.dp)
+                ),
+                leadingContent = {
+                    SvgIcon(
+                        resId = shared.drawable.app_version_icon_vector,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.size(24.dp)
+                    )
+                },
+                trailingContent = {
+                    SvgIcon(
+                        resId = shared.drawable.arrow_right_icon_vector,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.size(24.dp)
+                    )
+                },
+                content = {
+                    Text(stringResource(shared.string.settings_about_app_label),
+                        fontFamily = GoogleSansFlexFontFamily
+                    )
+                },
+                colors = ListItemDefaults.colors(
+                    containerColor = containerColor,
+                    headlineColor = containerContentColor,
+                    supportingColor = containerContentColor
+                ),
             )
         }
     }

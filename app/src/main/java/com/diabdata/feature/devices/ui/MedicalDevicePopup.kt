@@ -28,6 +28,8 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.diabdata.core.database.DataViewModel
 import com.diabdata.core.database.converters.toEntity
 import com.diabdata.core.model.MedicalDevice
+import com.diabdata.core.model.newEntryUuid
+import com.diabdata.core.model.nowMillis
 import com.diabdata.shared.utils.dataTypes.AddableType
 import com.diabdata.shared.utils.dataTypes.MedicalDeviceInfoType
 import com.diabdata.core.ui.components.actionInput.EnumDropdown
@@ -115,6 +117,7 @@ fun MedicalDevicePopup(
         icon = AddableType.DEVICE.iconRes,
         onDismiss = onDismiss,
         onConfirm = {
+            val now = nowMillis()
             val deviceEntry = DataViewModel.MixedDbEntry.DeviceEntry(
                 id = toUpdate?.id ?: 0,
                 date = selectedDate.atStartOfDay(),
@@ -124,8 +127,8 @@ fun MedicalDevicePopup(
                 deviceType = selectedDeviceType,
                 icon = AddableType.DEVICE.iconRes,
                 isArchived = toUpdate?.isArchived ?: false,
-                createdAt = toUpdate?.createdAt ?: today,
-                updatedAt = today,
+                createdAt = toUpdate?.createdAt ?: now,
+                updatedAt = now,
                 batchNumber = batchNumber,
                 serialNumber = serialNumber,
                 referenceNumber = referenceNumber,
@@ -134,6 +137,7 @@ fun MedicalDevicePopup(
                 isFaulty = isFaulty,
                 isReported = isReported,
                 isLifeSpanOver = isLifeSpanOver,
+                entryUuid = toUpdate?.entryUuid ?: newEntryUuid()
             )
             if (toUpdate == null) {
                 devicesViewModel.insertDevice(deviceEntry.toEntity() as MedicalDevice)

@@ -1,12 +1,17 @@
 package com.diabdata.core.model
 
 import androidx.room.Entity
+import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.diabdata.shared.utils.dataTypes.MedicalDeviceInfoType
 import com.google.gson.annotations.SerializedName
 import java.time.LocalDate
+import kotlin.time.Instant
 
-@Entity(tableName = "medical_devices")
+@Entity(
+    tableName = "medical_devices",
+    indices = [Index(value = ["entryUuid"], unique = true)]
+)
 data class MedicalDevice(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     @SerializedName(value = "device_startup_date", alternate = ["date"])
@@ -26,7 +31,7 @@ data class MedicalDevice(
     @SerializedName("device_type", alternate = ["deviceType"])
     val deviceType: MedicalDeviceInfoType,
     @SerializedName("created_at", alternate = ["createdAt"])
-    val createdAt: LocalDate,
+    val createdAt: Instant,
     @SerializedName("is_archived", alternate = ["isArchived"])
     val isArchived: Boolean,
     @SerializedName("device_life_span", alternate = ["lifeSpan"])
@@ -38,5 +43,7 @@ data class MedicalDevice(
     @SerializedName("is_life_span_over", alternate = ["isLifeSpanOver"])
     val isLifeSpanOver: Boolean,
     @SerializedName("updated_at", alternate = ["updatedAt"])
-    val updatedAt: LocalDate
+    val updatedAt: Instant,
+    @SerializedName("entry_uuid")
+    val entryUuid: String
 )

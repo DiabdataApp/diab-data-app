@@ -6,6 +6,7 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.diabdata.core.database.DiabDataDatabase
 import com.diabdata.core.model.Weight
+import com.diabdata.core.model.nowMillis
 import com.diabdata.feature.weight.data.WeightDao
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
@@ -26,6 +27,7 @@ class WeightDaoTest {
     private lateinit var db: DiabDataDatabase
     
     val today: LocalDate = LocalDate.now()
+    val now = nowMillis()
 
     @Before
     fun createDb() {
@@ -49,10 +51,11 @@ class WeightDaoTest {
         val weight: Weight = Weight(
             id = 1,
             date = today,
-            createdAt = today,
+            createdAt = now,
             isArchived = false,
             value = 70f,
-            updatedAt = today
+            updatedAt = now,
+            entryUuid = "weight-1"
         )
 
         weightDao.insert(weight)
@@ -69,10 +72,11 @@ class WeightDaoTest {
         val weight: Weight = Weight(
             id = 1,
             date = today,
-            createdAt = today,
+            createdAt = now,
             isArchived = false,
             value = 70f,
-            updatedAt = today
+            updatedAt = now,
+            entryUuid = "weight-2"
         )
 
         weightDao.insert(weight)
@@ -91,10 +95,11 @@ class WeightDaoTest {
         val weight: Weight = Weight(
             id = 1,
             date = today,
-            createdAt = today,
+            createdAt = now,
             isArchived = false,
             value = 70f,
-            updatedAt = today
+            updatedAt = now,
+            entryUuid = "weight-3"
         )
 
         weightDao.insert(weight)
@@ -115,24 +120,27 @@ class WeightDaoTest {
         val weights: List<Weight> = listOf(
             Weight(
                 date = third,
-                createdAt = today,
+                createdAt = now,
                 isArchived = false,
                 value = 70f,
-                updatedAt = today
+                updatedAt = now,
+                entryUuid = "weight-4"
             ),
             Weight(
                 date = first,
-                createdAt = today,
+                createdAt = now,
                 isArchived = false,
                 value = 70f,
-                updatedAt = today
+                updatedAt = now,
+                entryUuid = "weight-5"
             ),
             Weight(
                 date = second,
-                createdAt = today,
+                createdAt = now,
                 isArchived = false,
                 value = 70f,
-                updatedAt = today
+                updatedAt = now,
+                entryUuid = "weight-6"
             )
         )
 
@@ -150,10 +158,11 @@ class WeightDaoTest {
         val weight: Weight = Weight(
             id = 1,
             date = today,
-            createdAt = today,
+            createdAt = now,
             isArchived = false,
             value = 70f,
-            updatedAt = today
+            updatedAt = now,
+            entryUuid = "weight-7"
         )
 
         weightDao.insert(weight)
@@ -163,14 +172,14 @@ class WeightDaoTest {
         assertEquals(1, allWeights.size)
         assertEquals(false, allWeights[0].isArchived)
 
-        weightDao.setArchived(weight.id, true)
+        weightDao.update(weight.copy(isArchived = true))
 
         allWeights = weightDao.getAllWeightsFlow().first()
 
         assertEquals(1, allWeights.size)
         assertEquals(true, allWeights[0].isArchived)
 
-        weightDao.setArchived(weight.id, false)
+        weightDao.update(weight.copy(isArchived = false))
 
         allWeights = weightDao.getAllWeightsFlow().first()
 
@@ -192,31 +201,35 @@ class WeightDaoTest {
         val weights: List<Weight> = listOf(
             Weight(
                 date = third,
-                createdAt = today,
+                createdAt = now,
                 isArchived = false,
                 value = 70f,
-                updatedAt = today
+                updatedAt = now,
+                entryUuid = "weight-8"
             ),
             Weight(
                 date = first,
-                createdAt = today,
+                createdAt = now,
                 isArchived = false,
                 value = 70f,
-                updatedAt = today
+                updatedAt = now,
+                entryUuid = "weight-9"
             ),
             Weight(
                 date = second,
-                createdAt = today,
+                createdAt = now,
                 isArchived = false,
                 value = 70f,
-                updatedAt = today
+                updatedAt = now,
+                entryUuid = "weight-10"
             ),
             Weight(
                 date = fourth,
-                createdAt = today,
+                createdAt = now,
                 isArchived = true,
                 value = 70f,
-                updatedAt = today
+                updatedAt = now,
+                entryUuid = "weight-11"
             )
         )
 
@@ -241,31 +254,35 @@ class WeightDaoTest {
         val weights: List<Weight> = listOf(
             Weight(
                 date = third,
-                createdAt = today,
+                createdAt = now,
                 isArchived = false,
                 value = 70f,
-                updatedAt = today
+                updatedAt = now,
+                entryUuid = "weight-12"
             ),
             Weight(
                 date = first,
-                createdAt = today,
+                createdAt = now,
                 isArchived = false,
                 value = 70f,
-                updatedAt = today
+                updatedAt = now,
+                entryUuid = "weight-13"
             ),
             Weight(
                 date = second,
-                createdAt = today,
+                createdAt = now,
                 isArchived = false,
                 value = 70f,
-                updatedAt = today
+                updatedAt = now,
+                entryUuid = "weight-14"
             ),
             Weight(
                 date = fourth,
-                createdAt = today,
+                createdAt = now,
                 isArchived = true,
                 value = 70f,
-                updatedAt = today
+                updatedAt = now,
+                entryUuid = "weight-15"
             )
         )
 

@@ -6,6 +6,7 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.diabdata.core.database.DiabDataDatabase
 import com.diabdata.core.model.ImportantDate
+import com.diabdata.core.model.nowMillis
 import com.diabdata.feature.importantDates.data.ImportantDateDao
 import org.junit.Assert.assertEquals
 import kotlinx.coroutines.flow.first
@@ -26,6 +27,7 @@ class ImportantDatesDaoTest {
     private lateinit var db: DiabDataDatabase
 
     val today: LocalDate = LocalDate.now()
+    val now = nowMillis()
 
     @Before
     fun createDb() {
@@ -48,11 +50,12 @@ class ImportantDatesDaoTest {
     fun insertAndGetImportantDate() = runBlocking {
         val importantDate = ImportantDate(
             date = today,
-            createdAt = today,
+            createdAt = now,
             isArchived = false,
             importantDate = "test",
             id = 1,
-            updatedAt = today,
+            updatedAt = now,
+            entryUuid = "important-date-1"
         )
 
         importantDateDao.insert(importantDate)
@@ -66,11 +69,12 @@ class ImportantDatesDaoTest {
     fun insertAndUpdateImportantDate() = runBlocking {
         val importantDate = ImportantDate(
             date = today,
-            createdAt = today,
+            createdAt = now,
             isArchived = false,
             importantDate = "test",
             id = 1,
-            updatedAt = today,
+            updatedAt = now,
+            entryUuid = "important-date-2"
         )
 
         importantDateDao.insert(importantDate)
@@ -91,11 +95,12 @@ class ImportantDatesDaoTest {
     fun setArchivedImportantDate() = runBlocking {
         val importantDate = ImportantDate(
             date = today,
-            createdAt = today,
+            createdAt = now,
             isArchived = false,
             importantDate = "test",
             id = 1,
-            updatedAt = today,
+            updatedAt = now,
+            entryUuid = "important-date-3"
         )
 
         importantDateDao.insert(importantDate)
@@ -104,13 +109,13 @@ class ImportantDatesDaoTest {
         assertEquals(1, allImportantDates.size)
         assertEquals(false, allImportantDates[0].isArchived)
 
-        importantDateDao.setArchived(importantDate.id, true)
+        importantDateDao.update(importantDate.copy(isArchived = true))
         allImportantDates = importantDateDao.getAllImportantDates().first()
 
         assertEquals(1, allImportantDates.size)
         assertEquals(true, allImportantDates[0].isArchived)
 
-        importantDateDao.setArchived(importantDate.id, false)
+        importantDateDao.update(importantDate.copy(isArchived = false))
         allImportantDates = importantDateDao.getAllImportantDates().first()
 
         assertEquals(1, allImportantDates.size)
@@ -122,11 +127,12 @@ class ImportantDatesDaoTest {
     fun deleteImportantDate() = runBlocking {
         val importantDate = ImportantDate(
             date = today,
-            createdAt = today,
+            createdAt = now,
             isArchived = false,
             importantDate = "test",
             id = 1,
-            updatedAt = today,
+            updatedAt = now,
+            entryUuid = "important-date-4"
         )
 
         importantDateDao.insert(importantDate)
@@ -145,19 +151,21 @@ class ImportantDatesDaoTest {
         val importantDates = listOf(
             ImportantDate(
                 date = today,
-                createdAt = today,
+                createdAt = now,
                 isArchived = false,
                 importantDate = "Test 1",
                 id = 1,
-                updatedAt = today,
+                updatedAt = now,
+                entryUuid = "important-date-5"
             ),
             ImportantDate(
                 date = today.minusYears(1).minusMonths(2),
-                createdAt = today,
+                createdAt = now,
                 isArchived = false,
                 importantDate = "Test 2",
                 id = 2,
-                updatedAt = today,
+                updatedAt = now,
+                entryUuid = "important-date-6"
             ),
         )
 

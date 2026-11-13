@@ -6,6 +6,8 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.diabdata.core.database.DiabDataDatabase
 import com.diabdata.core.model.Treatment
+import com.diabdata.core.model.nowMillis
+import com.diabdata.core.model.nowMillisInLong
 import com.diabdata.feature.treatments.data.TreatmentDao
 import com.diabdata.shared.utils.dataTypes.TreatmentType
 import kotlinx.coroutines.flow.first
@@ -27,19 +29,33 @@ class TreatmentDaoTest {
     private lateinit var treatmentDao: TreatmentDao
 
     val today: LocalDate = LocalDate.now()
+    val now = nowMillis()
 
     val treatment = Treatment(
         id = 1,
         expirationDate = today,
         name = "fast acting insulin syringe",
-        createdAt = today,
+        createdAt = now,
         isArchived = false,
         type = TreatmentType.FAST_ACTING_INSULIN_SYRINGE,
-        updatedAt = today
+        updatedAt = now,
+        entryUuid = "treatment-1"
     )
-    val treatment2 = treatment.copy(id = 2, expirationDate = today.plusDays(8))
-    val treatment3 = treatment.copy(id = 3, expirationDate = today.plusDays(1))
-    val treatment4 = treatment.copy(id = 4, expirationDate = today.minusDays(4))
+    val treatment2 = treatment.copy(
+        id = 2,
+        expirationDate = today.plusDays(8),
+        entryUuid = "treatment-2"
+    )
+    val treatment3 = treatment.copy(
+        id = 3,
+        expirationDate = today.plusDays(1),
+        entryUuid = "treatment-3"
+    )
+    val treatment4 = treatment.copy(
+        id = 4,
+        expirationDate = today.minusDays(4),
+        entryUuid = "treatment-4"
+    )
 
     @Before
     fun createDb() {
@@ -102,11 +118,11 @@ class TreatmentDaoTest {
         val treatmentsBefore = treatmentDao.getAllTreatmentsFlow().first()
         assertEquals(treatment, treatmentsBefore[0])
 
-        treatmentDao.setArchived(treatment.id, true)
+        treatmentDao.setArchived(treatment.id, true, nowMillisInLong())
         val treatmentsAfterArchive = treatmentDao.getAllTreatmentsFlow().first()
         assertEquals(true, treatmentsAfterArchive[0].isArchived)
 
-        treatmentDao.setArchived(treatment.id, false)
+        treatmentDao.setArchived(treatment.id, false, nowMillisInLong())
         val treatmentsAfterUnarchive = treatmentDao.getAllTreatmentsFlow().first()
         assertEquals(false, treatmentsAfterUnarchive[0].isArchived)
     }

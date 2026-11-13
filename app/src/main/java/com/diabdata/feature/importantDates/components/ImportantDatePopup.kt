@@ -16,6 +16,8 @@ import androidx.compose.ui.res.stringResource
 import com.diabdata.core.database.DataViewModel
 import com.diabdata.core.database.converters.toEntity
 import com.diabdata.core.model.ImportantDate
+import com.diabdata.core.model.newEntryUuid
+import com.diabdata.core.model.nowMillis
 import com.diabdata.shared.utils.dataTypes.AddableType
 import com.diabdata.core.ui.components.addDataPopup.BasePopupLayout
 import com.diabdata.core.ui.components.date_components.DateSelector
@@ -48,15 +50,17 @@ fun ImportantDatePopup(
         icon = AddableType.IMPORTANT_DATE.iconRes,
         onDismiss = onDismiss,
         onConfirm = {
+            val now = nowMillis()
             val entry = DataViewModel.MixedDbEntry.ImportantDateEntry(
                 id = toUpdate?.id ?: 0,
                 date = selectedDate.atStartOfDay(),
-                createdAt = toUpdate?.createdAt ?: today,
+                createdAt = toUpdate?.createdAt ?: now,
                 isArchived = toUpdate?.isArchived ?: false,
                 importantDate = diagnosis,
-                updatedAt = today,
+                updatedAt = now,
                 addableType = AddableType.IMPORTANT_DATE,
-                icon = AddableType.IMPORTANT_DATE.iconRes
+                icon = AddableType.IMPORTANT_DATE.iconRes,
+                entryUuid = toUpdate?.entryUuid ?: newEntryUuid()
             )
 
             if (toUpdate == null) {

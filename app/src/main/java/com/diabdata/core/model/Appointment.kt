@@ -1,13 +1,17 @@
 package com.diabdata.core.model
 
 import androidx.room.Entity
+import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.diabdata.shared.utils.dataTypes.AppointmentType
 import com.google.gson.annotations.SerializedName
-import java.time.LocalDate
 import java.time.LocalDateTime
+import kotlin.time.Instant
 
-@Entity(tableName = "appointments")
+@Entity(
+    tableName = "appointments",
+    indices = [Index(value = ["entryUuid"], unique = true)]
+)
 data class Appointment(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     @SerializedName(value = "appointment_date", alternate = ["date"])
@@ -17,10 +21,12 @@ data class Appointment(
     @SerializedName("appointment_type", alternate = ["type"])
     val type: AppointmentType,
     @SerializedName("created_at", alternate = ["createdAt"])
-    val createdAt: LocalDate,
+    val createdAt: Instant,
     @SerializedName("is_archived", alternate = ["isArchived"])
     val isArchived: Boolean,
     val notes: String?,
     @SerializedName("updated_at", alternate = ["updatedAt"])
-    val updatedAt: LocalDate
+    val updatedAt: Instant,
+    @SerializedName("entry_uuid")
+    val entryUuid: String
 )

@@ -16,13 +16,14 @@ import androidx.compose.ui.res.stringResource
 import com.diabdata.core.database.DataViewModel
 import com.diabdata.core.database.converters.toEntity
 import com.diabdata.core.model.Appointment
-import com.diabdata.shared.utils.dataTypes.AddableType
-import com.diabdata.shared.utils.dataTypes.AppointmentType
+import com.diabdata.core.model.newEntryUuid
+import com.diabdata.core.model.nowMillis
 import com.diabdata.core.ui.components.actionInput.EnumDropdown
 import com.diabdata.core.ui.components.addDataPopup.BasePopupLayout
 import com.diabdata.core.ui.components.date_components.DateTimeSelector
+import com.diabdata.shared.utils.dataTypes.AddableType
+import com.diabdata.shared.utils.dataTypes.AppointmentType
 import kotlinx.coroutines.launch
-import java.time.LocalDate
 import java.time.LocalDateTime
 import com.diabdata.shared.R as shared
 
@@ -42,7 +43,6 @@ fun AppointmentPopup(
     }
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
-    val today = LocalDate.now()
 
     BasePopupLayout(
         title = stringResource(
@@ -52,16 +52,18 @@ fun AppointmentPopup(
         icon = AddableType.APPOINTMENT.iconRes,
         onDismiss = onDismiss,
         onConfirm = {
+            val now = nowMillis()
             val appointmentEntry = DataViewModel.MixedDbEntry.AppointmentEntry(
                 id = toUpdate?.id ?: 0,
                 date = selectedDate,
                 doctor = doctor,
                 type = selectedAppointmentType,
-                createdAt = toUpdate?.createdAt ?: today,
+                createdAt = toUpdate?.createdAt ?: now,
                 isArchived = toUpdate?.isArchived ?: false,
                 notes = notes,
-                updatedAt = today,
-                icon = AddableType.APPOINTMENT.iconRes
+                updatedAt = now,
+                icon = AddableType.APPOINTMENT.iconRes,
+                entryUuid = toUpdate?.entryUuid ?: newEntryUuid()
             )
 
             if (toUpdate == null) {

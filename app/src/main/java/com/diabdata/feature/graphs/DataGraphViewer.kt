@@ -110,7 +110,7 @@ fun GraphViewer(
             options.forEachIndexed { index, label ->
                 ToggleButton(
                     checked = selectedIndex == index,
-                    colors = ToggleButtonDefaults.toggleButtonColors(
+                    colors = ToggleButtonDefaults.colors(
                         containerColor = MaterialTheme.colorScheme.surfaceContainerLowest
                     ),
                     onCheckedChange = { selectedIndex = index },

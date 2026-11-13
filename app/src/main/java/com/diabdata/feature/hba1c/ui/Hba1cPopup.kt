@@ -18,6 +18,8 @@ import androidx.compose.ui.text.input.KeyboardType
 import com.diabdata.core.database.DataViewModel
 import com.diabdata.core.database.converters.toEntity
 import com.diabdata.core.model.Hba1c
+import com.diabdata.core.model.newEntryUuid
+import com.diabdata.core.model.nowMillis
 import com.diabdata.shared.utils.dataTypes.AddableType
 import com.diabdata.core.ui.components.addDataPopup.BasePopupLayout
 import com.diabdata.core.ui.components.date_components.DateSelector
@@ -53,15 +55,17 @@ fun Hba1cPopup(
         onDismiss = onDismiss,
         onConfirm = {
             hba1cText.replace(',', '.').toFloatOrNull()?.let { value ->
+                val now = nowMillis()
                 val entry = DataViewModel.MixedDbEntry.Hba1cEntry(
                     id = toUpdate?.id ?: 0,
                     date = selectedDate.atStartOfDay(),
-                    createdAt = toUpdate?.createdAt ?: today,
+                    createdAt = toUpdate?.createdAt ?: now,
                     isArchived = toUpdate?.isArchived ?: false,
                     value = value,
-                    updatedAt = today,
+                    updatedAt = now,
                     addableType = AddableType.HBA1C,
-                    icon = AddableType.HBA1C.iconRes
+                    icon = AddableType.HBA1C.iconRes,
+                    entryUuid = toUpdate?.entryUuid ?: newEntryUuid()
                 )
 
                 if (toUpdate == null) {

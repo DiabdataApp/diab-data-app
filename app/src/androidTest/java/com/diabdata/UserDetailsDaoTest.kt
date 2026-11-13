@@ -6,6 +6,7 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.diabdata.core.database.DiabDataDatabase
 import com.diabdata.core.model.UserDetails
+import com.diabdata.core.model.nowMillisInLong
 import com.diabdata.feature.userProfile.data.UserDetailsDao
 import com.diabdata.shared.utils.dataTypes.BloodType
 import com.diabdata.shared.utils.dataTypes.DiabetesType
@@ -118,7 +119,7 @@ class UserDetailsDaoTest {
         assertEquals(testUser, retrievedUserBefore)
 
         val photoPath = "updated/photo/path"
-        userDetailsDao.updateProfilePhotoPath(photoPath)
+        userDetailsDao.updateProfilePhotoPath(photoPath, nowMillisInLong())
 
         val retrievedUserAfter = userDetailsDao.getUserDetails().first()
         assertEquals(photoPath, retrievedUserAfter!!.profilePhotoPath)

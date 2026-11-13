@@ -6,6 +6,7 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.diabdata.core.database.DiabDataDatabase
 import com.diabdata.core.model.Appointment
+import com.diabdata.core.model.nowMillis
 import com.diabdata.feature.appointments.data.AppointmentDao
 import com.diabdata.shared.utils.dataTypes.AppointmentType
 import kotlinx.coroutines.flow.first
@@ -27,20 +28,39 @@ class AppointmentDaoTest {
     private lateinit var appointmentDao: AppointmentDao
 
     val today: LocalDate = LocalDate.now()
+    val now = nowMillis()
 
     val appointment = Appointment(
         id = 1,
         date = today.atTime(12, 0),
         doctor = "Dr. Johnson",
         type = AppointmentType.APPOINTMENT,
-        createdAt = today,
+        createdAt = now,
         isArchived = false,
         notes = "Initial appointment today",
-        updatedAt = today
+        updatedAt = now,
+        entryUuid = "appointment-1"
     )
-    val appointment2 = appointment.copy(id = 2, date = today.minusMonths(8).plusDays(15).atTime(9, 0), notes = "past appointment", type = AppointmentType.ANNUAL_CHECKUP)
-    val appointment3 = appointment.copy(id = 3, date = today.plusMonths(3).plusDays(8).atTime(16, 30), doctor = "Dr. Smith")
-    val appointment4 = appointment.copy(id = 4, date = today.plusMonths(3).plusDays(20).atTime(16, 30), doctor = "Dr. Smith", type = AppointmentType.ANNUAL_CHECKUP)
+    val appointment2 = appointment.copy(
+        id = 2,
+        date = today.minusMonths(8).plusDays(15).atTime(9, 0),
+        notes = "past appointment",
+        type = AppointmentType.ANNUAL_CHECKUP,
+        entryUuid = "appointment-2"
+    )
+    val appointment3 = appointment.copy(
+        id = 3,
+        date = today.plusMonths(3).plusDays(8).atTime(16, 30),
+        doctor = "Dr. Smith",
+        entryUuid = "appointment-3"
+    )
+    val appointment4 = appointment.copy(
+        id = 4,
+        date = today.plusMonths(3).plusDays(20).atTime(16, 30),
+        doctor = "Dr. Smith",
+        type = AppointmentType.ANNUAL_CHECKUP,
+        entryUuid = "appointment-4"
+    )
 
     val allAppointments = listOf(appointment, appointment2, appointment3, appointment4)
 
@@ -108,12 +128,12 @@ class AppointmentDaoTest {
         assertEquals(1, appointmentsBefore.size)
         assertEquals(appointment, appointmentsBefore[0])
 
-        appointmentDao.setArchived(appointment.id, true)
+        appointmentDao.update(appointment.copy(isArchived = true))
         val appointmentsAfterArchive = appointmentDao.getAllAppointmentsFlow().first()
         assertEquals(1, appointmentsAfterArchive.size)
         assertEquals(true, appointmentsAfterArchive[0].isArchived)
 
-        appointmentDao.setArchived(appointment.id, false)
+        appointmentDao.update(appointment.copy(isArchived = false))
         val appointmentsAfterUnarchive = appointmentDao.getAllAppointmentsFlow().first()
         assertEquals(1, appointmentsAfterUnarchive.size)
         assertEquals(false, appointmentsAfterUnarchive[0].isArchived)

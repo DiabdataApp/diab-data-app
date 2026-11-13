@@ -41,6 +41,7 @@ import com.diabdata.core.ui.components.cardsList.CardsList
 import com.diabdata.core.utils.ui.SvgIcon
 import java.time.LocalDate
 import java.time.LocalDateTime
+import kotlin.time.Instant
 import com.diabdata.shared.R as shared
 
 @Composable
@@ -180,9 +181,10 @@ fun PreviewUpcomingAppointmentsList() {
             date = LocalDateTime.now().plusDays(5),
             notes = "Rappel vaccin",
             id = 1,
-            createdAt = LocalDate.of(2015, 3, 1),
+            createdAt = Instant.parse(LocalDate.of(2015, 3, 1).toString()),
             isArchived = false,
-            updatedAt = LocalDate.of(2015, 4, 2),
+            updatedAt = Instant.parse(LocalDate.of(2015, 4, 2).toString()),
+            entryUuid = "preview-1"
         ),
         Appointment(
             doctor = "Dr. Martin",
@@ -190,9 +192,10 @@ fun PreviewUpcomingAppointmentsList() {
             date = LocalDateTime.now().plusMonths(2),
             notes = null,
             id = 2,
-            createdAt = LocalDate.of(2015, 3, 1),
+            createdAt = Instant.parse(LocalDate.of(2015, 3, 1).toString()),
             isArchived = false,
-            updatedAt = LocalDate.of(2015, 4, 2),
+            updatedAt = Instant.parse(LocalDate.of(2015, 4, 2).toString()),
+            entryUuid = "preview-2"
         )
     )
 

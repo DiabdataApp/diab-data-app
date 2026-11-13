@@ -17,6 +17,6 @@ interface UserDetailsDao {
     @Query("DELETE FROM user_details")
     suspend fun deleteUserDetails()
 
-    @Query("UPDATE user_details SET profilePhotoPath = :path WHERE id = 0")
-    suspend fun updateProfilePhotoPath(path: String?)
+    @Query("UPDATE user_details SET profilePhotoPath = :path, updatedAt = :updatedAt WHERE id = 0")
+    suspend fun updateProfilePhotoPath(path: String?, updatedAt: Long)
 }

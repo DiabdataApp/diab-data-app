@@ -16,6 +16,8 @@ import androidx.compose.ui.res.stringResource
 import com.diabdata.core.database.DataViewModel
 import com.diabdata.core.database.converters.toEntity
 import com.diabdata.core.model.Treatment
+import com.diabdata.core.model.newEntryUuid
+import com.diabdata.core.model.nowMillis
 import com.diabdata.shared.utils.dataTypes.AddableType
 import com.diabdata.shared.utils.dataTypes.TreatmentType
 import com.diabdata.core.ui.components.actionInput.EnumDropdown
@@ -56,6 +58,7 @@ fun TreatmentPopup(
         icon = AddableType.TREATMENT.iconRes,
         onDismiss = onDismiss,
         onConfirm = {
+            val now = nowMillis()
             val treatmentEntry = DataViewModel.MixedDbEntry.TreatmentEntry(
                 id = toUpdate?.id ?: 0,
                 date = selectedDate.atStartOfDay(),
@@ -64,8 +67,9 @@ fun TreatmentPopup(
                 treatmentType = selectedTreatmentType,
                 icon = AddableType.TREATMENT.iconRes,
                 isArchived = toUpdate?.isArchived ?: false,
-                createdAt = toUpdate?.createdAt ?: today,
-                updatedAt = today
+                createdAt = toUpdate?.createdAt ?: now,
+                updatedAt = now,
+                entryUuid = toUpdate?.entryUuid ?: newEntryUuid()
             )
             if (toUpdate == null) {
                 dataViewModel.addTreatment(treatmentEntry.toEntity() as Treatment)

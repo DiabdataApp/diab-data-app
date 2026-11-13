@@ -71,6 +71,7 @@ import com.diabdata.feature.databaseView.DatabaseEditionView
 import com.diabdata.feature.devices.ui.DevicesScreen
 import com.diabdata.feature.graphs.GraphViewer
 import com.diabdata.feature.home.HomeScreen
+import com.diabdata.feature.settings.sections.aboutApp.ui.AboutAppSettingScreen
 import com.diabdata.feature.settings.sections.dataSettings.ui.DataSettingsScreen
 import com.diabdata.feature.settings.sections.security.ui.SecuritySettingsScreen
 import com.diabdata.feature.settings.ui.SettingsScreen
@@ -114,6 +115,13 @@ fun App(
             && currentRoute != "settings/main"
 
     val snackbarHostState = remember { SnackbarHostState() }
+
+    val topAppBarSubSettingsText = when (currentRoute) {
+        "settings/data" -> stringResource(shared.string.settings_data_section_title)
+        "settings/security" -> stringResource(shared.string.settings_security_settings)
+        "settings/about" -> stringResource(shared.string.settings_about_app_label)
+        else -> ""
+    }
 
     // ── Shortcuts ──
     LaunchedEffect(pendingDestination) {
@@ -259,13 +267,7 @@ fun App(
                                 if (isSubSettingsRoute) {
                                     TopAppBar(
                                         title = {
-                                            Text(
-                                                when (currentRoute) {
-                                                    "settings/data" -> stringResource(shared.string.settings_data_section_title)
-                                                    "settings/security" -> stringResource(shared.string.settings_security_settings)
-                                                    else -> ""
-                                                }
-                                            )
+                                            Text(topAppBarSubSettingsText)
                                         },
                                         navigationIcon = {
                                             IconButton(onClick = { navController.popBackStack() }) {
@@ -300,13 +302,7 @@ fun App(
                         if (isSubSettingsRoute) {
                             TopAppBar(
                                 title = {
-                                    Text(
-                                        when (currentRoute) {
-                                            "settings/data" -> stringResource(shared.string.settings_data_section_title)
-                                            "settings/security" -> stringResource(shared.string.settings_security_settings)
-                                            else -> ""
-                                        }
-                                    )
+                                    Text(topAppBarSubSettingsText)
                                 },
                                 navigationIcon = {
                                     IconButton(onClick = { navController.popBackStack() }) {
@@ -398,15 +394,7 @@ fun App(
                             isSubSettingsRoute -> {
                                 TopAppBar(
                                     title = {
-                                        Text(
-                                            text = currentRoute.let { route ->
-                                                when (route) {
-                                                    "settings/data" -> stringResource(shared.string.settings_data_section_title)
-                                                    "settings/security" -> stringResource(shared.string.settings_security_settings)
-                                                    else -> ""
-                                                }
-                                            }
-                                        )
+                                        Text(topAppBarSubSettingsText)
                                     },
                                     navigationIcon = {
                                         IconButton(onClick = { navController.popBackStack() }) {
@@ -574,6 +562,9 @@ fun DiabDataNavHost(
                     },
                     onNavigateToSecuritySettings = {
                         navController.navigate("settings/security")
+                    },
+                    onNavigateToAboutScreen = {
+                        navController.navigate("settings/about")
                     }
                 )
             }
@@ -584,6 +575,9 @@ fun DiabDataNavHost(
             }
             composable("settings/security") {
                 SecuritySettingsScreen()
+            }
+            composable("settings/about") {
+                AboutAppSettingScreen()
             }
         }
     }

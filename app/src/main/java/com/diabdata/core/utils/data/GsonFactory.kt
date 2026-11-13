@@ -10,12 +10,14 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import java.time.LocalDate
 import java.time.LocalDateTime
+import kotlin.time.Instant
 
 object GsonFactory {
     fun create(prettyPrint: Boolean = false): Gson {
         return GsonBuilder()
             .registerTypeAdapter(LocalDate::class.java, LocalDateAdapter())
             .registerTypeAdapter(LocalDateTime::class.java, LocalDateTimeAdapter())
+            .registerTypeAdapter(Instant::class.java, InstantAdapter())
             .registerTypeAdapter(AppointmentType::class.java, AppointmentTypeAdapter())
             .registerTypeAdapter(DiabetesType::class.java, EnumTypeAdapter(DiabetesType::class.java))
             .registerTypeAdapter(Gender::class.java, EnumTypeAdapter(Gender::class.java))

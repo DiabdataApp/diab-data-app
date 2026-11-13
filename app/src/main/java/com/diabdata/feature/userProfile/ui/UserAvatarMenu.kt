@@ -63,13 +63,10 @@ fun UserAvatarMenu(
                         color = MenuDefaults.selectableItemColors().leadingIconColor
                     )
                 },
-                shapes = MenuDefaults.itemShape(index = 0, count = 1),
-                colors = MenuDefaults.selectableItemColors(),
                 onClick = {
                     onDismiss()
                     onEditProfile()
                 },
-                selected = false
             )
         }
 
@@ -91,13 +88,10 @@ fun UserAvatarMenu(
                         color = MenuDefaults.selectableItemColors().leadingIconColor
                     )
                 },
-                shapes = MenuDefaults.itemShape(index = 0, count = 2),
-                colors = MenuDefaults.selectableItemColors(),
                 onClick = {
                     onDismiss()
                     showShareDialog = ShareMode.COMPANION
                 },
-                selected = false
             )
             // Doctor mode
             DropdownMenuItem(
@@ -109,13 +103,10 @@ fun UserAvatarMenu(
                         color = MenuDefaults.selectableItemColors().leadingIconColor
                     )
                 },
-                shapes = MenuDefaults.itemShape(index = 1, count = 2),
-                colors = MenuDefaults.selectableItemColors(),
                 onClick = {
                     onDismiss()
                     showShareDialog = ShareMode.MEDICAL
                 },
-                selected = false
             )
         }
     }

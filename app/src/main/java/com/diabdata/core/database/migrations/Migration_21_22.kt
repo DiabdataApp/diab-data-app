@@ -18,8 +18,8 @@ val MIGRATION_21_22 = object : Migration(21, 22) {
         )
         db.execSQL(
             """
-            UPDATE user_preferences (automaticBackupEnabled, frequency)
-            VALUES (0, 'weekly')
+            INSERT OR IGNORE INTO user_preferences (id, automaticBackupEnabled, frequency)
+            VALUES (0, 0, 'weekly')
             """.trimIndent()
         )
     }

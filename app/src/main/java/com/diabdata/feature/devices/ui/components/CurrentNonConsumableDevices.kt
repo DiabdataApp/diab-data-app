@@ -44,6 +44,7 @@ import com.diabdata.shared.utils.dataTypes.MedicalDeviceInfoType
 import com.diabdata.shared.utils.dateUtils.shortenedFormatLocalDate
 import kotlinx.coroutines.launch
 import java.time.LocalDate
+import kotlin.time.Instant
 import com.diabdata.shared.R as shared
 
 @Composable
@@ -267,13 +268,14 @@ fun NonConsumableDevicesListPreview() {
             referenceNumber = "1R5TFG",
             manufacturer = "Insulet",
             deviceType = MedicalDeviceInfoType.WIRELESS_PATCH_REMOTE,
-            createdAt = LocalDate.of(2025, 9, 25),
+            createdAt = Instant.parse(LocalDate.of(2025, 9, 25).toString()),
             isArchived = false,
             lifeSpan = 0,
             isFaulty = false,
             isReported = false,
             isLifeSpanOver = false,
-            updatedAt = LocalDate.of(2025, 9, 1)
+            updatedAt = Instant.parse(LocalDate.of(2025, 9, 1).toString()),
+            entryUuid = "preview-1"
         )
     )
 
