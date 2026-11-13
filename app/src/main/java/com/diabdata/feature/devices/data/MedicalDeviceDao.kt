@@ -22,7 +22,7 @@ interface MedicalDeviceDao {
     @Query("SELECT * FROM medical_devices WHERE entryUuid = :uuid")
     suspend fun getByUuid(uuid: String): MedicalDevice?
 
-@Query("SELECT * FROM medical_devices WHERE createdAt = :createdAt AND date = :date AND deviceType = :deviceType AND name = :name AND batchNumber = :batchNumber LIMIT 1")
+    @Query("SELECT * FROM medical_devices WHERE createdAt = :createdAt AND date = :date AND deviceType = :deviceType AND batchNumber = :batchNumber LIMIT 1")
     suspend fun getByContent(createdAt: Instant, date: LocalDate, deviceType: MedicalDeviceInfoType, batchNumber: String): MedicalDevice?
 
     @Query("DELETE FROM medical_devices WHERE id = :id")
