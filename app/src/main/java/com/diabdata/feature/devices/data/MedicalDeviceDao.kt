@@ -9,6 +9,7 @@ import com.diabdata.feature.devices.classes.FaultyBatchCount
 import com.diabdata.shared.utils.dataTypes.MedicalDeviceInfoType
 import kotlinx.coroutines.flow.Flow
 import java.time.LocalDate
+import kotlin.time.Instant
 
 @Dao
 interface MedicalDeviceDao {
@@ -20,6 +21,9 @@ interface MedicalDeviceDao {
 
     @Query("SELECT * FROM medical_devices WHERE entryUuid = :uuid")
     suspend fun getByUuid(uuid: String): MedicalDevice?
+
+    @Query("SELECT * FROM medical_devices WHERE createdAt = :createdAt AND date = :date AND deviceType = :deviceType AND name = :name AND batchNumber = :batchNumber")
+    suspend fun getByContent(createdAt: Instant, date: LocalDate, deviceType: MedicalDeviceInfoType, name: String, batchNumber: String): MedicalDevice?
 
     @Query("DELETE FROM medical_devices WHERE id = :id")
     suspend fun deleteById(id: Int)

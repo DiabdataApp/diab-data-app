@@ -170,6 +170,28 @@ class DataRepositoryImportTest {
         return gson.fromJson(json, Treatment::class.java)
     }
 
+    private fun legacyDevice(updatedAt: String = "2026-01-15", isArchived: Boolean = false): MedicalDevice {
+        val json = """
+            {
+                "id": 1,
+                "lifeSpanEndDate": "2026-01-18",
+                "name": "Omnipod 1",
+                "date": "2026-01-15",
+                "batchNumber": "12345678",
+                "deviceType": "WIRELESS_PATCH",
+                "lifeSpan": 3,
+                "isFaulty": false,
+                "isReported": false,
+                "isLifeSpanOver": true,
+                "is_archived": $isArchived,
+                "created_at": "2026-01-15",
+                "updated_at": "$updatedAt"
+            }
+        """.trimIndent()
+
+        return gson.fromJson(json, MedicalDevice::class.java)
+    }
+
     @Before
     fun createDb() {
         val context = ApplicationProvider.getApplicationContext<Context>()
@@ -408,5 +430,18 @@ class DataRepositoryImportTest {
         val allTreatments = db.treatmentDao().getAllTreatmentsFlow().first()
 
         assertEquals(1, allTreatments.size)
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun legacyDeviceBackupReimportedTwiceDoesNotDuplicate() = runBlocking {
+        val backup = listOf(legacyDevice())
+
+        repository.importMedicalDevices(backup)
+        repository.importMedicalDevices(backup)
+
+        val allDevices = db.medicalDevicesDao().getAllMedicalDevices().first()
+
+        assertEquals(1, allDevices.size)
     }
 }
