@@ -405,11 +405,19 @@ class DataRepository(
      */
     suspend fun importTreatments(treatments: List<Treatment>) = withContext(Dispatchers.IO) {
         treatments.forEach { backupEntry ->
-            val localEntry = treatmentDao.getByUuid(backupEntry.entryUuid)
+            val backupUuid: String? = backupEntry.entryUuid   // Gson may leave it null for old backups
+            val hasUuid = !backupUuid.isNullOrBlank()
+
+            val localEntry = when {
+                hasUuid -> treatmentDao.getByUuid(backupEntry.entryUuid)
+                else -> treatmentDao.getByContent(backupEntry.createdAt, backupEntry.name, backupEntry.expirationDate, backupEntry.type)
+            }
+
+            val uuidForInsert = if (hasUuid) backupUuid else newEntryUuid()
 
             when {
-                localEntry == null -> insertTreatment(backupEntry.copy(id = 0))
-                backupEntry.updatedAt > localEntry.updatedAt -> updateTreatment(backupEntry.copy(id = localEntry.id))
+                localEntry == null -> insertTreatment(backupEntry.copy(id = 0, entryUuid = uuidForInsert))
+                backupEntry.updatedAt > localEntry.updatedAt -> updateTreatment(backupEntry.copy(id = localEntry.id, entryUuid = localEntry.entryUuid))
                 else -> Unit // local entry is same or newer: keep it
             }
         }

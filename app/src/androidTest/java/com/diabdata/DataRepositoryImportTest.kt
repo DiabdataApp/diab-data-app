@@ -10,6 +10,7 @@ import com.diabdata.core.model.Appointment
 import com.diabdata.core.model.Hba1c
 import com.diabdata.core.model.ImportantDate
 import com.diabdata.core.model.MedicalDevice
+import com.diabdata.core.model.Treatment
 import com.diabdata.core.model.UserDetails
 import com.diabdata.core.model.UserPreferences
 import com.diabdata.core.model.Weight
@@ -151,6 +152,22 @@ class DataRepositoryImportTest {
         """.trimIndent()
 
         return gson.fromJson(json, Appointment::class.java)
+    }
+
+    private fun legacyTreatment(updatedAt: String = "2026-01-15", isArchived: Boolean = false): Treatment {
+        val json = """
+            {
+                "id": 1,
+                "expirationDate": "2026-01-15",
+                "name": "Novorapid penfill",
+                "type": "FAST_ACTING_INSULIN_CARTRIDGE",
+                "is_archived": $isArchived,
+                "created_at": "2026-01-15",
+                "updated_at": "$updatedAt"
+            }
+        """.trimIndent()
+
+        return gson.fromJson(json, Treatment::class.java)
     }
 
     @Before
@@ -378,5 +395,18 @@ class DataRepositoryImportTest {
         val allApppointments = db.appointmentDao().getAllAppointmentsFlow().first()
 
         assertEquals(1, allApppointments.size)
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun legacyTreatmentBackupReimportedTwiceDoesNotDuplicate() = runBlocking {
+        val backup = listOf(legacyTreatment())
+
+        repository.importTreatments(backup)
+        repository.importTreatments(backup)
+
+        val allTreatments = db.treatmentDao().getAllTreatmentsFlow().first()
+
+        assertEquals(1, allTreatments.size)
     }
 }

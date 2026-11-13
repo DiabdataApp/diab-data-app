@@ -8,6 +8,20 @@ import com.google.gson.annotations.SerializedName
 import java.time.LocalDate
 import kotlin.time.Instant
 
+/**
+ * A treatment supply owned by the user (e.g. an insulin cartridge), tracked by its expiration date.
+ *
+ * Alternate JSON names in [SerializedName] are kept so that older backups can still be imported.
+ *
+ * @property id Local database id. Only meaningful on this device: do not use it to identify
+ * an entry across devices or backups, use [entryUuid] instead.
+ * @property createdAt When the entry was created. Never changes afterwards; used to match
+ * entries from legacy backups that have no [entryUuid].
+ * @property updatedAt When the entry was last modified. Must be updated on every change,
+ * otherwise the import conflict resolver may keep an outdated version.
+ * @property entryUuid Stable identity of the entry across devices and backups, used by the
+ * import conflict resolver.
+ */
 @Entity(
     tableName = "treatments",
     indices = [Index(value = ["entryUuid"], unique = true)]
