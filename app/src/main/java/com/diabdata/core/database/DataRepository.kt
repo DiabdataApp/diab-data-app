@@ -466,7 +466,7 @@ class DataRepository(
 
                 val localEntry = when {
                     hasUuid -> medicalDevicesDao.getByUuid(backupEntry.entryUuid)
-                    else -> medicalDevicesDao.getByContent(backupEntry.createdAt, backupEntry.date, backupEntry.deviceType, backupEntry.name, backupEntry.batchNumber)
+                    else -> medicalDevicesDao.getByContent(backupEntry.createdAt, backupEntry.date, backupEntry.deviceType, backupEntry.batchNumber)
                 }
 
                 val uuidForInsert = if (hasUuid) backupUuid else newEntryUuid()
