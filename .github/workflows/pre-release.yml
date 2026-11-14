@@ -3,6 +3,10 @@ run-name: "Pre-Release — ${{ github.sha }}"
 
 on:
   pull_request:
+    paths-ignore:
+      - '.idea/**'
+      - '**/*.md'
+      - 'resources/**'
     branches: ['dev']
     types: [closed]
 
