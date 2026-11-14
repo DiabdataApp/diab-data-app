@@ -3,11 +3,19 @@ run-name: "Pre-Release — ${{ github.sha }}"
 
 on:
   pull_request:
+    paths-ignore:
+      - '.idea/**'
+      - '**/*.md'
+      - 'resources/**'
     branches: ['dev']
     types: [closed]
 
 permissions:
   contents: write
+
+concurrency:
+  group: pre-release
+  cancel-in-progress: true
 
 jobs:
   pre-release:
@@ -47,12 +55,12 @@ jobs:
         id: version
         run: |
           VERSION_NAME=$(grep -oP 'versionName\s*=\s*"\K[^"]+' app/build.gradle.kts | head -1)
-          
+
           BETA_COUNT=$(git tag -l "v${VERSION_NAME}-beta.*" | wc -l)
           NEXT_BETA=$((BETA_COUNT + 1))
-          
+
           TAG="v${VERSION_NAME}-beta.${NEXT_BETA}"
-          
+
           echo "tag=$TAG" >> $GITHUB_OUTPUT
           echo "version_name=$VERSION_NAME" >> $GITHUB_OUTPUT
           echo "📦 Tag: $TAG"
@@ -75,15 +83,15 @@ jobs:
             --prerelease \
             --generate-notes \
             --notes "## 🧪 Pre-Release Beta
-          
+
           **Version :** ${{ steps.version.outputs.version_name }}
           **Tag :** \`${{ steps.version.outputs.tag }}\`
           **PR :** #${{ github.event.pull_request.number }} — ${{ github.event.pull_request.title }}
           **Author :** @${{ github.event.pull_request.user.login }}
-          
+
           > ⚠️ Development build (debug, unsigned, not minified).
           > For testing purposes only.
-          
+
           ### 📥 Downloads
           - 📱 **DiabData-phone** — Mobile app
           - ⌚ **DiabData-wear** — Wear OS app" \
