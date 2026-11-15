@@ -19,9 +19,9 @@
     <string name="date_this_year">Cette année</string>
 
     <!-- For null quantities-->
-    <string name="date_zero_days">0 days</string>
-    <string name="date_zero_months">0 months</string>
-    <string name="date_zero_years">0 years</string>
+    <string name="date_zero_days">0 jours</string>
+    <string name="date_zero_months">0 mois</string>
+    <string name="date_zero_years">0 années</string>
 
     <!-- For upcoming date -->
     <string name="date_tomorrow">Demain</string>
