@@ -1,4 +1,4 @@
-package com.diabdata.core.ui.components.date_components
+package com.diabdata.core.ui.components.dateComponents
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.clickable

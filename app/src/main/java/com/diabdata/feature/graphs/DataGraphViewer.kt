@@ -42,7 +42,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.diabdata.core.database.DataViewModel
-import com.diabdata.core.ui.components.date_components.DateRangeModal
+import com.diabdata.core.ui.components.dateComponents.DateRangeModal
 import com.diabdata.core.ui.components.noDataView.NoDataView
 import com.diabdata.core.utils.ScreenSize
 import com.diabdata.core.utils.getScreenSize

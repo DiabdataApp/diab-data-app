@@ -42,7 +42,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.diabdata.core.model.UserDetails
 import com.diabdata.core.model.nowMillis
 import com.diabdata.core.ui.components.actionInput.EnumDropdown
-import com.diabdata.core.ui.components.date_components.DateSelector
+import com.diabdata.core.ui.components.dateComponents.DateSelector
 import com.diabdata.feature.userProfile.UserProfileViewModel
 import com.diabdata.shared.R as shared
 import com.diabdata.shared.utils.dataTypes.BloodType

@@ -20,7 +20,7 @@ import com.diabdata.core.model.newEntryUuid
 import com.diabdata.core.model.nowMillis
 import com.diabdata.core.ui.components.actionInput.EnumDropdown
 import com.diabdata.core.ui.components.addDataPopup.BasePopupLayout
-import com.diabdata.core.ui.components.date_components.DateTimeSelector
+import com.diabdata.core.ui.components.dateComponents.DateTimeSelector
 import com.diabdata.shared.R as shared
 import com.diabdata.shared.utils.dataTypes.AddableType
 import com.diabdata.shared.utils.dataTypes.AppointmentType

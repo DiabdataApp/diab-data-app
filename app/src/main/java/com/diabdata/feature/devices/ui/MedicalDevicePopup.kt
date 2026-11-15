@@ -32,7 +32,7 @@ import com.diabdata.core.model.newEntryUuid
 import com.diabdata.core.model.nowMillis
 import com.diabdata.core.ui.components.actionInput.EnumDropdown
 import com.diabdata.core.ui.components.addDataPopup.BasePopupLayout
-import com.diabdata.core.ui.components.date_components.DateSelector
+import com.diabdata.core.ui.components.dateComponents.DateSelector
 import com.diabdata.core.utils.ui.SvgIcon
 import com.diabdata.core.utils.ui.darken
 import com.diabdata.feature.devices.DevicesViewModel
