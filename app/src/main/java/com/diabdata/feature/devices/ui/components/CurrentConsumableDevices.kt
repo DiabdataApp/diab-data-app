@@ -111,7 +111,9 @@ fun CurrentConsumableDevicesCards(
 ) {
     val primaryColor = MaterialTheme.colorScheme.primary
 
-    if (devices.isEmpty()) return
+    if (devices.isEmpty()) {
+        return
+    }
 
     val today = LocalDate.now()
 
@@ -119,7 +121,11 @@ fun CurrentConsumableDevicesCards(
         MedicalDeviceCardData(
             device = device,
             titleText = device.name.ifEmpty { device.deviceType.displayName(LocalContext.current) },
-            textColor = if (device.isLifeSpanOver) MaterialTheme.colorScheme.error else device.deviceType.baseColor,
+            textColor = if (device.isLifeSpanOver) {
+                MaterialTheme.colorScheme.error
+            } else {
+                device.deviceType.baseColor
+            },
             addableType = AddableType.DEVICE,
             isLifeSpanOver = device.isLifeSpanOver,
             iconRes = device.deviceType.iconRes,
@@ -330,7 +336,11 @@ fun CurrentConsumableDevicesCards(
                                 LinearProgressIndicator(
                                     progress = { progress },
                                     modifier = Modifier.weight(1f),
-                                    color = if (card.isLifeSpanOver) MaterialTheme.colorScheme.error else card.textColor,
+                                    color = if (card.isLifeSpanOver) {
+                                        MaterialTheme.colorScheme.error
+                                    } else {
+                                        card.textColor
+                                    },
                                     trackColor = MaterialTheme.colorScheme.surfaceVariant
                                 )
                                 Text(

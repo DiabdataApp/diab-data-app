@@ -79,7 +79,6 @@ fun FaultyDevices(dataViewModel: DataViewModel) {
     )
 }
 
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun FaultyDevicesScreen(
     faultyDevices: List<MedicalDevice>,
@@ -220,7 +219,11 @@ fun DisplayCard(
         MedicalDeviceCardData(
             device = device,
             titleText = device.name.ifEmpty { device.deviceType.displayName(LocalContext.current) },
-            textColor = if (device.isLifeSpanOver) MaterialTheme.colorScheme.error else device.deviceType.baseColor,
+            textColor = if (device.isLifeSpanOver) {
+                MaterialTheme.colorScheme.error
+            } else {
+                device.deviceType.baseColor
+            },
             addableType = AddableType.DEVICE,
             isLifeSpanOver = device.isLifeSpanOver,
             iconRes = device.deviceType.iconRes,

@@ -241,12 +241,18 @@ fun DatabaseEditionView(dataViewModel: DataViewModel) {
                     }
                 }
 
-                if (!selectionMode && selectedEntries.isEmpty()) Spacer(Modifier.width(8.dp))
+                if (!selectionMode && selectedEntries.isEmpty()) {
+                    Spacer(Modifier.width(8.dp))
+                }
 
                 IconButton(
                     onClick = {
                         val selectingAll = selectedEntries.size < filteredEntries.size
-                        selectedEntries = if (selectingAll) filteredEntries.toSet() else emptySet()
+                        selectedEntries = if (selectingAll) {
+                            filteredEntries.toSet()
+                        } else {
+                            emptySet()
+                        }
                         selectionMode = selectingAll
                     },
                     modifier = Modifier
@@ -280,7 +286,9 @@ fun DatabaseEditionView(dataViewModel: DataViewModel) {
                         onClick = {
                             if (selectionMode) {
                                 selectedEntries = toggleEntrySelection(selectedEntries, entry)
-                                if (selectedEntries.isEmpty()) selectionMode = false
+                                if (selectedEntries.isEmpty()) {
+                                    selectionMode = false
+                                }
                             } else if (selectedEntries.isEmpty()) {
                                 selectedEntry = entry
                             }
@@ -335,8 +343,11 @@ fun EntryCardSwipeM3(
     val currentOnDelete by rememberUpdatedState(onDeleteFromDb)
     val currentOnArchive by rememberUpdatedState(onArchive)
 
-    val archiveResId =
-        if (entry.isArchived) shared.drawable.unarchive_icon_vector else shared.drawable.archive_icon_vector
+    val archiveResId = if (entry.isArchived) {
+        shared.drawable.unarchive_icon_vector
+    } else {
+        shared.drawable.archive_icon_vector
+    }
     val archivedCardBgColor = when {
         selectionMode && isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.2f)
         entry.isArchived -> colorResource(R.color.archived_washed)
@@ -441,7 +452,11 @@ fun EntryCardSwipeM3(
                 Box(contentAlignment = Alignment.Center) {
                     ColoredIconCircle(
                         iconRes = entry.icon,
-                        baseColor = if (entry.isArchived) color else entry.addableType.baseColor,
+                        baseColor = if (entry.isArchived) {
+                            color
+                        } else {
+                            entry.addableType.baseColor
+                        },
                         size = 40.dp,
                         iconSize = 25.dp
                     )
@@ -617,8 +632,11 @@ private fun EntryContent(entry: DataViewModel.MixedDbEntry) {
 fun toggleEntrySelection(
     current: Set<DataViewModel.MixedDbEntry>,
     entry: DataViewModel.MixedDbEntry
-): Set<DataViewModel.MixedDbEntry> =
-    if (current.contains(entry)) current - entry else current + entry
+): Set<DataViewModel.MixedDbEntry> = if (current.contains(entry)) {
+    current - entry
+} else {
+    current + entry
+}
 
 @Composable
 fun FilterChips(

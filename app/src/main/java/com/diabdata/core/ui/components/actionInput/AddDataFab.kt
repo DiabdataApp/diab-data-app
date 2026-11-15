@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.FloatingActionButtonMenu
 import androidx.compose.material3.FloatingActionButtonMenuItem
 import androidx.compose.material3.Icon
@@ -30,7 +29,6 @@ import androidx.compose.ui.res.stringResource
 import com.diabdata.shared.R as shared
 import com.diabdata.shared.utils.dataTypes.AddableType
 
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun AddDataFab(onSelect: (AddableType) -> Unit, onScanClick: () -> Unit) {
     var fabMenuExpanded by rememberSaveable { mutableStateOf(false) }
@@ -85,14 +83,26 @@ fun AddDataFab(onSelect: (AddableType) -> Unit, onScanClick: () -> Unit) {
                 ) {
                     val imageVector by remember {
                         derivedStateOf {
-                            if (fabMenuExpanded) Icons.Filled.Close else Icons.Filled.Add
+                            if (fabMenuExpanded) {
+                                Icons.Filled.Close
+                            } else {
+                                Icons.Filled.Add
+                            }
                         }
                     }
 
                     Icon(
                         imageVector = imageVector,
-                        tint = if (fabMenuExpanded) MaterialTheme.colorScheme.onPrimary else Color.Unspecified,
-                        contentDescription = if (fabMenuExpanded) "Fermer menu" else "Ouvrir menu"
+                        tint = if (fabMenuExpanded) {
+                            MaterialTheme.colorScheme.onPrimary
+                        } else {
+                            Color.Unspecified
+                        },
+                        contentDescription = if (fabMenuExpanded) {
+                            "Fermer menu"
+                        } else {
+                            "Ouvrir menu"
+                        }
                     )
                 }
             }

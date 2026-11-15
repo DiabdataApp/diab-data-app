@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -72,7 +71,6 @@ fun CurrentNonConsumableDevicesList() {
     }
 }
 
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun CurrentNonConsumableDevicesCards(
     devices: List<MedicalDevice>,
@@ -80,13 +78,19 @@ fun CurrentNonConsumableDevicesCards(
 ) {
     val primaryColor = MaterialTheme.colorScheme.primary
 
-    if (devices.isEmpty()) return
+    if (devices.isEmpty()) {
+        return
+    }
 
     val cards = devices.map { device ->
         MedicalDeviceCardData(
             device = device,
             titleText = device.name.ifEmpty { device.deviceType.displayName(LocalContext.current) },
-            textColor = if (device.isLifeSpanOver) MaterialTheme.colorScheme.error else device.deviceType.baseColor,
+            textColor = if (device.isLifeSpanOver) {
+                MaterialTheme.colorScheme.error
+            } else {
+                device.deviceType.baseColor
+            },
             addableType = AddableType.DEVICE,
             isLifeSpanOver = device.isLifeSpanOver,
             iconRes = device.deviceType.iconRes,
@@ -255,7 +259,9 @@ fun CurrentNonConsumableDevicesCards(
                     }
                 }
             }
-            if (index != cards.size - 1) Spacer(Modifier.height(3.dp))
+            if (index != cards.size - 1) {
+                Spacer(Modifier.height(3.dp))
+            }
         }
     }
 }

@@ -118,7 +118,11 @@ fun AutoBackupCard(
         SegmentedListItem(
             onClick = { expanded = !expanded },
             modifier = Modifier.semantics {
-                stateDescription = if (expanded) "Expanded" else "Collapsed"
+                stateDescription = if (expanded) {
+                    "Expanded"
+                } else {
+                    "Collapsed"
+                }
             },
             shapes = if (expanded) {
                 ListItemDefaults.segmentedShapes(
@@ -214,7 +218,13 @@ fun AutoBackupCard(
                                         .semantics {
                                             role = Role.RadioButton
                                         }
-                                        .weight(if (frequency == freq) 1.2f else 0.8f)
+                                        .weight(
+                                            if (frequency == freq) {
+                                                1.2f
+                                            } else {
+                                                0.8f
+                                            }
+                                        )
                                 ) {
                                     Text(
                                         text = stringResource(freq.labelRes),
@@ -441,7 +451,11 @@ fun AutoBackupCard(
                             checked = isBackupEnabled,
                             onCheckedChange = onEnabledChange,
                             thumbContent = {
-                                val iconRes = if (isBackupEnabled) shared.drawable.play_arrow_icon_vector else shared.drawable.pause_outlined_icon_vector
+                                val iconRes = if (isBackupEnabled) {
+                                    shared.drawable.play_arrow_icon_vector
+                                } else {
+                                    shared.drawable.pause_outlined_icon_vector
+                                }
                                 SvgIcon(
                                     resId = iconRes,
                                     modifier = Modifier.size(SwitchDefaults.IconSize),
@@ -549,7 +563,11 @@ fun TwoToneInfoRowPreview() {
                     onFrequencyChange = { frequency = it },
                     onPathChange = { backupPath = it },
                     onResetButtonClick = { backupPath = "" },
-                    backupStatusState = if (PREVIEW_TEST_DATA) backupStatusState else emptyBackupStatusState
+                    backupStatusState = if (PREVIEW_TEST_DATA) {
+                        backupStatusState
+                    } else {
+                        emptyBackupStatusState
+                    }
                 )
 
                 Column(

@@ -119,7 +119,11 @@ fun CardListItem(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 22.dp, vertical = 22.dp),
-            verticalAlignment = if (alignTop) Alignment.Top else Alignment.CenterVertically,
+            verticalAlignment = if (alignTop) {
+                Alignment.Top
+            } else {
+                Alignment.CenterVertically
+            },
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             LeadingSection(cardItem)
@@ -137,7 +141,11 @@ fun CardListItem(
         Surface(
             shape = shape,
             color = MaterialTheme.colorScheme.surface,
-            contentColor = if (cardItem.isDestructive) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurface,
+            contentColor = if (cardItem.isDestructive) {
+                MaterialTheme.colorScheme.error
+            } else {
+                MaterialTheme.colorScheme.onSurface
+            },
             modifier = modifier.fillMaxWidth(),
             onClick = onClick
         ) {
@@ -147,7 +155,11 @@ fun CardListItem(
         Surface(
             shape = shape,
             color = MaterialTheme.colorScheme.surface,
-            contentColor = if (cardItem.isDestructive) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurface,
+            contentColor = if (cardItem.isDestructive) {
+                MaterialTheme.colorScheme.error
+            } else {
+                MaterialTheme.colorScheme.onSurface
+            },
             modifier = modifier.fillMaxWidth()
         ) {
             content()

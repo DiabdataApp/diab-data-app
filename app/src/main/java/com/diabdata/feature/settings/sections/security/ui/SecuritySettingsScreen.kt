@@ -69,15 +69,35 @@ fun SecuritySettingsScreen() {
         stringResource(shared.string.settings_security_unset_backup_password_error)
 
     val passwordButtonIcon =
-        if (hasBackupPassword) shared.drawable.save_as_icon_vector else shared.drawable.save_icon_vector
+        if (hasBackupPassword) {
+            shared.drawable.save_as_icon_vector
+        } else {
+            shared.drawable.save_icon_vector
+        }
 
     val isBackupEncryptionEnabledIcon =
-        if (backupEncryptionEnabled) shared.drawable.shield_lock_filled_icon_vector else shared.drawable.shield_lock_icon_vector
+        if (backupEncryptionEnabled) {
+            shared.drawable.shield_lock_filled_icon_vector
+        } else {
+            shared.drawable.shield_lock_icon_vector
+        }
     val lockUnlockIcon =
-        if (backupEncryptionEnabled) shared.drawable.lock_icon_vector else shared.drawable.lock_open_icon_vector
+        if (backupEncryptionEnabled) {
+            shared.drawable.lock_icon_vector
+        } else {
+            shared.drawable.lock_open_icon_vector
+        }
     val backupToggleSupportingText =
-        if (backupEncryptionEnabled) shared.string.settings_security_disable_backup_encryption else shared.string.settings_security_enable_backup_encryption
-    val backupEncryptionSectionChildCount = if (hasBackupPassword) 3 else 2
+        if (backupEncryptionEnabled) {
+            shared.string.settings_security_disable_backup_encryption
+        } else {
+            shared.string.settings_security_enable_backup_encryption
+        }
+    val backupEncryptionSectionChildCount = if (hasBackupPassword) {
+        3
+    } else {
+        2
+    }
 
     fun submitPassword() {
         scope.launch(Dispatchers.IO) {
@@ -186,7 +206,11 @@ fun SecuritySettingsScreen() {
                     SegmentedListItem(
                         modifier = Modifier,
                         shapes = ListItemDefaults.segmentedShapes(
-                            if (hasBackupPassword) 1 else 0,
+                            if (hasBackupPassword) {
+                                1
+                            } else {
+                                0
+                            },
                             backupEncryptionSectionChildCount
                         ),
                         leadingContent = {
@@ -254,13 +278,21 @@ fun SecuritySettingsScreen() {
                 SegmentedListItem(
                     modifier = Modifier,
                     shapes = ListItemDefaults.segmentedShapes(
-                        if (hasBackupPassword) 2 else 1,
+                        if (hasBackupPassword) {
+                            2
+                        } else {
+                            1
+                        },
                         backupEncryptionSectionChildCount
                     ),
                     leadingContent = {
                         SvgIcon(
                             resId = isBackupEncryptionEnabledIcon,
-                            color = if (backupEncryptionEnabled) MaterialTheme.colorScheme.primary else containerContentColor,
+                            color = if (backupEncryptionEnabled) {
+                                MaterialTheme.colorScheme.primary
+                            } else {
+                                containerContentColor
+                            },
                             modifier = Modifier.size(24.dp)
                         )
                     },
