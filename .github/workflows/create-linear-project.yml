@@ -1,0 +1,47 @@
+name: "Create Linear project"
+run-name: "Create Linear project"
+
+on:
+  milestone:
+    types: [created]
+
+jobs:
+  create-project:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create Linear project
+        env:
+          MILESTONE_TITLE: ${{ github.event.milestone.title }}
+          MILESTONE_DESC: ${{ github.event.milestone.description }}
+          LINEAR_TEAM_ID: ${{ secrets.LINEAR_TEAM_ID }}
+          LINEAR_API_KEY: ${{ secrets.LINEAR_API_KEY }}
+        run: |
+          echo "Title: $MILESTONE_TITLE"
+          echo "Description: $MILESTONE_DESC"
+
+          QUERY='mutation ProjectCreate($input: ProjectCreateInput!) { projectCreate(input: $input) { success project {id, name, url}} }'
+
+          BODY=$(jq -n \
+            --arg query "$QUERY" \
+            --arg name  "$MILESTONE_TITLE" \
+            --arg desc  "$MILESTONE_DESC" \
+            --arg team  "$LINEAR_TEAM_ID" \
+            '{ query: $query, variables: { input: { name: $name, description: $desc, teamIds: [$team] } } }')
+
+          RESPONSE=$(curl \
+            -sS \
+            --fail-with-body \
+            -X POST \
+            -H "Content-Type: application/json" \
+            -H "Authorization: $LINEAR_API_KEY" \
+            -d "$BODY" https://api.linear.app/graphql) || { echo "$RESPONSE"; exit 1; }
+
+          echo "$RESPONSE"
+
+          if echo "$RESPONSE" | jq -e '.data.projectCreate.success' > /dev/null; then
+            PROJECT_URL=$(echo "$RESPONSE" | jq -r '.data.projectCreate.project.url')
+            echo "✅ Linear project created: $PROJECT_URL"
+          else
+            echo "❌ Linear project creation failed"
+            exit 1
+          fi
