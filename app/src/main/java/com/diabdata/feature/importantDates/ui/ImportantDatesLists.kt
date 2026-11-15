@@ -38,7 +38,6 @@ import com.diabdata.core.ui.theme.DiabDataTheme
 import com.diabdata.core.ui.theme.GoogleSansFlexFontFamily
 import com.diabdata.core.utils.ui.ColoredIconCircleProps
 import com.diabdata.core.utils.ui.SvgIcon
-import com.diabdata.feature.settings.sections.dataSettings.ui.components.locale
 import com.diabdata.feature.userProfile.UserProfileViewModel
 import com.diabdata.shared.R as shared
 import com.diabdata.shared.utils.dataTypes.AddableType
@@ -174,9 +173,9 @@ fun ImportantDatesListContent(
     )
 }
 
-const val locale = "fr"
+private const val PREVIEW_LOCALE = "fr"
 
-@Preview(name = "Interactive", showBackground = true, locale = locale)
+@Preview(name = "Interactive", showBackground = true, locale = PREVIEW_LOCALE)
 @Composable
 fun ImportantDatesListPreview() {
     var darkTheme by remember { mutableStateOf(false) }

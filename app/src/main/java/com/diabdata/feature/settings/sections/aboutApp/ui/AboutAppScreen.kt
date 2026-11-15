@@ -29,7 +29,6 @@ import com.diabdata.BuildConfig
 import com.diabdata.core.ui.theme.DiabDataTheme
 import com.diabdata.core.ui.theme.ExtendedTheme
 import com.diabdata.core.ui.theme.GoogleSansFlexFontFamily
-import com.diabdata.feature.settings.sections.dataSettings.ui.components.locale
 import com.diabdata.feature.settings.ui.components.AppInfoCard
 import com.diabdata.feature.settings.ui.components.changelog.ChangelogDialog
 import com.diabdata.feature.settings.ui.components.licenses.LicensesDialog
@@ -68,7 +67,9 @@ fun AboutAppSettingScreen() {
     }
 }
 
-@Preview(name = "Interactive", showBackground = true, locale = locale)
+private const val PREVIEW_LOCALE = "fr"
+
+@Preview(name = "Interactive", showBackground = true, locale = PREVIEW_LOCALE)
 @Composable
 fun AboutAppSettingScreenInteractivePreview() {
     var darkTheme by remember { mutableStateOf(false) }

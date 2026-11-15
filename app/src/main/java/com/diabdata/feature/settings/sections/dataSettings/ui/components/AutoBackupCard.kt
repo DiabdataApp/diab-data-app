@@ -499,9 +499,9 @@ fun AutoBackupCard(
     }
 }
 
-const val locale = "fr"
-const val testData = false
-const val testBackupPath = "content://com.android.externalstorage.documents/tree/primary%3ADiabdata"
+private const val PREVIEW_LOCALE = "fr"
+private const val PREVIEW_TEST_DATA = false
+private const val PREVIEW_BACKUP_PATH = "content://com.android.externalstorage.documents/tree/primary%3ADiabdata"
 val backupStatusState = BackupStatusState("30 juil. 2026", "31/08/26 16h30")
 val emptyBackupStatusState = BackupStatusState(null, null)
 val withNextBackupDate = BackupStatusState(null, "30 juil. 2026")
@@ -509,7 +509,7 @@ val withNextBackupDate = BackupStatusState(null, "30 juil. 2026")
 @Preview(
     name = "ON",
     showBackground = true,
-    locale = locale,
+    locale = PREVIEW_LOCALE,
     device = "id:pixel_8_pro",
     showSystemUi = true
 )
@@ -521,7 +521,7 @@ fun TwoToneInfoRowPreview() {
     var backupPath by remember {
         @Suppress("SimplifyBooleanWithConstants")
         mutableStateOf(
-            testBackupPath.takeIf { it.isNotBlank() && testData }
+            PREVIEW_BACKUP_PATH.takeIf { it.isNotBlank() && PREVIEW_TEST_DATA }
                 ?: ""
         )
     }
@@ -549,7 +549,7 @@ fun TwoToneInfoRowPreview() {
                     onFrequencyChange = { frequency = it },
                     onPathChange = { backupPath = it },
                     onResetButtonClick = { backupPath = "" },
-                    backupStatusState = if (testData) backupStatusState else emptyBackupStatusState
+                    backupStatusState = if (PREVIEW_TEST_DATA) backupStatusState else emptyBackupStatusState
                 )
 
                 Column(

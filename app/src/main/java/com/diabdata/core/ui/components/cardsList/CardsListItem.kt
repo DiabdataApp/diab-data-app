@@ -241,14 +241,14 @@ private fun TrailingSection(cardItem: CardItem) {
     }
 }
 
-const val darkTheme = true
-const val locale = "fr"
+private const val PREVIEW_DARK_THEME = true
+private const val PREVIEW_LOCALE = "fr"
 
-@Preview(name = "ON", showBackground = true, locale = locale)
+@Preview(name = "ON", showBackground = true, locale = PREVIEW_LOCALE)
 @Composable
 fun CardListItemSwitch() {
     var enableNotifications by remember { mutableStateOf(true) }
-    DiabDataTheme(dynamicColor = false, darkTheme = darkTheme) {
+    DiabDataTheme(dynamicColor = false, darkTheme = PREVIEW_DARK_THEME) {
         Box(
             modifier = Modifier
                 .background(MaterialTheme.colorScheme.surfaceContainer)
