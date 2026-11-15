@@ -14,6 +14,9 @@ import com.diabdata.shared.utils.imgUtils.toTreatmentIcon
 
 class ExpiringTreatmentComplicationService : SuspendingComplicationDataSourceService() {
 
+    private val daysLeftLabelRes =
+        shared.string.medications_wear_complication_expiring_treatments_plain_text_builder
+
     override suspend fun onComplicationRequest(request: ComplicationRequest): ComplicationData {
         val prefs = getSharedPreferences("complications_treatment_expiry", MODE_PRIVATE)
         val treatmentDaysBeforeExpiry = prefs.getString("nextTreatmentExpiry", "0") ?: "0"
@@ -42,9 +45,7 @@ class ExpiringTreatmentComplicationService : SuspendingComplicationDataSourceSer
             min = 0f,
             max = if (totalLifespan > 0f) totalLifespan else 1f,
             contentDescription = PlainComplicationText.Builder(
-                getString(
-                    shared.string.medications_wear_complication_expiring_treatments_plain_text_builder
-                )
+                getString(daysLeftLabelRes)
             )
                 .build()
         )
@@ -63,9 +64,7 @@ class ExpiringTreatmentComplicationService : SuspendingComplicationDataSourceSer
             min = 0f,
             max = 3f,
             contentDescription = PlainComplicationText.Builder(
-                getString(
-                    shared.string.medications_wear_complication_expiring_treatments_plain_text_builder
-                )
+                getString(daysLeftLabelRes)
             )
                 .build()
         )

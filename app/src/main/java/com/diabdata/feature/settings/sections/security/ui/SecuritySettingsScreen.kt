@@ -42,7 +42,8 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.diabdata.core.ui.theme.GoogleSansFlexFontFamily
 import com.diabdata.core.utils.ui.SvgIcon
 import com.diabdata.feature.settings.sections.security.SecuritySettingsViewModel
-import com.diabdata.shared.R as shared
+import com.diabdata.shared.R.drawable as icons
+import com.diabdata.shared.R.string as strings
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -62,36 +63,36 @@ fun SecuritySettingsScreen() {
     val context = LocalContext.current
 
     val setBackupPasswordSuccess =
-        stringResource(shared.string.settings_security_set_backup_password_success)
+        stringResource(strings.settings_security_set_backup_password_success)
     val setBackupPasswordError =
-        stringResource(shared.string.settings_security_set_backup_password_error)
+        stringResource(strings.settings_security_set_backup_password_error)
     val unsetPasswordErrorMessage =
-        stringResource(shared.string.settings_security_unset_backup_password_error)
+        stringResource(strings.settings_security_unset_backup_password_error)
 
     val passwordButtonIcon =
         if (hasBackupPassword) {
-            shared.drawable.save_as_icon_vector
+            icons.save_as_icon_vector
         } else {
-            shared.drawable.save_icon_vector
+            icons.save_icon_vector
         }
 
     val isBackupEncryptionEnabledIcon =
         if (backupEncryptionEnabled) {
-            shared.drawable.shield_lock_filled_icon_vector
+            icons.shield_lock_filled_icon_vector
         } else {
-            shared.drawable.shield_lock_icon_vector
+            icons.shield_lock_icon_vector
         }
     val lockUnlockIcon =
         if (backupEncryptionEnabled) {
-            shared.drawable.lock_icon_vector
+            icons.lock_icon_vector
         } else {
-            shared.drawable.lock_open_icon_vector
+            icons.lock_open_icon_vector
         }
     val backupToggleSupportingText =
         if (backupEncryptionEnabled) {
-            shared.string.settings_security_disable_backup_encryption
+            strings.settings_security_disable_backup_encryption
         } else {
-            shared.string.settings_security_enable_backup_encryption
+            strings.settings_security_enable_backup_encryption
         }
     val backupEncryptionSectionChildCount = if (hasBackupPassword) {
         3
@@ -104,7 +105,11 @@ fun SecuritySettingsScreen() {
             val setPassword = viewModel.setBackupPassword(passwordValue)
             withContext(Dispatchers.Main) {
                 setPassword.onSuccess {
-                    Toast.makeText(context, setBackupPasswordSuccess, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        context,
+                        setBackupPasswordSuccess,
+                        Toast.LENGTH_SHORT
+                    ).show()
                     passwordValue = ""
                 }
                 setPassword.onFailure { e ->
@@ -132,7 +137,7 @@ fun SecuritySettingsScreen() {
         ) {
             Text(
                 text = stringResource(
-                    shared.string.settings_security_settings_section_backup_password_label
+                    strings.settings_security_settings_section_backup_password_label
                 ),
                 fontFamily = GoogleSansFlexFontFamily
             )
@@ -142,10 +147,13 @@ fun SecuritySettingsScreen() {
             ) {
                 SegmentedListItem(
                     modifier = Modifier,
-                    shapes = ListItemDefaults.segmentedShapes(0, backupEncryptionSectionChildCount),
+                    shapes = ListItemDefaults.segmentedShapes(
+                        0,
+                        backupEncryptionSectionChildCount
+                    ),
                     leadingContent = {
                         SvgIcon(
-                            resId = shared.drawable.password_icon_vector,
+                            resId = icons.password_icon_vector,
                             color = containerContentColor,
                             modifier = Modifier.size(24.dp)
                         )
@@ -157,7 +165,7 @@ fun SecuritySettingsScreen() {
                                 label = {
                                     Text(
                                         stringResource(
-                                            shared.string.settings_security_set_backup_password_label
+                                            strings.settings_security_set_backup_password_label
                                         ),
                                         fontFamily = GoogleSansFlexFontFamily
                                     )
@@ -200,8 +208,12 @@ fun SecuritySettingsScreen() {
 
                 AnimatedVisibility(
                     visible = hasBackupPassword,
-                    enter = expandVertically(MaterialTheme.motionScheme.slowSpatialSpec()),
-                    exit = shrinkVertically(MaterialTheme.motionScheme.slowSpatialSpec())
+                    enter = expandVertically(
+                        MaterialTheme.motionScheme.slowSpatialSpec()
+                    ),
+                    exit = shrinkVertically(
+                        MaterialTheme.motionScheme.slowSpatialSpec()
+                    )
                 ) {
                     SegmentedListItem(
                         modifier = Modifier,
@@ -215,7 +227,7 @@ fun SecuritySettingsScreen() {
                         ),
                         leadingContent = {
                             SvgIcon(
-                                resId = shared.drawable.backspace_icon_vector,
+                                resId = icons.backspace_icon_vector,
                                 color = MaterialTheme.colorScheme.error,
                                 modifier = Modifier.size(24.dp)
                             )
@@ -223,7 +235,7 @@ fun SecuritySettingsScreen() {
                         content = {
                             Text(
                                 text = stringResource(
-                                    shared.string.settings_security_unset_backup_password_label
+                                    strings.settings_security_unset_backup_password_label
                                 ),
                                 fontFamily = GoogleSansFlexFontFamily
                             )
@@ -231,7 +243,7 @@ fun SecuritySettingsScreen() {
                         supportingContent = {
                             Text(
                                 text = stringResource(
-                                    shared.string.settings_security_unset_backup_password_description
+                                    strings.settings_security_unset_backup_password_description
                                 ),
                                 fontFamily = GoogleSansFlexFontFamily
                             )
@@ -261,7 +273,7 @@ fun SecuritySettingsScreen() {
                                 }
                             ) {
                                 SvgIcon(
-                                    resId = shared.drawable.arrow_right_icon_vector,
+                                    resId = icons.arrow_right_icon_vector,
                                     modifier = Modifier.size(18.dp),
                                     color = MaterialTheme.colorScheme.error
                                 )
@@ -312,7 +324,7 @@ fun SecuritySettingsScreen() {
                     content = {
                         Text(
                             text = stringResource(
-                                shared.string.settings_security_backup_encryption_label
+                                strings.settings_security_backup_encryption_label
                             ),
                             fontFamily = GoogleSansFlexFontFamily
                         )
@@ -336,12 +348,12 @@ fun SecuritySettingsScreen() {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 SvgIcon(
-                    resId = shared.drawable.lightbulb_icon_vector,
+                    resId = icons.lightbulb_icon_vector,
                     color = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.size(12.dp)
                 )
                 Text(
-                    text = stringResource(shared.string.settings_security_backup_encryption_tip),
+                    text = stringResource(strings.settings_security_backup_encryption_tip),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.primary,
                     fontFamily = GoogleSansFlexFontFamily

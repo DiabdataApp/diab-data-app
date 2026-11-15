@@ -71,6 +71,12 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.diabdata.R
 import com.diabdata.core.database.DataViewModel
+import com.diabdata.core.database.DataViewModel.MixedDbEntry.AppointmentEntry
+import com.diabdata.core.database.DataViewModel.MixedDbEntry.DeviceEntry
+import com.diabdata.core.database.DataViewModel.MixedDbEntry.Hba1cEntry
+import com.diabdata.core.database.DataViewModel.MixedDbEntry.ImportantDateEntry
+import com.diabdata.core.database.DataViewModel.MixedDbEntry.TreatmentEntry
+import com.diabdata.core.database.DataViewModel.MixedDbEntry.WeightEntry
 import com.diabdata.core.database.converters.toEntity
 import com.diabdata.core.model.MedicalDevice
 import com.diabdata.core.ui.components.actionInput.FlippableSelectionIcon
@@ -201,7 +207,7 @@ fun DatabaseEditionView(dataViewModel: DataViewModel) {
                                     scope.launch {
                                         scope.launch {
                                             val deviceEntries = selectedEntries
-                                                .filterIsInstance<DataViewModel.MixedDbEntry.DeviceEntry>()
+                                                .filterIsInstance<DeviceEntry>()
                                                 .map { it.toEntity() as MedicalDevice }
 
                                             devicesViewModel.setDevicesLifespanOver(
@@ -476,7 +482,7 @@ private fun EntryContent(entry: DataViewModel.MixedDbEntry) {
     val formatter = DateTimeFormatter.ofPattern("dd MMM yyyy")
 
     when (entry) {
-        is DataViewModel.MixedDbEntry.AppointmentEntry -> {
+        is AppointmentEntry -> {
             Text(
                 entry.doctor,
                 fontWeight = FontWeight.Bold,
@@ -497,7 +503,7 @@ private fun EntryContent(entry: DataViewModel.MixedDbEntry) {
             }
         }
 
-        is DataViewModel.MixedDbEntry.ImportantDateEntry -> {
+        is ImportantDateEntry -> {
             Text(
                 entry.importantDate,
                 fontWeight = FontWeight.Bold,
@@ -506,7 +512,7 @@ private fun EntryContent(entry: DataViewModel.MixedDbEntry) {
             Text(entry.date.format(formatter), style = MaterialTheme.typography.bodySmall)
         }
 
-        is DataViewModel.MixedDbEntry.Hba1cEntry -> {
+        is Hba1cEntry -> {
             Text(
                 "${entry.value} %",
                 fontWeight = FontWeight.Bold,
@@ -515,7 +521,7 @@ private fun EntryContent(entry: DataViewModel.MixedDbEntry) {
             Text(entry.date.format(formatter), style = MaterialTheme.typography.bodySmall)
         }
 
-        is DataViewModel.MixedDbEntry.TreatmentEntry -> {
+        is TreatmentEntry -> {
             Text(
                 entry.name,
                 fontWeight = FontWeight.Bold,
@@ -528,7 +534,7 @@ private fun EntryContent(entry: DataViewModel.MixedDbEntry) {
             )
         }
 
-        is DataViewModel.MixedDbEntry.WeightEntry -> {
+        is WeightEntry -> {
             Text(
                 "${entry.value} kg",
                 fontWeight = FontWeight.Bold,
@@ -537,7 +543,7 @@ private fun EntryContent(entry: DataViewModel.MixedDbEntry) {
             Text(entry.date.format(formatter), style = MaterialTheme.typography.bodySmall)
         }
 
-        is DataViewModel.MixedDbEntry.DeviceEntry -> {
+        is DeviceEntry -> {
             val numbersWithIcons = listOfNotNull(
                 entry.batchNumber.takeIf { it.isNotBlank() }?.let {
                     shared.drawable.lot_icon_vector to it

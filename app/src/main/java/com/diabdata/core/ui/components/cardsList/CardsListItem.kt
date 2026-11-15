@@ -195,7 +195,11 @@ private fun TrailingSection(cardItem: CardItem) {
         if (cardItem.trailingIcon != null) {
             val trailingOnClick = cardItem.onTrailingIconClick ?: cardItem.onClick
             val iconColor =
-                if (cardItem.isDestructive) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurface
+                if (cardItem.isDestructive) {
+                    MaterialTheme.colorScheme.error
+                } else {
+                    MaterialTheme.colorScheme.onSurface
+                }
 
             if (trailingOnClick != null) {
                 IconButton(
@@ -235,7 +239,11 @@ private fun TrailingSection(cardItem: CardItem) {
             onCheckedChange = cardItem.onSwitchChange,
             colors = switchColors,
             thumbContent = {
-                val iconRes = if (cardItem.switchState) cardItem.trailingIcon else cardItem.uncheckedTrailingIcon
+                val iconRes = if (cardItem.switchState) {
+                    cardItem.trailingIcon
+                } else {
+                    cardItem.uncheckedTrailingIcon
+                }
                 if (iconRes != null) {
                     SvgIcon(
                         resId = iconRes,

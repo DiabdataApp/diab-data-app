@@ -211,7 +211,8 @@ fun AutoBackupCard(
                                     onCheckedChange = { onFrequencyChange(freq) },
                                     shapes = when (index) {
                                         0 -> ButtonGroupDefaults.connectedLeadingButtonShapes()
-                                        BackupFrequency.entries.lastIndex -> ButtonGroupDefaults.connectedTrailingButtonShapes()
+                                        BackupFrequency.entries.lastIndex ->
+                                            ButtonGroupDefaults.connectedTrailingButtonShapes()
                                         else -> ButtonGroupDefaults.connectedMiddleButtonShapes()
                                     },
                                     modifier = Modifier
@@ -288,6 +289,8 @@ fun AutoBackupCard(
                                 }
                             }
                         } else {
+                            val backupFolderIcon =
+                                shared.drawable.backup_folder_settings_icon_vector
                             Row(
                                 horizontalArrangement = Arrangement.Center
                             ) {
@@ -299,7 +302,7 @@ fun AutoBackupCard(
                                         horizontalArrangement = spacedBy(8.dp)
                                     ) {
                                         SvgIcon(
-                                            resId = shared.drawable.backup_folder_settings_icon_vector,
+                                            resId = backupFolderIcon,
                                             modifier = Modifier.size(20.dp),
                                             color = MaterialTheme.colorScheme.onPrimary
                                         )
@@ -385,6 +388,10 @@ fun AutoBackupCard(
                         } else if (backupStatusState.lastBackupDate?.isNotBlank() == true ||
                             backupStatusState.nextBackupEstimate?.isNotBlank() == true
                         ) {
+                            val historyLastLabel =
+                                shared.string.settings_set_data_backup_history_last_label
+                            val historyNextLabel =
+                                shared.string.settings_set_data_backup_history_next_label
                             // If we only have one of the two
                             Row(
                                 horizontalArrangement = spacedBy(4.dp),
@@ -392,9 +399,7 @@ fun AutoBackupCard(
                             ) {
                                 if (backupStatusState.lastBackupDate?.isNotBlank() == true) {
                                     Text(
-                                        text = stringResource(
-                                            shared.string.settings_set_data_backup_history_last_label
-                                        ),
+                                        text = stringResource(historyLastLabel),
                                         fontFamily = GoogleSansFlexFontFamily
                                     )
 
@@ -403,9 +408,7 @@ fun AutoBackupCard(
                                     true
                                 ) {
                                     Text(
-                                        text = stringResource(
-                                            shared.string.settings_set_data_backup_history_next_label
-                                        ),
+                                        text = stringResource(historyNextLabel),
                                         fontFamily = GoogleSansFlexFontFamily
                                     )
 
@@ -515,8 +518,10 @@ fun AutoBackupCard(
 
 private const val PREVIEW_LOCALE = "fr"
 private const val PREVIEW_TEST_DATA = false
-private const val PREVIEW_BACKUP_PATH = "content://com.android.externalstorage.documents/tree/primary%3ADiabdata"
-val backupStatusState = BackupStatusState("30 juil. 2026", "31/08/26 16h30")
+private const val PREVIEW_BACKUP_PATH =
+    "content://com.android.externalstorage.documents/tree/primary%3ADiabdata"
+val backupStatusState =
+    BackupStatusState("30 juil. 2026", "31/08/26 16h30")
 val emptyBackupStatusState = BackupStatusState(null, null)
 val withNextBackupDate = BackupStatusState(null, "30 juil. 2026")
 

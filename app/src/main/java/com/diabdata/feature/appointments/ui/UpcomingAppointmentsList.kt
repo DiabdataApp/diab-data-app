@@ -50,6 +50,7 @@ fun UpcomingAppointmentsListContent(upcomingAppointments: List<Appointment>) {
 
     val context = LocalContext.current
     val primaryColor = MaterialTheme.colorScheme.primary
+    val surfaceVariantColor = MaterialTheme.colorScheme.onSurfaceVariant
 
     CardsList(
         header = stringResource(shared.string.appointments_homescreen_upcoming_appointments),
@@ -92,13 +93,13 @@ fun UpcomingAppointmentsListContent(upcomingAppointments: List<Appointment>) {
                                         modifier = Modifier.size(22.dp),
                                         colors = IconButtonDefaults.iconButtonColors(
                                             containerColor = Color.Transparent,
-                                            contentColor = MaterialTheme.colorScheme.onSurfaceVariant
+                                            contentColor = surfaceVariantColor
                                         )
                                     ) {
                                         SvgIcon(
                                             resId = shared.drawable.note_icon_vector,
                                             modifier = Modifier.size(18.dp),
-                                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                                            color = surfaceVariantColor
                                         )
                                     }
                                     if (showNotesDialog) {
@@ -145,7 +146,7 @@ fun UpcomingAppointmentsListContent(upcomingAppointments: List<Appointment>) {
                                         formatLocalDateTime(appointment.date)
                                     ),
                                     style = MaterialTheme.typography.bodySmall,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                    color = surfaceVariantColor
                                 )
                             }
                         }
@@ -153,13 +154,13 @@ fun UpcomingAppointmentsListContent(upcomingAppointments: List<Appointment>) {
                             SvgIcon(
                                 resId = shared.drawable.hourglass_icon_vector,
                                 modifier = Modifier.size(15.dp),
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                                color = surfaceVariantColor
                             )
                             Spacer(Modifier.width(4.dp))
                             Text(
                                 text = remainingText,
                                 style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                                color = surfaceVariantColor
                             )
                         }
                     }

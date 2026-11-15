@@ -34,15 +34,6 @@ class GlanceWidgetWorker @AssistedInject constructor(
         val devicesFlow =
             db.medicalDevicesDao().getAllCurrentConsumableMedicalDevices(today.toLocalDate())
         val devices = devicesFlow.firstOrNull()?.map {
-            Log.i(
-                "GlanceWidgetWorker",
-                "Processing devices: ${it.name}, end=${it.lifeSpanEndDate}, today=$today, daysLeft=${
-                    getDaysLeft(
-                        it.lifeSpanEndDate
-                    )
-                }"
-            )
-
             WidgetDevice(
                 name = it.name,
                 type = it.deviceType.toString(),

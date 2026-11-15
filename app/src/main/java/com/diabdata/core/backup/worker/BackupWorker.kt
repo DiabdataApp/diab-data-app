@@ -12,7 +12,7 @@ import com.diabdata.core.backup.BackupScheduleCoordinator
 import com.diabdata.core.database.DataRepository
 import com.diabdata.core.notifications.NotificationImportance
 import com.diabdata.core.notifications.showNotification
-import com.diabdata.shared.R
+import com.diabdata.shared.R.string as strings
 import com.diabdata.shared.utils.utils.uriStringToReadablePath
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
@@ -44,11 +44,11 @@ class BackupWorker @AssistedInject constructor(
         Log.w(tag, technicalMessage)
         applicationContext.showNotification(
             title = applicationContext.getString(
-                R.string.settings_notifications_scheduled_backup_error_title
+                strings.settings_notifications_scheduled_backup_error_title
             ),
             content = applicationContext.getString(localisedString),
             channelName = applicationContext.getString(
-                R.string.settings_notifications_scheduled_data_backup_channel_name
+                strings.settings_notifications_scheduled_data_backup_channel_name
             ),
             importance = NotificationImportance.DEFAULT
         )
@@ -69,14 +69,14 @@ class BackupWorker @AssistedInject constructor(
             val prefs = dataRepository.getUserPreferences().first() ?: run {
                 return failWithNotification(
                     "No preferences found, skipping",
-                    R.string.settings_notifications_scheduled_backup_no_preferences_error
+                    strings.settings_notifications_scheduled_backup_no_preferences_error
                 )
             }
 
             val backupPath = prefs.backupPath ?: run {
                 return failWithNotification(
                     "No backup path configured, skipping",
-                    R.string.settings_notifications_scheduled_backup_undefined_backup_directory_error
+                    strings.settings_notifications_scheduled_backup_undefined_backup_directory_error
                 )
             }
 
@@ -91,6 +91,12 @@ class BackupWorker @AssistedInject constructor(
 
             val fileName = "diabdata_backup_$date.zip"
 
+            val backupFileCreationError =
+                strings.settings_notifications_scheduled_backup_file_creation_error
+
+            val backupPathAccessErrorText =
+                strings.settings_notifications_scheduled_backup_file_access_error
+
             val docUri = DocumentsContract.createDocument(
                 applicationContext.contentResolver,
                 DocumentsContract.buildDocumentUriUsingTree(
@@ -102,7 +108,7 @@ class BackupWorker @AssistedInject constructor(
             ) ?: run {
                 return failWithNotification(
                     "createDocument returned null",
-                    R.string.settings_notifications_scheduled_backup_file_creation_error
+                    backupFileCreationError
                 )
             }
 
@@ -110,7 +116,7 @@ class BackupWorker @AssistedInject constructor(
                 ?: run {
                     return failWithNotification(
                         "openOutputStream returned null",
-                        R.string.settings_notifications_scheduled_backup_file_access_error
+                        backupPathAccessErrorText
                     )
                 }
 
@@ -128,15 +134,15 @@ class BackupWorker @AssistedInject constructor(
 
             applicationContext.showNotification(
                 title = applicationContext.getString(
-                    R.string.settings_notifications_scheduled_backup_success_title
+                    strings.settings_notifications_scheduled_backup_success_title
                 ),
                 content = applicationContext.getString(
-                    R.string.settings_notifications_scheduled_backup_success,
+                    strings.settings_notifications_scheduled_backup_success,
                     backupPath.uriStringToReadablePath(applicationContext),
                     readableDate
                 ),
                 channelName = applicationContext.getString(
-                    R.string.settings_notifications_scheduled_data_backup_channel_name
+                    strings.settings_notifications_scheduled_data_backup_channel_name
                 ),
                 importance = NotificationImportance.LOW
             )
@@ -149,14 +155,14 @@ class BackupWorker @AssistedInject constructor(
             Log.e(tag, "Permission denied", e)
             applicationContext.showNotification(
                 title = applicationContext.getString(
-                    R.string.settings_notifications_scheduled_backup_error_title
+                    strings.settings_notifications_scheduled_backup_error_title
                 ),
                 content = applicationContext.getString(
-                    R.string.settings_notifications_scheduled_backup_error_permission_denied,
+                    strings.settings_notifications_scheduled_backup_error_permission_denied,
                     e.message.toString()
                 ),
                 channelName = applicationContext.getString(
-                    R.string.settings_notifications_scheduled_data_backup_channel_name
+                    strings.settings_notifications_scheduled_data_backup_channel_name
                 ),
                 importance = NotificationImportance.DEFAULT
             )
@@ -167,16 +173,20 @@ class BackupWorker @AssistedInject constructor(
                 "${e.javaClass.simpleName}: ${e.message}\nat ${e.stackTrace.firstOrNull()}"
             applicationContext.showNotification(
                 title = applicationContext.getString(
-                    R.string.settings_notifications_scheduled_backup_error_title
+                    strings.settings_notifications_scheduled_backup_error_title
                 ),
                 content = errorDetail,
                 channelName = applicationContext.getString(
-                    R.string.settings_notifications_scheduled_data_backup_channel_name
+                    strings.settings_notifications_scheduled_data_backup_channel_name
                 ),
                 importance = NotificationImportance.DEFAULT
             )
 
-            if (runAttemptCount < 3) Result.retry() else Result.failure()
+            if (runAttemptCount < 3) {
+                Result.retry()
+            } else {
+                Result.failure()
+            }
         }
     }
 }

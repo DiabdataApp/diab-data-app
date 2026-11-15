@@ -118,6 +118,8 @@ fun App(dataViewModel: DataViewModel, shortcutDestination: StateFlow<String?>) {
 
     val snackbarHostState = remember { SnackbarHostState() }
 
+    val surfaceContainerColor = MaterialTheme.colorScheme.surfaceContainer
+
     val topAppBarSubSettingsText = when (currentRoute) {
         "settings/data" -> stringResource(shared.string.settings_data_section_title)
         "settings/security" -> stringResource(shared.string.settings_security_settings)
@@ -196,7 +198,7 @@ fun App(dataViewModel: DataViewModel, shortcutDestination: StateFlow<String?>) {
                 if (isProfileRoute) {
                     Scaffold(
                         snackbarHost = { SnackbarHost(snackbarHostState) },
-                        containerColor = MaterialTheme.colorScheme.surfaceContainer
+                        containerColor = surfaceContainerColor
                     ) { paddingValues ->
                         DiabDataNavHost(
                             navController = navController,
@@ -285,7 +287,7 @@ fun App(dataViewModel: DataViewModel, shortcutDestination: StateFlow<String?>) {
                                             }
                                         },
                                         colors = TopAppBarDefaults.topAppBarColors(
-                                            containerColor = MaterialTheme.colorScheme.surfaceContainer
+                                            containerColor = surfaceContainerColor
                                         )
                                     )
                                 }
@@ -323,7 +325,7 @@ fun App(dataViewModel: DataViewModel, shortcutDestination: StateFlow<String?>) {
                                     }
                                 },
                                 colors = TopAppBarDefaults.topAppBarColors(
-                                    containerColor = MaterialTheme.colorScheme.surfaceContainer
+                                    containerColor = surfaceContainerColor
                                 )
                             )
                         }
@@ -422,7 +424,7 @@ fun App(dataViewModel: DataViewModel, shortcutDestination: StateFlow<String?>) {
                                         }
                                     },
                                     colors = TopAppBarDefaults.topAppBarColors(
-                                        containerColor = MaterialTheme.colorScheme.surfaceContainer
+                                        containerColor = surfaceContainerColor
                                     )
                                 )
                             }
@@ -464,7 +466,7 @@ fun App(dataViewModel: DataViewModel, shortcutDestination: StateFlow<String?>) {
                                     ),
                                     expandedHeight = 40.dp,
                                     colors = TopAppBarDefaults.topAppBarColors(
-                                        containerColor = MaterialTheme.colorScheme.surfaceContainer
+                                        containerColor = surfaceContainerColor
                                     )
                                 )
                             }
