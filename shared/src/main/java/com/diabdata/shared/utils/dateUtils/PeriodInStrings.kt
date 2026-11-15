@@ -258,11 +258,7 @@ fun Period.toCountString(context: Context): String {
     }
 
     if (parts.isEmpty()) {
-        return context.resources.getQuantityString(
-            R.string.date_zero_days,
-            0,
-            0
-        )
+        return context.resources.getString(R.string.date_zero_days)
     }
 
     return when (parts.size) {
