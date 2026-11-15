@@ -7,7 +7,7 @@ plugins {
     alias(libs.plugins.hilt.android) apply false
     alias(libs.plugins.ksp) apply false
     alias(libs.plugins.aboutLibraries) apply false
-
+    alias(libs.plugins.kotlint.gradle) apply false
 }
 
 tasks.register("generateTestData") {

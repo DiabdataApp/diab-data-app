@@ -1,5 +1,7 @@
 plugins {
     alias(libs.plugins.android.library)
+    alias(libs.plugins.kotlint.gradle)
+
 }
 
 android {

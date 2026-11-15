@@ -8,6 +8,7 @@ plugins {
     alias(libs.plugins.ksp)
     alias(libs.plugins.hilt.android)
     alias(libs.plugins.aboutLibraries)
+    alias(libs.plugins.kotlint.gradle)
 }
 
 val localProperties = Properties()
