@@ -55,7 +55,7 @@ fun QuickActionButtons(
             ) {
                 Icon(
                     painter = painterResource(if (isSelected) action.filledIcon else action.icon),
-                    contentDescription = action.label,
+                    contentDescription = action.label
                 )
                 Spacer(modifier = Modifier.width(4.dp))
                 Text(action.label)

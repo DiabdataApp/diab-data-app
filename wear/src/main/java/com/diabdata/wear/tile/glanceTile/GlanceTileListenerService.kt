@@ -2,12 +2,12 @@ package com.diabdata.wear.tile.glanceTile
 
 import android.content.Context
 import android.util.Log
+import androidx.core.content.edit
 import androidx.wear.tiles.TileService
 import com.google.android.gms.wearable.DataEvent
 import com.google.android.gms.wearable.DataEventBuffer
 import com.google.android.gms.wearable.DataMapItem
 import com.google.android.gms.wearable.WearableListenerService
-import androidx.core.content.edit
 import kotlinx.coroutines.*
 
 class GlanceTileDataListenerService : WearableListenerService() {
@@ -17,7 +17,10 @@ class GlanceTileDataListenerService : WearableListenerService() {
         Log.d("GlanceTileDataListener", "onDataChanged: ${dataEvents.count} events")
 
         for (event in dataEvents) {
-            Log.d("GlanceTileDataListener", "Event: type=${event.type}, path=${event.dataItem.uri.path}")
+            Log.d(
+                "GlanceTileDataListener",
+                "Event: type=${event.type}, path=${event.dataItem.uri.path}"
+            )
 
             if (event.type == DataEvent.TYPE_CHANGED) {
                 val path = event.dataItem.uri.path
@@ -28,7 +31,10 @@ class GlanceTileDataListenerService : WearableListenerService() {
                     val timestamp = dataMap.getLong("timestamp", 0)
                     val updateCount = dataMap.getInt("updateCount", 0)
 
-                    Log.d("GlanceTileDataListener", "Received update: timestamp=$timestamp, updateCount=$updateCount")
+                    Log.d(
+                        "GlanceTileDataListener",
+                        "Received update: timestamp=$timestamp, updateCount=$updateCount"
+                    )
 
                     applicationContext.getSharedPreferences("tile_data", Context.MODE_PRIVATE)
                         .edit {

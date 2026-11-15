@@ -13,12 +13,12 @@ import com.google.android.gms.wearable.Wearable
 import com.google.gson.Gson
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
+import java.time.LocalDate
+import java.time.LocalDateTime
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
-import java.time.LocalDate
-import java.time.LocalDateTime
 
 @HiltWorker
 class GlanceTileUpdateWorker @AssistedInject constructor(
@@ -131,20 +131,8 @@ data class TileData(
     val timestamp: Long = System.currentTimeMillis()
 )
 
-data class DeviceInfo(
-    val type: String,
-    val daysUntilExpiry: Int,
-    val lifespan: String
-)
+data class DeviceInfo(val type: String, val daysUntilExpiry: Int, val lifespan: String)
 
-data class TreatmentInfo(
-    val type: String,
-    val daysUntilExpiry: Int,
-    val daysSinceCreation: Int
-)
+data class TreatmentInfo(val type: String, val daysUntilExpiry: Int, val daysSinceCreation: Int)
 
-data class AppointmentInfo(
-    val type: String,
-    val doctor: String,
-    val daysUntil: Int
-)
+data class AppointmentInfo(val type: String, val doctor: String, val daysUntil: Int)

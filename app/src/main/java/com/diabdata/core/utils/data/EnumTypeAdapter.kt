@@ -6,9 +6,7 @@ import com.google.gson.stream.JsonReader
 import com.google.gson.stream.JsonToken
 import com.google.gson.stream.JsonWriter
 
-class EnumTypeAdapter<T : Enum<T>>(
-    private val enumClass: Class<T>
-) : TypeAdapter<T?>() {
+class EnumTypeAdapter<T : Enum<T>>(private val enumClass: Class<T>) : TypeAdapter<T?>() {
 
     override fun write(out: JsonWriter, value: T?) {
         if (value == null) {

@@ -8,8 +8,8 @@ class LinearRegressionTest {
     // Linear regression tests
     @Test
     fun linearRegression_isPositiveSlope() {
-        val x = listOf(1.0,2.0,3.0)
-        val y = listOf(1.0,2.0,3.0)
+        val x = listOf(1.0, 2.0, 3.0)
+        val y = listOf(1.0, 2.0, 3.0)
 
         val fn = linearRegression(x, y)
 
@@ -20,8 +20,8 @@ class LinearRegressionTest {
 
     @Test
     fun linearRegression_isNegativeSlope() {
-        val x = listOf(1.0,2.0,3.0)
-        val y = listOf(3.0,2.0,1.0)
+        val x = listOf(1.0, 2.0, 3.0)
+        val y = listOf(3.0, 2.0, 1.0)
 
         val fn = linearRegression(x, y)
 
@@ -32,8 +32,8 @@ class LinearRegressionTest {
 
     @Test
     fun linearRegression_isHorizontal() {
-        val x = listOf(1.0,2.0,3.0)
-        val y = listOf(5.0,5.0,5.0)
+        val x = listOf(1.0, 2.0, 3.0)
+        val y = listOf(5.0, 5.0, 5.0)
 
         val fn = linearRegression(x, y)
 
@@ -44,8 +44,8 @@ class LinearRegressionTest {
 
     @Test
     fun linearRegression_lineGoesThroughTwoPoints() {
-        val x = listOf(1.0,2.0)
-        val y = listOf(1.0,2.0)
+        val x = listOf(1.0, 2.0)
+        val y = listOf(1.0, 2.0)
 
         val fn = linearRegression(x, y)
 
@@ -55,8 +55,8 @@ class LinearRegressionTest {
 
     @Test
     fun linearRegression_linePredictionContinuesOutsidePointSet() {
-        val x = listOf(1.0,2.0,3.0)
-        val y = listOf(1.0,2.0,3.0)
+        val x = listOf(1.0, 2.0, 3.0)
+        val y = listOf(1.0, 2.0, 3.0)
 
         val fn = linearRegression(x, y)
 
@@ -65,26 +65,26 @@ class LinearRegressionTest {
     }
 
     // Linear regression error test
-    @Test (expected = IllegalArgumentException::class)
+    @Test(expected = IllegalArgumentException::class)
     fun linearRegression_errorOnEmptyXSet() {
         val x = listOf<Double>()
-        val y = listOf(1.0,2.0,3.0)
+        val y = listOf(1.0, 2.0, 3.0)
 
         linearRegression(x, y)
     }
 
-    @Test (expected = IllegalArgumentException::class)
+    @Test(expected = IllegalArgumentException::class)
     fun linearRegression_errorOnEmptyYSet() {
-        val x = listOf(1.0,2.0,3.0)
+        val x = listOf(1.0, 2.0, 3.0)
         val y = listOf<Double>()
 
         linearRegression(x, y)
     }
 
-    @Test (expected = IllegalArgumentException::class)
+    @Test(expected = IllegalArgumentException::class)
     fun linearRegression_errorOnMismatchedPointSetSizes() {
-        val x = listOf(1.0,2.0,3.0)
-        val y = listOf(1.0,2.0)
+        val x = listOf(1.0, 2.0, 3.0)
+        val y = listOf(1.0, 2.0)
 
         linearRegression(x, y)
     }

@@ -23,7 +23,7 @@ val MIGRATION_15_16 = object : Migration(15, 16) {
                 isArchived INTEGER NOT NULL,
                 updatedAt TEXT NOT NULL
             )
-        """.trimIndent()
+            """.trimIndent()
         )
 
         db.execSQL(
@@ -37,7 +37,7 @@ val MIGRATION_15_16 = object : Migration(15, 16) {
                    0 AS lifeSpan, 0 AS isFaulty, 0 AS isReported, 0 AS isLifeSpanOver,
                    createdAt, isArchived, updatedAt
             FROM medical_devices
-        """.trimIndent()
+            """.trimIndent()
         )
 
         db.execSQL("DROP TABLE medical_devices")

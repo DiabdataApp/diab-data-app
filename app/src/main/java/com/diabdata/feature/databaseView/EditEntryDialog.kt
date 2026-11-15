@@ -3,9 +3,9 @@ package com.diabdata.feature.databaseView
 import androidx.compose.runtime.Composable
 import com.diabdata.core.database.DataViewModel
 import com.diabdata.feature.appointments.ui.AppointmentPopup
+import com.diabdata.feature.devices.ui.MedicalDevicePopup
 import com.diabdata.feature.hba1c.ui.Hba1cPopup
 import com.diabdata.feature.importantDates.components.ImportantDatePopup
-import com.diabdata.feature.devices.ui.MedicalDevicePopup
 import com.diabdata.feature.treatments.ui.TreatmentPopup
 import com.diabdata.feature.weight.ui.WeightPopup
 

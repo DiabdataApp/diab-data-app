@@ -8,15 +8,15 @@ import com.diabdata.core.database.DiabDataDatabase
 import com.diabdata.core.model.ImportantDate
 import com.diabdata.core.model.nowMillis
 import com.diabdata.feature.importantDates.data.ImportantDateDao
-import org.junit.Assert.assertEquals
+import java.io.IOException
+import java.time.LocalDate
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.After
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import java.io.IOException
-import java.time.LocalDate
 
 /**
  * Tests for [ImportantDateDao] found at [com.diabdata.feature.importantDates.data.ImportantDateDao]
@@ -166,7 +166,7 @@ class ImportantDatesDaoTest {
                 id = 2,
                 updatedAt = now,
                 entryUuid = "important-date-6"
-            ),
+            )
         )
 
         importantDates.forEach { importantDateDao.insert(it) }

@@ -33,6 +33,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.diabdata.R
 import com.diabdata.core.utils.ui.SvgIcon
+import com.diabdata.shared.R as shared
 import com.mikepenz.aboutlibraries.ui.compose.LibraryDefaults
 import com.mikepenz.aboutlibraries.ui.compose.android.produceLibraries
 import com.mikepenz.aboutlibraries.ui.compose.m3.LibrariesContainer
@@ -40,7 +41,6 @@ import com.mikepenz.aboutlibraries.ui.compose.m3.libraryColors
 import com.mikepenz.aboutlibraries.ui.compose.m3.style.m3VariantColors
 import com.mikepenz.aboutlibraries.ui.compose.style.LicenseHueResolver
 import com.mikepenz.aboutlibraries.ui.compose.variant.LibrariesVariant
-import com.diabdata.shared.R as shared
 
 @Composable
 fun LicensesDialog(onDismiss: () -> Unit) {
@@ -76,7 +76,7 @@ fun LicensesDialog(onDismiss: () -> Unit) {
             Column(
                 modifier = Modifier
                     .padding(24.dp)
-                    .fillMaxWidth(),
+                    .fillMaxWidth()
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     SvgIcon(
@@ -103,16 +103,16 @@ fun LicensesDialog(onDismiss: () -> Unit) {
                         headerDivider = MaterialTheme.colorScheme.outline,
                         licenseBadgeContainer = MaterialTheme.colorScheme.primary,
                         licenseBadgeContent = MaterialTheme.colorScheme.onPrimary,
-                        licenseHueResolver = primaryLicenseHueResolver,
+                        licenseHueResolver = primaryLicenseHueResolver
                     ),
                     colors = LibraryDefaults.libraryColors(
                         libraryBackgroundColor = Color.Transparent,
-                        libraryContentColor = MaterialTheme.colorScheme.onSurface,
+                        libraryContentColor = MaterialTheme.colorScheme.onSurface
                     ),
                     modifier = Modifier
                         .fillMaxWidth()
                         .heightIn(max = maxHeight),
-                    licenseDialogConfirmText = closeButtonText,
+                    licenseDialogConfirmText = closeButtonText
                 )
 
                 Spacer(modifier = Modifier.height(24.dp))

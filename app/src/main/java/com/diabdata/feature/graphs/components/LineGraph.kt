@@ -27,8 +27,9 @@ import androidx.compose.ui.tooling.preview.Wallpapers
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.graphics.ColorUtils
-import com.diabdata.feature.graphs.classes.PlotPoint
 import com.diabdata.core.utils.linearRegression
+import com.diabdata.feature.graphs.classes.PlotPoint
+import com.diabdata.shared.R as shared
 import com.patrykandpatrick.vico.compose.cartesian.CartesianChartHost
 import com.patrykandpatrick.vico.compose.cartesian.axis.rememberBottom
 import com.patrykandpatrick.vico.compose.cartesian.axis.rememberStart
@@ -56,7 +57,6 @@ import com.patrykandpatrick.vico.core.common.shape.CorneredShape
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Locale
-import com.diabdata.shared.R as shared
 
 @Composable
 fun LineGraph(
@@ -114,7 +114,7 @@ fun LineGraph(
         textSize = 11.sp,
         background = shapeComponent(
             shape = CorneredShape.Pill,
-            fill = Fill(pointLabelBackground),
+            fill = Fill(pointLabelBackground)
         ),
         padding = Insets(startDp = 6f, topDp = 4f, endDp = 6f, bottomDp = 4f),
         margins = Insets(startDp = 0f, topDp = 8f, endDp = 0f, bottomDp = 0f)
@@ -141,13 +141,13 @@ fun LineGraph(
                 point = LineCartesianLayer.Point(
                     component = shapeComponent(
                         shape = CorneredShape.Pill,
-                        fill = Fill(primaryColor),
+                        fill = Fill(primaryColor)
                     ),
-                    sizeDp = 8f,
+                    sizeDp = 8f
                 )
             ),
             dataLabel = pointValueLabel,
-            dataLabelPosition = Position.Vertical.Bottom,  // or Bottom if you prefer under the point
+            dataLabelPosition = Position.Vertical.Bottom, // or Bottom if you prefer under the point
             dataLabelValueFormatter = pointValueFormatter,
             dataLabelRotationDegrees = 0f
         )
@@ -180,7 +180,7 @@ fun LineGraph(
         Spacer(Modifier.height(12.dp))
         Surface(
             shape = RoundedCornerShape(10.dp),
-            color = MaterialTheme.colorScheme.surface,
+            color = MaterialTheme.colorScheme.surface
         ) {
             CartesianChartHost(
                 chart = rememberCartesianChart(
@@ -191,7 +191,7 @@ fun LineGraph(
                             points.getOrNull(x.toInt())?.date?.format(dateFormatter) ?: " "
                         },
                         itemPlacer = HorizontalAxis.ItemPlacer.aligned()
-                    ),
+                    )
                 ),
                 modelProducer = modelProducer,
                 zoomState = zoomState,

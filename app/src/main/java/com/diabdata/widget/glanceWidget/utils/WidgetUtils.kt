@@ -3,20 +3,16 @@ package com.diabdata.widget.glanceWidget.utils
 import androidx.compose.ui.graphics.Color
 import androidx.glance.color.ColorProvider
 import androidx.glance.unit.ColorProvider
+import com.diabdata.core.utils.ui.darken
 import com.diabdata.shared.utils.dataTypes.AppointmentType
 import com.diabdata.shared.utils.dataTypes.MedicalDeviceInfoType
-import com.diabdata.core.utils.ui.darken
 
-fun getAppointmentTypeOrNull(typeName: String?): AppointmentType? {
-    return typeName?.let {
-        runCatching { AppointmentType.valueOf(it) }.getOrNull()
-    }
+fun getAppointmentTypeOrNull(typeName: String?): AppointmentType? = typeName?.let {
+    runCatching { AppointmentType.valueOf(it) }.getOrNull()
 }
 
-fun getDeviceTypeOrNull(typeName: String?): MedicalDeviceInfoType? {
-    return typeName?.let {
-        runCatching { MedicalDeviceInfoType.valueOf(it) }.getOrNull()
-    }
+fun getDeviceTypeOrNull(typeName: String?): MedicalDeviceInfoType? = typeName?.let {
+    runCatching { MedicalDeviceInfoType.valueOf(it) }.getOrNull()
 }
 
 /**
@@ -63,5 +59,7 @@ fun Int.intToColorProvider(): ColorProvider {
 }
 
 enum class ColorVariant {
-    DEFAULT, CIRCLE_ICON_ICON, CIRCLE_ICON_BACKGROUND
+    DEFAULT,
+    CIRCLE_ICON_ICON,
+    CIRCLE_ICON_BACKGROUND
 }

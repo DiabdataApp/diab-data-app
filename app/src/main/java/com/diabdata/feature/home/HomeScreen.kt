@@ -39,17 +39,15 @@ import com.diabdata.feature.dataMatrixScanner.ui.ScanResult
 import com.diabdata.feature.dataMatrixScanner.ui.ScannableTypes
 import com.diabdata.feature.dataMatrixScanner.utils.MedicationInfo
 import com.diabdata.feature.home.components.LatestMeasurements
-import com.diabdata.shared.utils.dataTypes.AddableType
-import kotlinx.coroutines.launch
-import java.time.LocalDate
 import com.diabdata.shared.R as shared
+import com.diabdata.shared.utils.dataTypes.AddableType
+import java.time.LocalDate
+import kotlinx.coroutines.launch
 
 @RequiresApi(Build.VERSION_CODES.P)
 @Composable
 @Suppress("unused")
-fun HomeScreen(
-    dataViewModel: DataViewModel
-) {
+fun HomeScreen(dataViewModel: DataViewModel) {
     val scannerViewModel: ScannerViewModel = hiltViewModel()
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
@@ -57,10 +55,12 @@ fun HomeScreen(
     val hasData = availability.hasAnyData
     val (selectedType, setSelectedType) = remember { mutableStateOf<AddableType?>(null) }
     var showScanner by remember { mutableStateOf(false) }
-    val unknownGtin = stringResource(shared.string.medications_unknown_medication_code_error_message)
+    val unknownGtin =
+        stringResource(shared.string.medications_unknown_medication_code_error_message)
     val scrollState = rememberScrollState()
     val permissionLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.RequestPermission(), onResult = { isGranted ->
+        contract = ActivityResultContracts.RequestPermission(),
+        onResult = { isGranted ->
             if (isGranted) {
                 showScanner = true
             } else {
@@ -70,7 +70,8 @@ fun HomeScreen(
                     Toast.LENGTH_SHORT
                 ).show()
             }
-        })
+        }
+    )
 
     Box(modifier = Modifier.fillMaxSize()) {
         if (hasData) {
@@ -112,7 +113,11 @@ fun HomeScreen(
                                 setSelectedType(AddableType.TREATMENT)
                             } else {
                                 Log.d("HomeScreen", "Unknown Gtin: ${info.gtin}")
-                                Toast.makeText(context, "$unknownGtin ${info.gtin}", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(
+                                    context,
+                                    "$unknownGtin ${info.gtin}",
+                                    Toast.LENGTH_SHORT
+                                ).show()
                             }
                         }
 

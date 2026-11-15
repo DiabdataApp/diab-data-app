@@ -97,7 +97,9 @@ fun CardsList(
     val isPaginated = pageSize != null && pageSize > 0 && cards.size > pageSize
     val totalPages = if (isPaginated) {
         (cards.size + pageSize - 1) / pageSize
-    } else 1
+    } else {
+        1
+    }
 
     val visibleCards = if (isPaginated) {
         val start = currentPage * pageSize

@@ -1,6 +1,6 @@
+import java.util.Properties
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import java.util.Properties
 
 plugins {
     alias(libs.plugins.android.application)
@@ -39,10 +39,18 @@ android {
         targetSdk = 36
         versionCode = 15
         versionName = "4.9.8"
-        buildConfigField("String", "RELAY_SERVER_URL","\"${localProperties.getProperty("RELAY_SERVER_URL", "")}\"")
+        buildConfigField(
+            "String",
+            "RELAY_SERVER_URL",
+            "\"${localProperties.getProperty("RELAY_SERVER_URL", "")}\""
+        )
         buildConfigField("String", "MEDICATION_GTIN_FILE_VERSION", "\"1.2.0\"")
         buildConfigField("String", "MEDICAL_DEVICES_GTIN_FILE_VERSION", "\"1.0.4\"")
-        buildConfigField("String", "APP_VARIANT", "\"${localProperties.getProperty("APP_VARIANT", "development")}\"")
+        buildConfigField(
+            "String",
+            "APP_VARIANT",
+            "\"${localProperties.getProperty("APP_VARIANT", "development")}\""
+        )
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -160,7 +168,7 @@ dependencies {
     // Material - CHOOSE ONLY ONE
     // implementation(libs.androidx.material3)           // Stable version
     // Or expressive alpha version :
-    implementation(libs.material3.expressive)      // Unstable expressive version
+    implementation(libs.material3.expressive) // Unstable expressive version
     implementation(libs.material)
     implementation(libs.androidx.material.icons.extended)
 

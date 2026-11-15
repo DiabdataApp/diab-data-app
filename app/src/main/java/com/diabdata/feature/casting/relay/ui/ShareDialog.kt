@@ -36,15 +36,12 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.diabdata.feature.casting.relay.ConnectionState
 import com.diabdata.feature.casting.relay.RelayViewModel
 import com.diabdata.feature.casting.relay.ShareMode
+import com.diabdata.shared.R as shared
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.qrcode.QRCodeWriter
-import com.diabdata.shared.R as shared
 
 @Composable
-fun ShareDialog(
-    mode: ShareMode,
-    onDismiss: () -> Unit
-) {
+fun ShareDialog(mode: ShareMode, onDismiss: () -> Unit) {
     val viewModel: RelayViewModel = viewModel()
     val connectionState by viewModel.connectionState.collectAsState()
 
@@ -76,10 +73,11 @@ fun ShareDialog(
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 Text(
-                    text = if (mode == ShareMode.COMPANION)
+                    text = if (mode == ShareMode.COMPANION) {
                         stringResource(shared.string.share_dialog_title_compagnon_mode)
-                    else
-                        stringResource(shared.string.share_dialog_title_medical_mode),
+                    } else {
+                        stringResource(shared.string.share_dialog_title_medical_mode)
+                    },
                     style = MaterialTheme.typography.headlineSmall,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.primary
@@ -116,10 +114,15 @@ fun ShareDialog(
                         )
 
                         Text(
-                            text = if (mode == ShareMode.COMPANION)
-                                stringResource(shared.string.share_dialog_compagnon_mode_instruction_message)
-                            else
-                                stringResource(shared.string.share_dialog_medical_mode_instruction_message),
+                            text = if (mode == ShareMode.COMPANION) {
+                                stringResource(
+                                    shared.string.share_dialog_compagnon_mode_instruction_message
+                                )
+                            } else {
+                                stringResource(
+                                    shared.string.share_dialog_medical_mode_instruction_message
+                                )
+                            },
                             style = MaterialTheme.typography.bodyMedium,
                             textAlign = TextAlign.Center,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
@@ -135,7 +138,9 @@ fun ShareDialog(
                             ),
                             modifier = Modifier.fillMaxWidth()
                         ) {
-                            Text(stringResource(shared.string.share_dialog_stop_sharing_button_label))
+                            Text(
+                                stringResource(shared.string.share_dialog_stop_sharing_button_label)
+                            )
                         }
                     }
 
@@ -158,19 +163,17 @@ fun ShareDialog(
     }
 }
 
-private fun generateQrCode(content: String, size: Int = 512): Bitmap? {
-    return try {
-        val writer = QRCodeWriter()
-        val bitMatrix = writer.encode(content, BarcodeFormat.QR_CODE, size, size)
-        val bitmap = createBitmap(size, size, Bitmap.Config.RGB_565)
-        for (x in 0 until size) {
-            for (y in 0 until size) {
-                bitmap[x, y] =
-                    if (bitMatrix[x, y]) Color.BLACK else Color.WHITE
-            }
+private fun generateQrCode(content: String, size: Int = 512): Bitmap? = try {
+    val writer = QRCodeWriter()
+    val bitMatrix = writer.encode(content, BarcodeFormat.QR_CODE, size, size)
+    val bitmap = createBitmap(size, size, Bitmap.Config.RGB_565)
+    for (x in 0 until size) {
+        for (y in 0 until size) {
+            bitmap[x, y] =
+                if (bitMatrix[x, y]) Color.BLACK else Color.WHITE
         }
-        bitmap
-    } catch (e: Exception) {
-        null
     }
+    bitmap
+} catch (e: Exception) {
+    null
 }

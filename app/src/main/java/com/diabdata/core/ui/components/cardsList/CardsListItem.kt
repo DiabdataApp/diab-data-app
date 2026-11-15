@@ -31,9 +31,9 @@ import com.diabdata.core.utils.ui.ColoredIconCircleProps
 import com.diabdata.core.utils.ui.SvgIcon
 import com.diabdata.core.utils.ui.darken
 import com.diabdata.core.utils.ui.getItemShape
+import com.diabdata.shared.R as shared
 import com.diabdata.shared.theme.DataIconColor
 import com.diabdata.shared.theme.NotificationIconColor
-import com.diabdata.shared.R as shared
 
 /**
  * A composable that renders a single card within a [CardsList] stack.
@@ -112,7 +112,7 @@ fun CardListItem(
     cardItem: CardItem,
     shape: Shape,
     modifier: Modifier = Modifier,
-    alignTop: Boolean = false,
+    alignTop: Boolean = false
 ) {
     val content: @Composable () -> Unit = {
         Row(
@@ -246,7 +246,7 @@ const val locale = "fr"
 
 @Preview(name = "ON", showBackground = true, locale = locale)
 @Composable
-fun CardListItemSwitch () {
+fun CardListItemSwitch() {
     var enableNotifications by remember { mutableStateOf(true) }
     DiabDataTheme(dynamicColor = false, darkTheme = darkTheme) {
         Box(

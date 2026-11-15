@@ -15,15 +15,15 @@ import com.diabdata.core.database.migrations.MIGRATION_21_22
 import com.diabdata.core.database.migrations.MIGRATION_22_23
 import com.diabdata.core.database.migrations.MIGRATION_23_24
 import com.diabdata.core.database.migrations.MIGRATION_24_25
+import java.io.IOException
+import java.time.LocalDate
+import java.time.ZoneId
+import java.util.UUID
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotEquals
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import java.io.IOException
-import java.time.LocalDate
-import java.time.ZoneId
-import java.util.UUID
 
 @RunWith(AndroidJUnit4::class)
 class MigrationTest {
@@ -53,7 +53,9 @@ class MigrationTest {
             }
         }
         insert(
-            table = table, conflictAlgorithm = SQLiteDatabase.CONFLICT_REPLACE, values = cv
+            table = table,
+            conflictAlgorithm = SQLiteDatabase.CONFLICT_REPLACE,
+            values = cv
         )
     }
 
@@ -170,7 +172,7 @@ class MigrationTest {
                 "lastBackupDate" to null,
                 "backupPath" to null,
                 "expirationReminder" to 0,
-                "appointmentReminder" to 0,
+                "appointmentReminder" to 0
             )
         }
 
@@ -180,12 +182,12 @@ class MigrationTest {
                     """
                 SELECT id, backupEncryptionEnabled 
                 FROM user_preferences
-                """.trimIndent()
+                    """.trimIndent()
                 ).use { cursor ->
                     assertEquals(1, cursor.count)
                     cursor.moveToFirst()
-                    assertEquals(0, cursor.getInt(0))  // id corrigé à 0
-                    assertEquals(0, cursor.getInt(1))  // valeur par défaut
+                    assertEquals(0, cursor.getInt(0)) // id corrigé à 0
+                    assertEquals(0, cursor.getInt(1)) // valeur par défaut
                 }
             }
     }
@@ -317,7 +319,11 @@ class MigrationTest {
             )
         }
 
-        val expectedCreatedAtMillis = LocalDate.of(2026, 1, 15).atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
+        val expectedCreatedAtMillis = LocalDate.of(
+            2026,
+            1,
+            15
+        ).atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
 
         val weightsUuids = mutableListOf<String>()
 
@@ -330,7 +336,10 @@ class MigrationTest {
                 ).use { cursor ->
                     assertEquals(2, cursor.count)
                     cursor.moveToFirst()
-                    assertEquals(expectedCreatedAtMillis, cursor.getLong(cursor.getColumnIndexOrThrow("createdAt")))
+                    assertEquals(
+                        expectedCreatedAtMillis,
+                        cursor.getLong(cursor.getColumnIndexOrThrow("createdAt"))
+                    )
                     weightsUuids.add(cursor.getString(cursor.getColumnIndexOrThrow("entryUuid")))
                     cursor.moveToNext()
                     assertEquals(0L, cursor.getLong(cursor.getColumnIndexOrThrow("createdAt")))

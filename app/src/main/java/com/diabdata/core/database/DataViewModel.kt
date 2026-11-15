@@ -21,6 +21,10 @@ import com.diabdata.shared.utils.dataTypes.AppointmentType
 import com.diabdata.shared.utils.dataTypes.MedicalDeviceInfoType
 import com.diabdata.shared.utils.dataTypes.TreatmentType
 import dagger.hilt.android.lifecycle.HiltViewModel
+import java.time.LocalDate
+import java.time.LocalDateTime
+import javax.inject.Inject
+import kotlin.time.Instant
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
@@ -29,11 +33,6 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.time.LocalDate
-import java.time.LocalDateTime
-import javax.inject.Inject
-import kotlin.time.Clock
-import kotlin.time.Instant
 
 @HiltViewModel
 class DataViewModel @Inject constructor(
@@ -92,13 +91,17 @@ class DataViewModel @Inject constructor(
     val dataAvailability: StateFlow<DataAvailability> =
         combine(part1, part2, userProfile) { (w, h, a), (t, d, md), profile ->
 
-            val hasDiagnosisDate = profile?.diagnosisDate != null
-                    && profile.diabetesType != null
+            val hasDiagnosisDate = profile?.diagnosisDate != null &&
+                profile.diabetesType != null
 
             DataAvailability(
-                hasAnyData = w.isNotEmpty() || h.isNotEmpty() || a.isNotEmpty()
-                        || t.isNotEmpty() || d.isNotEmpty() || md.isNotEmpty()
-                        || hasDiagnosisDate,
+                hasAnyData = w.isNotEmpty() ||
+                    h.isNotEmpty() ||
+                    a.isNotEmpty() ||
+                    t.isNotEmpty() ||
+                    d.isNotEmpty() ||
+                    md.isNotEmpty() ||
+                    hasDiagnosisDate,
                 hasWeights = w.isNotEmpty(),
                 hasAppointments = a.isNotEmpty(),
                 hasTreatments = t.isNotEmpty(),
@@ -240,7 +243,9 @@ class DataViewModel @Inject constructor(
             AddableType.HBA1C -> repository.updateHBA1C(entry.toEntity() as Hba1c)
             AddableType.APPOINTMENT -> repository.updateAppointment(entry.toEntity() as Appointment)
             AddableType.TREATMENT -> repository.updateTreatment(entry.toEntity() as Treatment)
-            AddableType.IMPORTANT_DATE -> repository.updateImportantDate(entry.toEntity() as ImportantDate)
+            AddableType.IMPORTANT_DATE -> repository.updateImportantDate(
+                entry.toEntity() as ImportantDate
+            )
             AddableType.DEVICE -> repository.updateDevice(entry.toEntity() as MedicalDevice)
         }
     }
@@ -365,42 +370,40 @@ class DataViewModel @Inject constructor(
         appointmentType: AppointmentType? = null,
         treatmentType: TreatmentType? = null,
         deviceType: MedicalDeviceInfoType? = null
-    ): Int {
-        return when (addableType) {
-            AddableType.WEIGHT -> AddableType.WEIGHT.iconRes
-            AddableType.HBA1C -> AddableType.HBA1C.iconRes
-            AddableType.APPOINTMENT -> when (appointmentType) {
-                AppointmentType.ANNUAL_CHECKUP -> AppointmentType.ANNUAL_CHECKUP.iconRes
-                AppointmentType.APPOINTMENT -> AppointmentType.APPOINTMENT.iconRes
-                null -> R.drawable.event_icon_vector
-            }
+    ): Int = when (addableType) {
+        AddableType.WEIGHT -> AddableType.WEIGHT.iconRes
+        AddableType.HBA1C -> AddableType.HBA1C.iconRes
+        AddableType.APPOINTMENT -> when (appointmentType) {
+            AppointmentType.ANNUAL_CHECKUP -> AppointmentType.ANNUAL_CHECKUP.iconRes
+            AppointmentType.APPOINTMENT -> AppointmentType.APPOINTMENT.iconRes
+            null -> R.drawable.event_icon_vector
+        }
 
-            AddableType.TREATMENT -> when (treatmentType) {
-                TreatmentType.FAST_ACTING_INSULIN_CARTRIDGE -> TreatmentType.FAST_ACTING_INSULIN_CARTRIDGE.iconRes
-                TreatmentType.FAST_ACTING_INSULIN_SYRINGE -> TreatmentType.FAST_ACTING_INSULIN_SYRINGE.iconRes
-                TreatmentType.FAST_ACTING_INSULIN_VIAL -> TreatmentType.FAST_ACTING_INSULIN_VIAL.iconRes
-                TreatmentType.SLOW_ACTING_INSULIN_CARTRIDGE -> TreatmentType.SLOW_ACTING_INSULIN_CARTRIDGE.iconRes
-                TreatmentType.SLOW_ACTING_INSULIN_SYRINGE -> TreatmentType.SLOW_ACTING_INSULIN_SYRINGE.iconRes
-                TreatmentType.SLOW_ACTING_INSULIN_VIAL -> TreatmentType.SLOW_ACTING_INSULIN_VIAL.iconRes
-                TreatmentType.B_KETONE_TEST_STRIP -> TreatmentType.B_KETONE_TEST_STRIP.iconRes
-                TreatmentType.BLOOD_GLUCOSE_TEST_STRIP -> TreatmentType.BLOOD_GLUCOSE_TEST_STRIP.iconRes
-                TreatmentType.GLUCAGON_SYRINGE -> TreatmentType.GLUCAGON_SYRINGE.iconRes
-                TreatmentType.GLUCAGON_SPRAY -> TreatmentType.GLUCAGON_SPRAY.iconRes
-                TreatmentType.UNKNOWN -> TreatmentType.UNKNOWN.iconRes
-                null -> R.drawable.medication_icon_vector
-            }
+        AddableType.TREATMENT -> when (treatmentType) {
+            TreatmentType.FAST_ACTING_INSULIN_CARTRIDGE -> TreatmentType.FAST_ACTING_INSULIN_CARTRIDGE.iconRes
+            TreatmentType.FAST_ACTING_INSULIN_SYRINGE -> TreatmentType.FAST_ACTING_INSULIN_SYRINGE.iconRes
+            TreatmentType.FAST_ACTING_INSULIN_VIAL -> TreatmentType.FAST_ACTING_INSULIN_VIAL.iconRes
+            TreatmentType.SLOW_ACTING_INSULIN_CARTRIDGE -> TreatmentType.SLOW_ACTING_INSULIN_CARTRIDGE.iconRes
+            TreatmentType.SLOW_ACTING_INSULIN_SYRINGE -> TreatmentType.SLOW_ACTING_INSULIN_SYRINGE.iconRes
+            TreatmentType.SLOW_ACTING_INSULIN_VIAL -> TreatmentType.SLOW_ACTING_INSULIN_VIAL.iconRes
+            TreatmentType.B_KETONE_TEST_STRIP -> TreatmentType.B_KETONE_TEST_STRIP.iconRes
+            TreatmentType.BLOOD_GLUCOSE_TEST_STRIP -> TreatmentType.BLOOD_GLUCOSE_TEST_STRIP.iconRes
+            TreatmentType.GLUCAGON_SYRINGE -> TreatmentType.GLUCAGON_SYRINGE.iconRes
+            TreatmentType.GLUCAGON_SPRAY -> TreatmentType.GLUCAGON_SPRAY.iconRes
+            TreatmentType.UNKNOWN -> TreatmentType.UNKNOWN.iconRes
+            null -> R.drawable.medication_icon_vector
+        }
 
-            AddableType.IMPORTANT_DATE -> R.drawable.important_date_icon_vector
+        AddableType.IMPORTANT_DATE -> R.drawable.important_date_icon_vector
 
-            AddableType.DEVICE -> when (deviceType) {
-                MedicalDeviceInfoType.WIRELESS_PATCH -> MedicalDeviceInfoType.WIRELESS_PATCH.iconRes
-                MedicalDeviceInfoType.WIRED_PATCH -> MedicalDeviceInfoType.WIRED_PATCH.iconRes
-                MedicalDeviceInfoType.CONTINUOUS_GLUCOSE_MONITORING_SYSTEM_SENSOR -> MedicalDeviceInfoType.CONTINUOUS_GLUCOSE_MONITORING_SYSTEM_SENSOR.iconRes
-                MedicalDeviceInfoType.CONTINUOUS_GLUCOSE_MONITORING_SYSTEM_TRANSMITTER -> MedicalDeviceInfoType.CONTINUOUS_GLUCOSE_MONITORING_SYSTEM_TRANSMITTER.iconRes
-                MedicalDeviceInfoType.WIRED_PUMP -> MedicalDeviceInfoType.WIRED_PUMP.iconRes
-                MedicalDeviceInfoType.WIRELESS_PATCH_REMOTE -> MedicalDeviceInfoType.WIRELESS_PATCH_REMOTE.iconRes
-                else -> R.drawable.devices_icon_vector
-            }
+        AddableType.DEVICE -> when (deviceType) {
+            MedicalDeviceInfoType.WIRELESS_PATCH -> MedicalDeviceInfoType.WIRELESS_PATCH.iconRes
+            MedicalDeviceInfoType.WIRED_PATCH -> MedicalDeviceInfoType.WIRED_PATCH.iconRes
+            MedicalDeviceInfoType.CONTINUOUS_GLUCOSE_MONITORING_SYSTEM_SENSOR -> MedicalDeviceInfoType.CONTINUOUS_GLUCOSE_MONITORING_SYSTEM_SENSOR.iconRes
+            MedicalDeviceInfoType.CONTINUOUS_GLUCOSE_MONITORING_SYSTEM_TRANSMITTER -> MedicalDeviceInfoType.CONTINUOUS_GLUCOSE_MONITORING_SYSTEM_TRANSMITTER.iconRes
+            MedicalDeviceInfoType.WIRED_PUMP -> MedicalDeviceInfoType.WIRED_PUMP.iconRes
+            MedicalDeviceInfoType.WIRELESS_PATCH_REMOTE -> MedicalDeviceInfoType.WIRELESS_PATCH_REMOTE.iconRes
+            else -> R.drawable.devices_icon_vector
         }
     }
 

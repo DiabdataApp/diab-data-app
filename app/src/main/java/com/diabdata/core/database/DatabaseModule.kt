@@ -5,8 +5,8 @@ import android.util.Log
 import androidx.room.Room
 import androidx.room.RoomDatabase.Callback
 import androidx.sqlite.db.SupportSQLiteDatabase
-import com.diabdata.core.database.migrations.ALL_MIGRATIONS
 import com.diabdata.core.database.encryption.SqlCipherKeyManager
+import com.diabdata.core.database.migrations.ALL_MIGRATIONS
 import com.diabdata.feature.appointments.data.AppointmentDao
 import com.diabdata.feature.dataMatrixScanner.data.MedicationDao
 import com.diabdata.feature.dataMatrixScanner.utils.MedicalDevicesInitializer
@@ -24,11 +24,11 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import javax.inject.Provider
+import javax.inject.Singleton
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import javax.inject.Provider
-import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -81,58 +81,39 @@ object DatabaseModule {
     }
 
     @Provides
-    fun weightDao(db: DiabDataDatabase): WeightDao {
-        return db.weightDao()
-    }
+    fun weightDao(db: DiabDataDatabase): WeightDao = db.weightDao()
 
     @Provides
-    fun hba1cDao(db: DiabDataDatabase): HBA1CDao {
-        return db.hba1cDao()
-    }
+    fun hba1cDao(db: DiabDataDatabase): HBA1CDao = db.hba1cDao()
 
     @Provides
-    fun appointmentDao(db: DiabDataDatabase): AppointmentDao {
-        return db.appointmentDao()
-    }
+    fun appointmentDao(db: DiabDataDatabase): AppointmentDao = db.appointmentDao()
 
     @Provides
-    fun treatmentDao(db: DiabDataDatabase): TreatmentDao {
-        return db.treatmentDao()
-    }
+    fun treatmentDao(db: DiabDataDatabase): TreatmentDao = db.treatmentDao()
 
     @Provides
-    fun importantDateDao(db: DiabDataDatabase): ImportantDateDao {
-        return db.importantDateDao()
-    }
+    fun importantDateDao(db: DiabDataDatabase): ImportantDateDao = db.importantDateDao()
 
     @Provides
-    fun medicationDao(db: DiabDataDatabase): MedicationDao {
-        return db.medicationDao()
-    }
+    fun medicationDao(db: DiabDataDatabase): MedicationDao = db.medicationDao()
 
     @Provides
-    fun medicalDevicesDao(db: DiabDataDatabase): MedicalDeviceDao {
-        return db.medicalDevicesDao()
-    }
+    fun medicalDevicesDao(db: DiabDataDatabase): MedicalDeviceDao = db.medicalDevicesDao()
 
     @Provides
-    fun medicalDevicesInfoDao(db: DiabDataDatabase): MedicalDevicesInfoDao {
-        return db.medicalDevicesInfoDao()
-    }
+    fun medicalDevicesInfoDao(db: DiabDataDatabase): MedicalDevicesInfoDao =
+        db.medicalDevicesInfoDao()
 
     @Provides
-    fun userDetailsDao(db: DiabDataDatabase): UserDetailsDao {
-        return db.userDetailsDao()
-    }
+    fun userDetailsDao(db: DiabDataDatabase): UserDetailsDao = db.userDetailsDao()
 
     @Provides
-    fun userPreferencesDao(db: DiabDataDatabase): UserPreferencesDao {
-        return db.userPreferencesDao()
-    }
+    fun userPreferencesDao(db: DiabDataDatabase): UserPreferencesDao = db.userPreferencesDao()
 
     @Provides
     @Singleton
-    fun dataRepository (
+    fun dataRepository(
         weightDao: WeightDao,
         hba1cDao: HBA1CDao,
         appointmentDao: AppointmentDao,
@@ -156,7 +137,7 @@ object DatabaseModule {
             medicalDeviceInfo = medicalDeviceInfo,
             userDetailsDao = userDetailsDao,
             userPreferencesDao = userPreferencesDao,
-            database = database,
+            database = database
         )
         return repository
     }

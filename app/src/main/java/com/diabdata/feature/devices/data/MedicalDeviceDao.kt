@@ -7,9 +7,9 @@ import androidx.room.Update
 import com.diabdata.core.model.MedicalDevice
 import com.diabdata.feature.devices.classes.FaultyBatchCount
 import com.diabdata.shared.utils.dataTypes.MedicalDeviceInfoType
-import kotlinx.coroutines.flow.Flow
 import java.time.LocalDate
 import kotlin.time.Instant
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface MedicalDeviceDao {
@@ -22,8 +22,15 @@ interface MedicalDeviceDao {
     @Query("SELECT * FROM medical_devices WHERE entryUuid = :uuid")
     suspend fun getByUuid(uuid: String): MedicalDevice?
 
-    @Query("SELECT * FROM medical_devices WHERE createdAt = :createdAt AND date = :date AND deviceType = :deviceType AND batchNumber = :batchNumber LIMIT 1")
-    suspend fun getByContent(createdAt: Instant, date: LocalDate, deviceType: MedicalDeviceInfoType, batchNumber: String): MedicalDevice?
+    @Query(
+        "SELECT * FROM medical_devices WHERE createdAt = :createdAt AND date = :date AND deviceType = :deviceType AND batchNumber = :batchNumber LIMIT 1"
+    )
+    suspend fun getByContent(
+        createdAt: Instant,
+        date: LocalDate,
+        deviceType: MedicalDeviceInfoType,
+        batchNumber: String
+    ): MedicalDevice?
 
     @Query("DELETE FROM medical_devices WHERE id = :id")
     suspend fun deleteById(id: Int)
@@ -31,13 +38,19 @@ interface MedicalDeviceDao {
     @Query("SELECT * FROM medical_devices ORDER BY date DESC")
     fun getAllMedicalDevices(): Flow<List<MedicalDevice>>
 
-    @Query("SELECT * FROM medical_devices WHERE (deviceType != 'WIRELESS_PATCH_REMOTE' AND deviceType != 'WIRED_PUMP') ORDER BY date DESC")
+    @Query(
+        "SELECT * FROM medical_devices WHERE (deviceType != 'WIRELESS_PATCH_REMOTE' AND deviceType != 'WIRED_PUMP') ORDER BY date DESC"
+    )
     fun getAllConsumableDevices(): Flow<List<MedicalDevice>>
 
-    @Query("SELECT * FROM medical_devices WHERE (deviceType = 'WIRELESS_PATCH_REMOTE' OR deviceType = 'WIRED_PUMP') ORDER BY date DESC")
+    @Query(
+        "SELECT * FROM medical_devices WHERE (deviceType = 'WIRELESS_PATCH_REMOTE' OR deviceType = 'WIRED_PUMP') ORDER BY date DESC"
+    )
     fun getAllNonConsumableDevices(): Flow<List<MedicalDevice>>
 
-    @Query("SELECT * FROM medical_devices WHERE (lifeSpanEndDate >= :today AND isFaulty = 0) AND isLifeSpanOver = 0 AND (deviceType != 'WIRELESS_PATCH_REMOTE' AND deviceType != 'WIRED_PUMP')")
+    @Query(
+        "SELECT * FROM medical_devices WHERE (lifeSpanEndDate >= :today AND isFaulty = 0) AND isLifeSpanOver = 0 AND (deviceType != 'WIRELESS_PATCH_REMOTE' AND deviceType != 'WIRED_PUMP')"
+    )
     fun getAllCurrentConsumableMedicalDevices(today: LocalDate): Flow<List<MedicalDevice>>
 
     @Query("SELECT * FROM medical_devices WHERE isFaulty=1 AND isReported=0")
@@ -57,7 +70,9 @@ interface MedicalDeviceDao {
     )
     fun getFaultyBatchNumbersCounts(): Flow<List<FaultyBatchCount>>
 
-    @Query("SELECT * from medical_devices WHERE deviceType = :deviceType AND lifeSpanEndDate <= :today")
+    @Query(
+        "SELECT * from medical_devices WHERE deviceType = :deviceType AND lifeSpanEndDate <= :today"
+    )
     fun getSimilarExpiringConsumableDevices(
         today: LocalDate,
         deviceType: MedicalDeviceInfoType

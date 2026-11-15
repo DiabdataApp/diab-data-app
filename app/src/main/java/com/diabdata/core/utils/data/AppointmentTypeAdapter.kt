@@ -9,23 +9,25 @@ import com.google.gson.JsonSerializationContext
 import com.google.gson.JsonSerializer
 import java.lang.reflect.Type
 
-class AppointmentTypeAdapter : JsonSerializer<AppointmentType>, JsonDeserializer<AppointmentType> {
+class AppointmentTypeAdapter :
+    JsonSerializer<AppointmentType>,
+    JsonDeserializer<AppointmentType> {
 
     override fun serialize(
-        src: AppointmentType?, typeOfSrc: Type?, context: JsonSerializationContext?
-    ): JsonElement {
-        return JsonPrimitive(src?.name?.lowercase())
-    }
+        src: AppointmentType?,
+        typeOfSrc: Type?,
+        context: JsonSerializationContext?
+    ): JsonElement = JsonPrimitive(src?.name?.lowercase())
 
     override fun deserialize(
-        json: JsonElement?, typeOfT: Type?, context: JsonDeserializationContext?
-    ): AppointmentType? {
-        return json?.asString?.let {
-            when (it.lowercase()) {
-                "annual_checkup" -> AppointmentType.ANNUAL_CHECKUP
-                "appointment" -> AppointmentType.APPOINTMENT
-                else -> null
-            }
+        json: JsonElement?,
+        typeOfT: Type?,
+        context: JsonDeserializationContext?
+    ): AppointmentType? = json?.asString?.let {
+        when (it.lowercase()) {
+            "annual_checkup" -> AppointmentType.ANNUAL_CHECKUP
+            "appointment" -> AppointmentType.APPOINTMENT
+            else -> null
         }
     }
 }

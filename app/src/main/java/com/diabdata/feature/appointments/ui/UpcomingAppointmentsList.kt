@@ -31,23 +31,21 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.diabdata.core.database.DataViewModel
 import com.diabdata.core.model.Appointment
+import com.diabdata.core.ui.components.cardsList.CardItem
+import com.diabdata.core.ui.components.cardsList.CardsList
+import com.diabdata.core.utils.ui.ColoredIconCircleProps
+import com.diabdata.core.utils.ui.SvgIcon
+import com.diabdata.shared.R as shared
 import com.diabdata.shared.utils.dataTypes.AddableType
 import com.diabdata.shared.utils.dataTypes.AppointmentType
 import com.diabdata.shared.utils.dateUtils.formatLocalDateTime
 import com.diabdata.shared.utils.dateUtils.toRelativeString
-import com.diabdata.core.utils.ui.ColoredIconCircleProps
-import com.diabdata.core.ui.components.cardsList.CardItem
-import com.diabdata.core.ui.components.cardsList.CardsList
-import com.diabdata.core.utils.ui.SvgIcon
 import java.time.LocalDate
 import java.time.LocalDateTime
 import kotlin.time.Instant
-import com.diabdata.shared.R as shared
 
 @Composable
-fun UpcomingAppointmentsListContent(
-    upcomingAppointments: List<Appointment>
-) {
+fun UpcomingAppointmentsListContent(upcomingAppointments: List<Appointment>) {
     if (upcomingAppointments.isEmpty()) return
 
     val context = LocalContext.current
@@ -115,7 +113,9 @@ fun UpcomingAppointmentsListContent(
                                             },
                                             title = {
                                                 Text(
-                                                    text = stringResource(shared.string.common_notes_label),
+                                                    text = stringResource(
+                                                        shared.string.common_notes_label
+                                                    ),
                                                     style = MaterialTheme.typography.titleMedium
                                                 )
                                             },
@@ -129,7 +129,11 @@ fun UpcomingAppointmentsListContent(
                                                 TextButton(onClick = {
                                                     showNotesDialog = false
                                                 }) {
-                                                    Text(text = stringResource(shared.string.common_confirm))
+                                                    Text(
+                                                        text = stringResource(
+                                                            shared.string.common_confirm
+                                                        )
+                                                    )
                                                 }
                                             }
                                         )

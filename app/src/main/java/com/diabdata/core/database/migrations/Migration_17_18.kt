@@ -25,7 +25,7 @@ val MIGRATION_17_18 = object : Migration(17, 18) {
                 isArchived INTEGER NOT NULL,
                 updatedAt TEXT NOT NULL
             )
-        """.trimIndent()
+            """.trimIndent()
         )
 
         db.execSQL(
@@ -58,7 +58,7 @@ val MIGRATION_17_18 = object : Migration(17, 18) {
                 COALESCE(isArchived,0),
                 COALESCE(NULLIF(substr(updatedAt,1,10), ''), strftime('%Y-%m-%d','now'))
             FROM medical_devices;
-        """.trimIndent()
+            """.trimIndent()
         )
 
         db.execSQL("DROP TABLE medical_devices")

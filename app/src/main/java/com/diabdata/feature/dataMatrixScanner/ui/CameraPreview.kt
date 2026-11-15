@@ -29,9 +29,7 @@ import com.google.zxing.NotFoundException
 import com.google.zxing.PlanarYUVLuminanceSource
 import com.google.zxing.common.HybridBinarizer
 
-class ZxingAnalyzer(
-    private val onBarcodeDetected: (String) -> Unit
-) : ImageAnalysis.Analyzer {
+class ZxingAnalyzer(private val onBarcodeDetected: (String) -> Unit) : ImageAnalysis.Analyzer {
 
     private val reader = MultiFormatReader().apply {
         val hints = mapOf(
@@ -83,7 +81,6 @@ class ZxingAnalyzer(
             } finally {
                 imageProxy.close()
             }
-
         } else {
             imageProxy.close()
         }
@@ -93,14 +90,13 @@ class ZxingAnalyzer(
 @SuppressLint("ClickableViewAccessibility")
 @RequiresApi(Build.VERSION_CODES.P)
 @Composable
-fun CameraPreview(
-    modifier: Modifier = Modifier, onBarcodeDetected: (String) -> Unit
-) {
+fun CameraPreview(modifier: Modifier = Modifier, onBarcodeDetected: (String) -> Unit) {
     LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
 
     AndroidView(
-        modifier = modifier.fillMaxSize(), factory = { ctx ->
+        modifier = modifier.fillMaxSize(),
+        factory = { ctx ->
             val previewView = PreviewView(ctx)
 
             val cameraProviderFuture =
@@ -125,7 +121,10 @@ fun CameraPreview(
                     cameraProvider.unbindAll()
 
                     val camera = cameraProvider.bindToLifecycle(
-                        lifecycleOwner, cameraSelector, preview, analyzer
+                        lifecycleOwner,
+                        cameraSelector,
+                        preview,
+                        analyzer
                     )
 
                     // --- Autofocus en continu ---
@@ -143,12 +142,12 @@ fun CameraPreview(
                         }
                         true
                     }
-
                 } catch (exc: Exception) {
                     Log.e("ZXING_SCANNER", "Use case binding failed", exc)
                 }
             }, ContextCompat.getMainExecutor(ctx))
 
             previewView
-        })
+        }
+    )
 }

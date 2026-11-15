@@ -42,17 +42,17 @@ import com.diabdata.core.utils.ui.SvgIcon
 import com.diabdata.core.utils.ui.darken
 import com.diabdata.feature.settings.SettingsViewModel
 import com.diabdata.feature.settings.ui.components.changelog.ChangelogDialog
+import com.diabdata.shared.R as shared
 import com.diabdata.shared.theme.DataIconColor
 import com.diabdata.shared.theme.GtinFilesIconColor
 import com.diabdata.shared.theme.NotificationIconColor
 import com.diabdata.shared.theme.SecurityIconColor
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.time.format.DateTimeFormatter
-import java.time.format.FormatStyle
-import com.diabdata.shared.R as shared
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @SuppressLint("CoroutineCreationDuringComposition")
@@ -79,11 +79,15 @@ fun SettingsScreen(
     val isExpirationEnabled = userPreferences?.expirationReminder ?: false
     val isAppointmentEnabled = userPreferences?.appointmentReminder ?: false
 
-    val toastAppointmentReminderEnabled = stringResource(shared.string.appointments_reminders_enabled_success_toast)
-    val toastMedicationReminderEnabled = stringResource(shared.string.medications_reminders_enabled_success_toast)
+    val toastAppointmentReminderEnabled =
+        stringResource(shared.string.appointments_reminders_enabled_success_toast)
+    val toastMedicationReminderEnabled =
+        stringResource(shared.string.medications_reminders_enabled_success_toast)
 
-    val medicationStoreRebuiltText = stringResource(shared.string.medications_medication_store_rebuilt_toast_message)
-    val medicalDevicesStoreRebuiltText = stringResource(shared.string.devices_medical_devices_store_rebuilt_toast)
+    val medicationStoreRebuiltText =
+        stringResource(shared.string.medications_medication_store_rebuilt_toast_message)
+    val medicalDevicesStoreRebuiltText =
+        stringResource(shared.string.devices_medical_devices_store_rebuilt_toast)
 
     val nextAppointmentDate by remember {
         dataViewModel.upcomingAppointment
@@ -114,7 +118,10 @@ fun SettingsScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(
-                    start = 16.dp, end = 16.dp, top = 0.dp, bottom = 0.dp
+                    start = 16.dp,
+                    end = 16.dp,
+                    top = 0.dp,
+                    bottom = 0.dp
                 )
                 .background(Color.Transparent)
                 .verticalScroll(scrollState)
@@ -125,16 +132,22 @@ fun SettingsScreen(
                 CardItem(
                     leadingColoredCircleIcon = iconCircleProps,
                     content = {
-                        val displayText = if (nextTreatmentExpirationDate != null) stringResource(
-                            shared.string.medications_setting_screen_reminder_details,
-                            nextTreatmentExpirationDate!!.format(
-                                DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)
+                        val displayText = if (nextTreatmentExpirationDate != null) {
+                            stringResource(
+                                shared.string.medications_setting_screen_reminder_details,
+                                nextTreatmentExpirationDate!!.format(
+                                    DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)
+                                )
                             )
-                        ) else ""
+                        } else {
+                            ""
+                        }
 
                         Column {
                             Text(
-                                text = stringResource(shared.string.medications_expiry_notification_title_text),
+                                text = stringResource(
+                                    shared.string.medications_expiry_notification_title_text
+                                ),
                                 style = MaterialTheme.typography.titleMedium,
                                 fontFamily = GoogleSansFlexFontFamily
                             )
@@ -166,19 +179,25 @@ fun SettingsScreen(
                         iconRes = shared.drawable.event_notification_icon_vector
                     ),
                     content = {
-                        val displayText = if (nextAppointmentDate != null) stringResource(
-                            shared.string.appointments_setting_screen_reminder_details,
-                            nextAppointmentDate!!.format(
-                                DateTimeFormatter.ofLocalizedDateTime(
-                                    FormatStyle.MEDIUM,
-                                    FormatStyle.SHORT
+                        val displayText = if (nextAppointmentDate != null) {
+                            stringResource(
+                                shared.string.appointments_setting_screen_reminder_details,
+                                nextAppointmentDate!!.format(
+                                    DateTimeFormatter.ofLocalizedDateTime(
+                                        FormatStyle.MEDIUM,
+                                        FormatStyle.SHORT
+                                    )
                                 )
                             )
-                        ) else ""
+                        } else {
+                            ""
+                        }
 
                         Column {
                             Text(
-                                text = stringResource(shared.string.appointments_setting_screen_reminder_label),
+                                text = stringResource(
+                                    shared.string.appointments_setting_screen_reminder_label
+                                ),
                                 style = MaterialTheme.typography.titleMedium,
                                 fontFamily = GoogleSansFlexFontFamily
                             )
@@ -240,7 +259,9 @@ fun SettingsScreen(
                     ),
                     content = {
                         Row {
-                            Text("Medical devices information file version $medicalDeviceGtinFileVersion")
+                            Text(
+                                "Medical devices information file version $medicalDeviceGtinFileVersion"
+                            )
                         }
                     },
                     onClick = {
@@ -256,7 +277,7 @@ fun SettingsScreen(
                             }
                         }
                     },
-                    trailingIcon = shared.drawable.refresh_icon_vector,
+                    trailingIcon = shared.drawable.refresh_icon_vector
                 )
             )
 
@@ -275,7 +296,9 @@ fun SettingsScreen(
                                 fontFamily = GoogleSansFlexFontFamily
                             )
                             Text(
-                                text = stringResource(shared.string.settings_data_section_description_text),
+                                text = stringResource(
+                                    shared.string.settings_data_section_description_text
+                                ),
                                 style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                                 fontFamily = GoogleSansFlexFontFamily
@@ -303,7 +326,9 @@ fun SettingsScreen(
                                 fontFamily = GoogleSansFlexFontFamily
                             )
                             Text(
-                                text = stringResource(shared.string.settings_security_settings_section_description),
+                                text = stringResource(
+                                    shared.string.settings_security_settings_section_description
+                                ),
                                 style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                                 fontFamily = GoogleSansFlexFontFamily
@@ -348,7 +373,8 @@ fun SettingsScreen(
                     )
                 },
                 content = {
-                    Text(stringResource(shared.string.settings_about_app_label),
+                    Text(
+                        stringResource(shared.string.settings_about_app_label),
                         fontFamily = GoogleSansFlexFontFamily
                     )
                 },
@@ -356,7 +382,7 @@ fun SettingsScreen(
                     containerColor = containerColor,
                     headlineColor = containerContentColor,
                     supportingColor = containerContentColor
-                ),
+                )
             )
         }
     }

@@ -35,14 +35,13 @@ import androidx.compose.ui.unit.dp
 @Immutable
 data class DataTableDecoration(
     val showInnerBorder: Boolean = false,
-    val alternateRowBackground: Boolean = false,
+    val alternateRowBackground: Boolean = false
 ) {
     companion object {
         val Default = DataTableDecoration()
 
-        fun build(builder: Builder.() -> Unit): DataTableDecoration {
-            return Builder().apply(builder).build()
-        }
+        fun build(builder: Builder.() -> Unit): DataTableDecoration =
+            Builder().apply(builder).build()
     }
 
     class Builder {
@@ -87,7 +86,7 @@ fun DataTable(
     Surface(
         shape = RoundedCornerShape(16.dp),
         tonalElevation = 2.dp,
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth()
     ) {
         Column {
             Row(
@@ -104,7 +103,13 @@ fun DataTable(
                             .weight(1f)
                             .padding(
                                 start = if (index > 0 && showColumnBorders) 8.dp else 0.dp,
-                                end = if (index < headers.lastIndex && showColumnBorders) 8.dp else 0.dp
+                                end = if (index < headers.lastIndex &&
+                                    showColumnBorders
+                                ) {
+                                    8.dp
+                                } else {
+                                    0.dp
+                                }
                             ),
                         contentAlignment = Alignment.Center
                     ) {
@@ -131,8 +136,11 @@ fun DataTable(
             data.forEachIndexed { rowIndex, rowValues ->
                 val isEven = rowIndex % 2 == 0
                 val backgroundColor =
-                    if (useAlternateRows && !isEven) headerColor.copy(alpha = 0.08f)
-                    else Color.Transparent
+                    if (useAlternateRows && !isEven) {
+                        headerColor.copy(alpha = 0.08f)
+                    } else {
+                        Color.Transparent
+                    }
 
                 Row(
                     modifier = Modifier
@@ -147,7 +155,13 @@ fun DataTable(
                                 .weight(1f)
                                 .padding(
                                     start = if (colIndex > 0 && showColumnBorders) 8.dp else 0.dp,
-                                    end = if (colIndex < rowValues.lastIndex && showColumnBorders) 8.dp else 0.dp
+                                    end = if (colIndex < rowValues.lastIndex &&
+                                        showColumnBorders
+                                    ) {
+                                        8.dp
+                                    } else {
+                                        0.dp
+                                    }
                                 ),
                             contentAlignment = Alignment.Center
                         ) {

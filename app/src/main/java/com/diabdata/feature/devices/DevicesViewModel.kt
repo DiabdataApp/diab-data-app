@@ -5,17 +5,15 @@ import androidx.lifecycle.viewModelScope
 import com.diabdata.core.database.DataRepository
 import com.diabdata.core.model.MedicalDevice
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @HiltViewModel
-class DevicesViewModel @Inject constructor(
-    val repository: DataRepository
-) : ViewModel() {
+class DevicesViewModel @Inject constructor(val repository: DataRepository) : ViewModel() {
     val currentConsumableDevices: StateFlow<List<MedicalDevice>> =
         repository.getAllCurrentConsumableDevices()
             .stateIn(viewModelScope, SharingStarted.Companion.WhileSubscribed(5000), emptyList())

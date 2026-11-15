@@ -78,8 +78,8 @@ import com.diabdata.feature.settings.ui.SettingsScreen
 import com.diabdata.feature.userProfile.UserProfileViewModel
 import com.diabdata.feature.userProfile.ui.UserAvatarWithMenu
 import com.diabdata.feature.userProfile.ui.UserDetailsScreen
-import kotlinx.coroutines.flow.StateFlow
 import com.diabdata.shared.R as shared
+import kotlinx.coroutines.flow.StateFlow
 
 sealed interface NavIcon {
     data class Vector(val imageVector: ImageVector, val contentDescription: String) : NavIcon
@@ -87,16 +87,16 @@ sealed interface NavIcon {
 }
 
 data class BottomNavItem(
-    val route: String, val label: Int, val selectedIcon: NavIcon, val unselectedIcon: NavIcon
+    val route: String,
+    val label: Int,
+    val selectedIcon: NavIcon,
+    val unselectedIcon: NavIcon
 )
 
 @OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.P)
 @Composable
-fun App(
-    dataViewModel: DataViewModel,
-    shortcutDestination: StateFlow<String?>
-) {
+fun App(dataViewModel: DataViewModel, shortcutDestination: StateFlow<String?>) {
     // ── Window Size ──
     val windowSize = getScreenSize()
 
@@ -107,12 +107,14 @@ fun App(
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
-    val userDetails by userProfileViewModel.userDetails.collectAsStateWithLifecycle(initialValue = null)
+    val userDetails by userProfileViewModel.userDetails.collectAsStateWithLifecycle(
+        initialValue = null
+    )
     val pendingDestination by shortcutDestination.collectAsStateWithLifecycle()
     val activity = LocalActivity.current as? MainActivity
     val isProfileRoute = currentRoute == "profile"
-    val isSubSettingsRoute = currentRoute?.startsWith("settings/") == true
-            && currentRoute != "settings/main"
+    val isSubSettingsRoute = currentRoute?.startsWith("settings/") == true &&
+        currentRoute != "settings/main"
 
     val snackbarHostState = remember { SnackbarHostState() }
 
@@ -244,8 +246,13 @@ fun App(
                                 val currentDestination = currentBackStack?.destination
 
                                 items.forEach { item ->
-                                    val selected = currentDestination?.hierarchy?.any { it.route == item.route } == true
-                                            || currentDestination?.route?.startsWith(item.route) == true
+                                    val selected =
+                                        currentDestination?.hierarchy?.any {
+                                            it.route == item.route
+                                        } ==
+                                            true ||
+                                            currentDestination?.route?.startsWith(item.route) ==
+                                            true
                                     NavigationDrawerItem(
                                         icon = { NavItemIcon(item, selected) },
                                         label = { Text(stringResource(item.label)) },
@@ -271,7 +278,10 @@ fun App(
                                         },
                                         navigationIcon = {
                                             IconButton(onClick = { navController.popBackStack() }) {
-                                                Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                                                Icon(
+                                                    Icons.AutoMirrored.Filled.ArrowBack,
+                                                    contentDescription = "Back"
+                                                )
                                             }
                                         },
                                         colors = TopAppBarDefaults.topAppBarColors(
@@ -306,7 +316,10 @@ fun App(
                                 },
                                 navigationIcon = {
                                     IconButton(onClick = { navController.popBackStack() }) {
-                                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                                        Icon(
+                                            Icons.AutoMirrored.Filled.ArrowBack,
+                                            contentDescription = "Back"
+                                        )
                                     }
                                 },
                                 colors = TopAppBarDefaults.topAppBarColors(
@@ -354,8 +367,10 @@ fun App(
                             val currentDestination = currentBackStack?.destination
 
                             items.forEach { item ->
-                                val selected = currentDestination?.hierarchy?.any { it.route == item.route } == true
-                                        || currentDestination?.route?.startsWith(item.route) == true
+                                val selected =
+                                    currentDestination?.hierarchy?.any { it.route == item.route } ==
+                                        true ||
+                                        currentDestination?.route?.startsWith(item.route) == true
                                 NavigationRailItem(
                                     icon = { NavItemIcon(item, false) },
                                     label = {
@@ -390,7 +405,7 @@ fun App(
                     containerColor = MaterialTheme.colorScheme.surfaceContainer,
                     topBar = {
                         when {
-                            isProfileRoute -> {  }
+                            isProfileRoute -> { }
                             isSubSettingsRoute -> {
                                 TopAppBar(
                                     title = {
@@ -400,7 +415,9 @@ fun App(
                                         IconButton(onClick = { navController.popBackStack() }) {
                                             Icon(
                                                 Icons.AutoMirrored.Filled.ArrowBack,
-                                                contentDescription = stringResource(shared.string.common_back)
+                                                contentDescription = stringResource(
+                                                    shared.string.common_back
+                                                )
                                             )
                                         }
                                     },
@@ -416,7 +433,10 @@ fun App(
                                         Row(
                                             modifier = Modifier.fillMaxWidth(),
                                             verticalAlignment = Alignment.CenterVertically,
-                                            horizontalArrangement = Arrangement.spacedBy(16.dp, Alignment.End)
+                                            horizontalArrangement = Arrangement.spacedBy(
+                                                16.dp,
+                                                Alignment.End
+                                            )
                                         ) {
                                             userDetails?.firstName?.let {
                                                 Text(
@@ -430,12 +450,17 @@ fun App(
                                                 lastName = userDetails?.lastName,
                                                 profilePhotoPath = userDetails?.profilePhotoPath,
                                                 size = 30.dp,
-                                                onEditProfile = { navController.navigate("profile") }
+                                                onEditProfile = {
+                                                    navController.navigate("profile")
+                                                }
                                             )
                                         }
                                     },
                                     contentPadding = PaddingValues(
-                                        start = 32.dp, top = 5.dp, end = 32.dp, bottom = 10.dp
+                                        start = 32.dp,
+                                        top = 5.dp,
+                                        end = 32.dp,
+                                        bottom = 10.dp
                                     ),
                                     expandedHeight = 40.dp,
                                     colors = TopAppBarDefaults.topAppBarColors(
@@ -453,8 +478,13 @@ fun App(
                                 val currentBackStack by navController.currentBackStackEntryAsState()
                                 val currentDestination = currentBackStack?.destination
                                 items.forEach { item ->
-                                    val selected = currentDestination?.hierarchy?.any { it.route == item.route } == true
-                                            || currentDestination?.route?.startsWith(item.route) == true
+                                    val selected =
+                                        currentDestination?.hierarchy?.any {
+                                            it.route == item.route
+                                        } ==
+                                            true ||
+                                            currentDestination?.route?.startsWith(item.route) ==
+                                            true
                                     NavigationBarItem(
                                         icon = { NavItemIcon(item, selected) },
                                         label = { Text(stringResource(item.label)) },
@@ -470,13 +500,16 @@ fun App(
                         navController = navController,
                         dataViewModel = dataViewModel,
                         modifier = Modifier.padding(
-                            if (isProfileRoute) PaddingValues(
-                                start = 0.dp,
-                                top = 0.dp,
-                                end = 0.dp,
-                                bottom = paddingValues.calculateBottomPadding()
-                            )
-                            else paddingValues
+                            if (isProfileRoute) {
+                                PaddingValues(
+                                    start = 0.dp,
+                                    top = 0.dp,
+                                    end = 0.dp,
+                                    bottom = paddingValues.calculateBottomPadding()
+                                )
+                            } else {
+                                paddingValues
+                            }
                         )
                     )
                 }
@@ -488,8 +521,11 @@ fun App(
 @Composable
 fun NavItemIcon(item: BottomNavItem, selected: Boolean) {
     val icon = if (selected) item.selectedIcon else item.unselectedIcon
-    val tint = if (selected) MaterialTheme.colorScheme.primary
-    else MaterialTheme.colorScheme.onSurfaceVariant
+    val tint = if (selected) {
+        MaterialTheme.colorScheme.primary
+    } else {
+        MaterialTheme.colorScheme.onSurfaceVariant
+    }
 
     when (icon) {
         is NavIcon.Vector -> Icon(

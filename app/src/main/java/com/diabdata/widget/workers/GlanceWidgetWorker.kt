@@ -13,12 +13,12 @@ import com.diabdata.widget.glanceWidget.GlanceWidget
 import com.diabdata.widget.widgetDataStore
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
-import kotlinx.coroutines.flow.firstOrNull
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 import kotlin.math.roundToInt
+import kotlinx.coroutines.flow.firstOrNull
 
 @HiltWorker
 class GlanceWidgetWorker @AssistedInject constructor(
@@ -28,7 +28,6 @@ class GlanceWidgetWorker @AssistedInject constructor(
 ) : CoroutineWorker(context, workerParameters) {
 
     override suspend fun doWork(): Result {
-
         val today = LocalDateTime.now()
         val formatter = DateTimeFormatter.ISO_LOCAL_DATE
 
@@ -55,7 +54,6 @@ class GlanceWidgetWorker @AssistedInject constructor(
 
         Log.i("GlanceWidgetWorker", "Updating DataStore with devices: $devices")
 
-
         val apptsFlow = db.appointmentDao().getUpcomingAppointmentsFlow(today)
         val nextAppt = apptsFlow.firstOrNull()?.firstOrNull()
 
@@ -65,7 +63,7 @@ class GlanceWidgetWorker @AssistedInject constructor(
                 nextAppointment = WidgetAppointment(
                     date = nextAppt?.date?.toLocalDate()?.format(formatter) ?: "",
                     doctor = nextAppt?.doctor ?: "",
-                    type = nextAppt?.type?.toString() ?: "",
+                    type = nextAppt?.type?.toString() ?: ""
                 ),
                 lastUpdated = System.currentTimeMillis()
             )
@@ -78,7 +76,7 @@ class GlanceWidgetWorker @AssistedInject constructor(
 }
 
 fun getLifeSpanProgress(startDate: LocalDate, endDate: LocalDate): Int {
-    require(startDate < endDate) {"Start date cannot be set after endDate"}
+    require(startDate < endDate) { "Start date cannot be set after endDate" }
 
     val today = LocalDate.now()
 

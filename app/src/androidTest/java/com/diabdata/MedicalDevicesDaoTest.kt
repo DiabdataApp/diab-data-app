@@ -9,18 +9,17 @@ import com.diabdata.core.model.MedicalDevice
 import com.diabdata.core.model.nowMillis
 import com.diabdata.feature.devices.data.MedicalDeviceDao
 import com.diabdata.shared.utils.dataTypes.MedicalDeviceInfoType
+import java.io.IOException
+import java.time.LocalDate
+import java.time.ZoneId
+import kotlin.time.toKotlinInstant
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.After
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import java.io.IOException
-import java.time.LocalDate
-import org.junit.Assert.assertEquals
-import java.time.ZoneId
-import kotlin.time.Instant
-import kotlin.time.toKotlinInstant
 
 /**
  * Tests for [MedicalDeviceDao] found at [com.diabdata.feature.devices.data.MedicalDeviceDao]
@@ -90,7 +89,9 @@ class MedicalDevicesDaoTest {
         referenceNumber = "R-001",
         manufacturer = "Insulet",
         deviceType = MedicalDeviceInfoType.WIRELESS_PATCH_REMOTE,
-        createdAt = today.minusYears(2).atStartOfDay(ZoneId.systemDefault()).toInstant().toKotlinInstant(),
+        createdAt = today.minusYears(
+            2
+        ).atStartOfDay(ZoneId.systemDefault()).toInstant().toKotlinInstant(),
         isArchived = false,
         lifeSpan = 0,
         isFaulty = false,
@@ -165,7 +166,9 @@ class MedicalDevicesDaoTest {
         assertEquals(1, medicalDevicesBefore.size)
         assertEquals(consumableDevice, medicalDevicesBefore[0])
 
-        medicalDeviceDao.update(consumableDevice.copy(name = "updated", referenceNumber = "updated"))
+        medicalDeviceDao.update(
+            consumableDevice.copy(name = "updated", referenceNumber = "updated")
+        )
         val medicalDevicesAfter = medicalDeviceDao.getAllMedicalDevices().first()
         assertEquals(1, medicalDevicesAfter.size)
         assertEquals("updated", medicalDevicesAfter[0].name)
@@ -246,8 +249,10 @@ class MedicalDevicesDaoTest {
     fun getSimilarExpiringConsumableDevicesTest() = runBlocking {
         allDevices.forEach { medicalDeviceDao.insert(it) }
 
-        val upcomingExpirationDates = medicalDeviceDao.getSimilarExpiringConsumableDevices(today,
-            MedicalDeviceInfoType.WIRELESS_PATCH)
+        val upcomingExpirationDates = medicalDeviceDao.getSimilarExpiringConsumableDevices(
+            today,
+            MedicalDeviceInfoType.WIRELESS_PATCH
+        )
         assertEquals(1, upcomingExpirationDates.size)
         assertEquals("B-003", upcomingExpirationDates[0].batchNumber)
     }

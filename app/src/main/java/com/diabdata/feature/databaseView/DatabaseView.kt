@@ -73,22 +73,20 @@ import com.diabdata.R
 import com.diabdata.core.database.DataViewModel
 import com.diabdata.core.database.converters.toEntity
 import com.diabdata.core.model.MedicalDevice
-import com.diabdata.shared.utils.dataTypes.AddableType
-import com.diabdata.core.utils.ui.ColoredIconCircle
 import com.diabdata.core.ui.components.actionInput.FlippableSelectionIcon
+import com.diabdata.core.utils.ui.ColoredIconCircle
 import com.diabdata.core.utils.ui.SvgIcon
 import com.diabdata.core.utils.ui.darken
 import com.diabdata.core.utils.ui.getItemShape
 import com.diabdata.feature.devices.DevicesViewModel
-import kotlinx.coroutines.launch
+import com.diabdata.shared.R as shared
+import com.diabdata.shared.utils.dataTypes.AddableType
 import java.time.format.DateTimeFormatter
 import kotlin.math.abs
-import com.diabdata.shared.R as shared
+import kotlinx.coroutines.launch
 
 @Composable
-fun DatabaseEditionView(
-    dataViewModel: DataViewModel
-) {
+fun DatabaseEditionView(dataViewModel: DataViewModel) {
     val scope = rememberCoroutineScope()
     var selectedTypes by remember { mutableStateOf(setOf<AddableType>()) }
     var selectionMode by remember { mutableStateOf(false) }
@@ -114,8 +112,11 @@ fun DatabaseEditionView(
                 types = AddableType.entries,
                 selectedTypes = selectedTypes,
                 onTypeToggle = { type ->
-                    selectedTypes = if (selectedTypes.contains(type)) selectedTypes - type
-                    else selectedTypes + type
+                    selectedTypes = if (selectedTypes.contains(type)) {
+                        selectedTypes - type
+                    } else {
+                        selectedTypes + type
+                    }
                 }
             )
 
@@ -138,15 +139,26 @@ fun DatabaseEditionView(
                     val deleteButtonText = stringResource(shared.string.common_delete)
                     val discardedItemText = stringResource(shared.string.common_set_lifespan)
 
-
-                    val bgColor = if (isPressed || isHovered) MaterialTheme.colorScheme.error
-                    else MaterialTheme.colorScheme.error.copy(alpha = 0.1f)
-                    val textColor = if (isPressed || isHovered) MaterialTheme.colorScheme.onError
-                    else MaterialTheme.colorScheme.error
-                    val badgeColor = if (isPressed || isHovered) MaterialTheme.colorScheme.onError
-                    else MaterialTheme.colorScheme.error
-                    val badgeTextColor = if (isPressed || isHovered) MaterialTheme.colorScheme.error
-                    else MaterialTheme.colorScheme.onError
+                    val bgColor = if (isPressed || isHovered) {
+                        MaterialTheme.colorScheme.error
+                    } else {
+                        MaterialTheme.colorScheme.error.copy(alpha = 0.1f)
+                    }
+                    val textColor = if (isPressed || isHovered) {
+                        MaterialTheme.colorScheme.onError
+                    } else {
+                        MaterialTheme.colorScheme.error
+                    }
+                    val badgeColor = if (isPressed || isHovered) {
+                        MaterialTheme.colorScheme.onError
+                    } else {
+                        MaterialTheme.colorScheme.error
+                    }
+                    val badgeTextColor = if (isPressed || isHovered) {
+                        MaterialTheme.colorScheme.error
+                    } else {
+                        MaterialTheme.colorScheme.onError
+                    }
 
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
@@ -202,7 +214,9 @@ fun DatabaseEditionView(
                                     selectionMode = false
                                 },
                                 colors = ButtonDefaults.buttonColors(
-                                    containerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
+                                    containerColor = MaterialTheme.colorScheme.primary.copy(
+                                        alpha = 0.1f
+                                    ),
                                     contentColor = MaterialTheme.colorScheme.primary
                                 )
                             ) {
@@ -225,7 +239,6 @@ fun DatabaseEditionView(
                             }
                         }
                     }
-
                 }
 
                 if (!selectionMode && selectedEntries.isEmpty()) Spacer(Modifier.width(8.dp))
@@ -242,9 +255,11 @@ fun DatabaseEditionView(
                         .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.1f))
                 ) {
                     SvgIcon(
-                        resId = if (selectedEntries.size < filteredEntries.size)
+                        resId = if (selectedEntries.size < filteredEntries.size) {
                             shared.drawable.select_all_icon_vector
-                        else shared.drawable.deselect_all_icon_vector,
+                        } else {
+                            shared.drawable.deselect_all_icon_vector
+                        },
                         color = MaterialTheme.colorScheme.primary
                     )
                 }
@@ -355,7 +370,9 @@ fun EntryCardSwipeM3(
         } else if (dragOffset.value < 0f) {
             Surface(
                 shape = shape,
-                color = colorResource(R.color.archived_primary).copy(alpha = 0.2f + 0.8f * progress),
+                color = colorResource(
+                    R.color.archived_primary
+                ).copy(alpha = 0.2f + 0.8f * progress),
                 modifier = Modifier.fillMaxSize()
             ) {
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.CenterEnd) {
@@ -415,8 +432,11 @@ fun EntryCardSwipeM3(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.padding(16.dp)
             ) {
-                val color = if (entry.isArchived) colorResource(R.color.archived_primary)
-                else MaterialTheme.colorScheme.primary
+                val color = if (entry.isArchived) {
+                    colorResource(R.color.archived_primary)
+                } else {
+                    MaterialTheme.colorScheme.primary
+                }
 
                 Box(contentAlignment = Alignment.Center) {
                     ColoredIconCircle(
@@ -537,7 +557,6 @@ private fun EntryContent(entry: DataViewModel.MixedDbEntry) {
                     )
                 }
 
-
                 if (numbersWithIcons.isNotEmpty()) {
                     FlowRow(
                         modifier = Modifier.weight(1f),
@@ -590,7 +609,6 @@ private fun EntryContent(entry: DataViewModel.MixedDbEntry) {
                         )
                     }
                 }
-
             }
         }
     }
@@ -599,9 +617,8 @@ private fun EntryContent(entry: DataViewModel.MixedDbEntry) {
 fun toggleEntrySelection(
     current: Set<DataViewModel.MixedDbEntry>,
     entry: DataViewModel.MixedDbEntry
-): Set<DataViewModel.MixedDbEntry> {
-    return if (current.contains(entry)) current - entry else current + entry
-}
+): Set<DataViewModel.MixedDbEntry> =
+    if (current.contains(entry)) current - entry else current + entry
 
 @Composable
 fun FilterChips(
@@ -628,7 +645,9 @@ fun FilterChips(
                 label = { Text(type.getDisplayName(context)) },
                 leadingIcon = if (isSelected) {
                     { Icon(Icons.Outlined.Check, contentDescription = null) }
-                } else null
+                } else {
+                    null
+                }
             )
         }
     }

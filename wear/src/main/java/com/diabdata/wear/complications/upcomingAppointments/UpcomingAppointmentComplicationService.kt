@@ -8,9 +8,9 @@ import androidx.wear.watchface.complications.data.PlainComplicationText
 import androidx.wear.watchface.complications.data.ShortTextComplicationData
 import androidx.wear.watchface.complications.datasource.ComplicationRequest
 import androidx.wear.watchface.complications.datasource.SuspendingComplicationDataSourceService
+import com.diabdata.shared.R as shared
 import com.diabdata.shared.utils.dataTypes.AppointmentType
 import com.diabdata.shared.utils.imgUtils.toAppointmentIcon
-import com.diabdata.shared.R as shared
 
 class UpcomingAppointmentComplicationService : SuspendingComplicationDataSourceService() {
 
@@ -42,8 +42,12 @@ class UpcomingAppointmentComplicationService : SuspendingComplicationDataSourceS
             }
 
             contentDescription = when (daysBeforeAppointment) {
-                0 -> resources.getString(shared.string.appointments_wear_complication_upcoming_appointment_today_text_description)
-                1 -> resources.getString(shared.string.appointments_wear_complication_upcoming_appointment_tomorrow_text_description)
+                0 -> resources.getString(
+                    shared.string.appointments_wear_complication_upcoming_appointment_today_text_description
+                )
+                1 -> resources.getString(
+                    shared.string.appointments_wear_complication_upcoming_appointment_tomorrow_text_description
+                )
                 else -> resources.getString(
                     shared.string.appointments_wear_complication_upcoming_appointment_in_days_text_description,
                     daysBeforeAppointment.toString()
@@ -53,7 +57,9 @@ class UpcomingAppointmentComplicationService : SuspendingComplicationDataSourceS
             daysCountText = "--"
             doctor = ""
             contentDescription =
-                resources.getString(shared.string.appointments_wear_complication_no_upcoming_appointment_text_description)
+                resources.getString(
+                    shared.string.appointments_wear_complication_no_upcoming_appointment_text_description
+                )
             iconRes = AppointmentType.APPOINTMENT.iconFilledRes
         }
 
@@ -76,8 +82,8 @@ class UpcomingAppointmentComplicationService : SuspendingComplicationDataSourceS
             .build()
     }
 
-    override fun getPreviewData(type: ComplicationType): ComplicationData {
-        return ShortTextComplicationData.Builder(
+    override fun getPreviewData(type: ComplicationType): ComplicationData =
+        ShortTextComplicationData.Builder(
             text = PlainComplicationText.Builder("3d").build(),
             contentDescription = PlainComplicationText.Builder(
                 resources.getString(
@@ -96,5 +102,4 @@ class UpcomingAppointmentComplicationService : SuspendingComplicationDataSourceS
                 ).build()
             )
             .build()
-    }
 }

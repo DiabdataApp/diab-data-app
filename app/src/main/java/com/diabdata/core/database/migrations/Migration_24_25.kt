@@ -21,7 +21,7 @@ val MIGRATION_24_25 = object : Migration(24, 25) {
                 )
             """.trimIndent()
         )
-        
+
         db.execSQL(
             """
                 INSERT INTO `weight_entries_new` (`id`, `date`, `createdAt`, `isArchived`, `value`, `updatedAt`, `entryUuid`)

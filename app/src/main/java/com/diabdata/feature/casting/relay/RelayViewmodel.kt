@@ -10,18 +10,18 @@ import com.diabdata.core.model.UserDetails
 import com.diabdata.core.utils.data.GsonFactory
 import com.diabdata.feature.casting.castServer.utils.computeTrend
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
 import java.io.File
 import java.time.LocalDateTime
 import javax.inject.Inject
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 
 @HiltViewModel
 class RelayViewModel @Inject constructor(
     private val db: DiabDataDatabase,
     application: Application
-): AndroidViewModel(application) {
+) : AndroidViewModel(application) {
 
     private val relayClient = RelayClient()
 
@@ -161,8 +161,14 @@ class RelayViewModel @Inject constructor(
                     }
 
                     "/api/latestMeasures" -> {
-                        val weights = db.weightDao().getWeightPlotData(today.minusYears(1).toLocalDate(), today.toLocalDate()).first()
-                        val hba1cs = db.hba1cDao().getHBA1CPlotData(today.minusYears(1).toLocalDate(), today.toLocalDate()).first()
+                        val weights = db.weightDao().getWeightPlotData(
+                            today.minusYears(1).toLocalDate(),
+                            today.toLocalDate()
+                        ).first()
+                        val hba1cs = db.hba1cDao().getHBA1CPlotData(
+                            today.minusYears(1).toLocalDate(),
+                            today.toLocalDate()
+                        ).first()
                         mapOf("weights" to weights, "hba1cs" to hba1cs)
                     }
 

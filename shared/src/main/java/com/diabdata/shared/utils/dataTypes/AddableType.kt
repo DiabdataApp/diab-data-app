@@ -56,6 +56,5 @@ enum class AddableType(
         iconFilledRes = R.drawable.devices_filled_icon_vector
     );
 
-    fun getDisplayName(context: Context): String =
-        context.getString(displayNameRes)
+    fun getDisplayName(context: Context): String = context.getString(displayNameRes)
 }

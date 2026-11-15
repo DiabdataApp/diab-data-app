@@ -33,7 +33,6 @@ android {
         targetSdk = 36
         versionCode = 15
         versionName = "1.7"
-
     }
 
     if (storeF != null && storeF.exists()) {

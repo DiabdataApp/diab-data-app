@@ -28,7 +28,9 @@ interface UserPreferencesDao {
     @Query("UPDATE user_preferences SET lastBackupDate = :date WHERE id = 0")
     suspend fun setLastBackupDate(date: String)
 
-    @Query("UPDATE user_preferences SET backupPath = NULL, lastBackupDate = NULL, frequency = :defaultFrequency, automaticBackupEnabled = 0 WHERE id = 0")
+    @Query(
+        "UPDATE user_preferences SET backupPath = NULL, lastBackupDate = NULL, frequency = :defaultFrequency, automaticBackupEnabled = 0 WHERE id = 0"
+    )
     suspend fun resetBackupPreferences(defaultFrequency: String = BackupFrequency.WEEKLY.key)
 
     @Query("UPDATE user_preferences SET expirationReminder = :enabled WHERE id = 0")

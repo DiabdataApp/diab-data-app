@@ -16,6 +16,9 @@ import com.diabdata.core.model.UserPreferences
 import com.diabdata.core.model.Weight
 import com.diabdata.core.utils.data.GsonFactory
 import com.diabdata.shared.utils.dataTypes.MedicalDeviceInfoType
+import java.io.IOException
+import java.time.LocalDate
+import kotlin.time.Instant
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.After
@@ -24,9 +27,6 @@ import org.junit.Assert.assertFalse
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import java.io.IOException
-import java.time.LocalDate
-import kotlin.time.Instant
 
 @RunWith(AndroidJUnit4::class)
 class DataRepositoryImportTest {
@@ -44,18 +44,16 @@ class DataRepositoryImportTest {
         value: Float = 70f,
         date: LocalDate = LocalDate.of(2026, 1, 15),
         createdAt: Instant = older,
-        updatedAt: Instant = older,
-    ): Weight {
-        return Weight(
-            entryUuid = entryUuid,
-            id = id,
-            value = value,
-            date = date,
-            createdAt = createdAt,
-            updatedAt = updatedAt,
-            isArchived = false,
-        )
-    }
+        updatedAt: Instant = older
+    ): Weight = Weight(
+        entryUuid = entryUuid,
+        id = id,
+        value = value,
+        date = date,
+        createdAt = createdAt,
+        updatedAt = updatedAt,
+        isArchived = false
+    )
 
     private fun device(
         entryUuid: String,
@@ -69,30 +67,31 @@ class DataRepositoryImportTest {
         isArchived: Boolean = false,
         isLifeSpanOver: Boolean = false,
         createdAt: Instant = older,
-        updatedAt: Instant = older,
-    ): MedicalDevice {
-        return MedicalDevice(
-            id = id,
-            date = date,
-            lifeSpanEndDate = date.plusDays(lifeSpan.toLong()),
-            name = name,
-            batchNumber = "12345678",
-            serialNumber = "12345678",
-            referenceNumber = "12345678",
-            manufacturer = "Insulet",
-            deviceType = deviceType,
-            createdAt = createdAt,
-            isArchived = isArchived,
-            lifeSpan = lifeSpan,
-            isFaulty = isFaulty,
-            isReported = isReported,
-            isLifeSpanOver = isLifeSpanOver,
-            updatedAt = updatedAt,
-            entryUuid = entryUuid
-        )
-    }
+        updatedAt: Instant = older
+    ): MedicalDevice = MedicalDevice(
+        id = id,
+        date = date,
+        lifeSpanEndDate = date.plusDays(lifeSpan.toLong()),
+        name = name,
+        batchNumber = "12345678",
+        serialNumber = "12345678",
+        referenceNumber = "12345678",
+        manufacturer = "Insulet",
+        deviceType = deviceType,
+        createdAt = createdAt,
+        isArchived = isArchived,
+        lifeSpan = lifeSpan,
+        isFaulty = isFaulty,
+        isReported = isReported,
+        isLifeSpanOver = isLifeSpanOver,
+        updatedAt = updatedAt,
+        entryUuid = entryUuid
+    )
 
-    private fun legacyWeight(updatedAt: String = "2026-01-15", isArchived: Boolean = false): Weight {
+    private fun legacyWeight(
+        updatedAt: String = "2026-01-15",
+        isArchived: Boolean = false
+    ): Weight {
         val json = """
             {
                 "id": 1,
@@ -122,7 +121,10 @@ class DataRepositoryImportTest {
         return gson.fromJson(json, Hba1c::class.java)
     }
 
-    private fun legacyImportantDate(updatedAt: String = "2026-01-15", isArchived: Boolean = false): ImportantDate {
+    private fun legacyImportantDate(
+        updatedAt: String = "2026-01-15",
+        isArchived: Boolean = false
+    ): ImportantDate {
         val json = """
             {
                 "id": 1,
@@ -137,7 +139,10 @@ class DataRepositoryImportTest {
         return gson.fromJson(json, ImportantDate::class.java)
     }
 
-    private fun legacyAppointment(updatedAt: String = "2026-01-15", isArchived: Boolean = false): Appointment {
+    private fun legacyAppointment(
+        updatedAt: String = "2026-01-15",
+        isArchived: Boolean = false
+    ): Appointment {
         val json = """
             {
                 "id": 1,
@@ -154,7 +159,10 @@ class DataRepositoryImportTest {
         return gson.fromJson(json, Appointment::class.java)
     }
 
-    private fun legacyTreatment(updatedAt: String = "2026-01-15", isArchived: Boolean = false): Treatment {
+    private fun legacyTreatment(
+        updatedAt: String = "2026-01-15",
+        isArchived: Boolean = false
+    ): Treatment {
         val json = """
             {
                 "id": 1,
@@ -170,7 +178,10 @@ class DataRepositoryImportTest {
         return gson.fromJson(json, Treatment::class.java)
     }
 
-    private fun legacyDevice(updatedAt: String = "2026-01-15", isArchived: Boolean = false): MedicalDevice {
+    private fun legacyDevice(
+        updatedAt: String = "2026-01-15",
+        isArchived: Boolean = false
+    ): MedicalDevice {
         val json = """
             {
                 "id": 1,
@@ -210,7 +221,7 @@ class DataRepositoryImportTest {
             medicalDeviceInfo = db.medicalDevicesInfoDao(),
             userDetailsDao = db.userDetailsDao(),
             userPreferencesDao = db.userPreferencesDao(),
-            database = db,
+            database = db
         )
     }
 
@@ -225,7 +236,7 @@ class DataRepositoryImportTest {
     fun reimportingSameWeightsBackupTwiceDoesNotDuplicate() = runBlocking {
         val weightsBackup = listOf(
             weight(entryUuid = "weight-1", id = 1),
-            weight(entryUuid = "weight-2", id = 2, value = 76f),
+            weight(entryUuid = "weight-2", id = 2, value = 76f)
         )
 
         repository.importWeights(weightsBackup)
@@ -241,7 +252,7 @@ class DataRepositoryImportTest {
     fun reimportingSameDevicesBackupTwiceDoesNotDuplicate() = runBlocking {
         val devicesBackup = listOf(
             device(entryUuid = "device-1", id = 1),
-            device(entryUuid = "device-2", id = 2, name = "Omnipod 2"),
+            device(entryUuid = "device-2", id = 2, name = "Omnipod 2")
         )
 
         repository.importMedicalDevices(devicesBackup)
@@ -275,8 +286,12 @@ class DataRepositoryImportTest {
     @Test
     @Throws(Exception::class)
     fun keepMoreRecentLocalEntry() = runBlocking {
-        db.weightDao().insert(weight(entryUuid = "weight-a", id = 1, value = 70f, updatedAt = newer))
-        repository.importWeights(listOf(weight(entryUuid = "weight-a", id = 1, value = 65f, updatedAt = older)))
+        db.weightDao().insert(
+            weight(entryUuid = "weight-a", id = 1, value = 70f, updatedAt = newer)
+        )
+        repository.importWeights(
+            listOf(weight(entryUuid = "weight-a", id = 1, value = 65f, updatedAt = older))
+        )
 
         val allWeights = db.weightDao().getAllWeightsFlow().first()
 
@@ -286,8 +301,12 @@ class DataRepositoryImportTest {
     @Test
     @Throws(Exception::class)
     fun keepNewerBackupWithPreservedLocalId() = runBlocking {
-        db.weightDao().insert(weight(entryUuid = "weight-a", id = 1, value = 70f, updatedAt = older))
-        repository.importWeights(listOf(weight(entryUuid = "weight-a", id = 42, value = 65f, updatedAt = newer)))
+        db.weightDao().insert(
+            weight(entryUuid = "weight-a", id = 1, value = 70f, updatedAt = older)
+        )
+        repository.importWeights(
+            listOf(weight(entryUuid = "weight-a", id = 42, value = 65f, updatedAt = newer))
+        )
 
         val allWeights = db.weightDao().getAllWeightsFlow().first()
         val result = allWeights.single()
@@ -302,7 +321,7 @@ class DataRepositoryImportTest {
         repository.importWeights(listOf(weight(entryUuid = "weight-b", id = 1, value = 80f)))
 
         val allWeights = db.weightDao().getAllWeightsFlow().first()
-        val weightsList = allWeights.map {it.value}.sorted()
+        val weightsList = allWeights.map { it.value }.sorted()
 
         assertEquals(2, allWeights.size)
         assertEquals(listOf(70f, 80f), weightsList)

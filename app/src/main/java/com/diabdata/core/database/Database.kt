@@ -41,7 +41,6 @@ import com.diabdata.feature.weight.data.WeightDao
     version = 25,
     exportSchema = true
 )
-
 @TypeConverters(DateConverters::class)
 abstract class DiabDataDatabase : RoomDatabase() {
 
@@ -56,7 +55,6 @@ abstract class DiabDataDatabase : RoomDatabase() {
     abstract fun userDetailsDao(): UserDetailsDao
 
     abstract fun userPreferencesDao(): UserPreferencesDao
-
 
     fun getAllTableNames(): List<String> {
         val db = openHelper.readableDatabase
@@ -78,7 +76,9 @@ abstract class DiabDataDatabase : RoomDatabase() {
             val tables = getAllTableNames().filter { it !in exclusionList }
             tables.forEach { table ->
                 openHelper.writableDatabase.execSQL("DELETE FROM $table")
-                openHelper.writableDatabase.execSQL("DELETE FROM sqlite_sequence WHERE name='$table'")
+                openHelper.writableDatabase.execSQL(
+                    "DELETE FROM sqlite_sequence WHERE name='$table'"
+                )
             }
         }
         openHelper.writableDatabase.execSQL("VACUUM")

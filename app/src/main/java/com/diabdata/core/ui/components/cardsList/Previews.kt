@@ -14,10 +14,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.diabdata.core.ui.theme.DiabDataTheme
+import com.diabdata.core.utils.ui.ColoredIconCircleProps
 import com.diabdata.shared.R
 import com.diabdata.shared.utils.dataTypes.AddableType
-import com.diabdata.core.utils.ui.ColoredIconCircleProps
-import com.diabdata.core.ui.theme.DiabDataTheme
 
 @Preview(showBackground = true, name = "CardsList - Simple")
 @Composable
@@ -217,7 +217,6 @@ fun CardsListFullPreview() {
             modifier = Modifier.padding(16.dp)
         ) {
             Column(verticalArrangement = Arrangement.spacedBy(24.dp)) {
-
                 // Stack 1 — Rappels
                 CardsList(
                     header = "Rappels",

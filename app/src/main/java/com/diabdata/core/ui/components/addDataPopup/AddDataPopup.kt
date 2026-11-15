@@ -35,15 +35,15 @@ import androidx.compose.ui.unit.dp
 import com.diabdata.core.database.DataViewModel
 import com.diabdata.core.model.MedicalDevice
 import com.diabdata.core.model.Treatment
-import com.diabdata.shared.utils.dataTypes.AddableType
+import com.diabdata.core.utils.ui.SvgIcon
 import com.diabdata.feature.appointments.ui.AppointmentPopup
+import com.diabdata.feature.devices.ui.MedicalDevicePopup
 import com.diabdata.feature.hba1c.ui.Hba1cPopup
 import com.diabdata.feature.importantDates.components.ImportantDatePopup
-import com.diabdata.feature.devices.ui.MedicalDevicePopup
 import com.diabdata.feature.treatments.ui.TreatmentPopup
 import com.diabdata.feature.weight.ui.WeightPopup
-import com.diabdata.core.utils.ui.SvgIcon
 import com.diabdata.shared.R as shared
+import com.diabdata.shared.utils.dataTypes.AddableType
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -102,7 +102,7 @@ fun BasePopupLayout(
                     interactionSource = remember { MutableInteractionSource() },
                     onClick = { }
                 ),
-            color = MaterialTheme.colorScheme.surface,
+            color = MaterialTheme.colorScheme.surface
         ) {
             Column(
                 modifier = Modifier

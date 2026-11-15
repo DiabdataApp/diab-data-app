@@ -8,9 +8,7 @@ import com.diabdata.shared.utils.dataTypes.MedicalDeviceInfoType
 import java.io.InputStream
 import java.security.MessageDigest
 
-class MedicalDevicesInitializer(
-    private val context: Context, private val db: DiabDataDatabase
-) {
+class MedicalDevicesInitializer(private val context: Context, private val db: DiabDataDatabase) {
 
     suspend fun initialize() {
         val prefs = context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)

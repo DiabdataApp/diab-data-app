@@ -8,12 +8,12 @@ import com.diabdata.core.backup.worker.BackupScheduler
 import com.diabdata.core.backup.worker.BackupWorker
 import com.diabdata.feature.settings.sections.dataSettings.BackupViewModel
 import com.diabdata.shared.utils.dataTypes.BackupFrequency
+import javax.inject.Inject
+import javax.inject.Singleton
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.guava.await
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
-import javax.inject.Inject
-import javax.inject.Singleton
 
 /**
  * Centralizes scheduling of the automatic backup [BackupWorker], ensuring only one scheduling
@@ -23,10 +23,9 @@ import javax.inject.Singleton
  * [BackupArchiveManager.zipImport] (to resynchronize the schedule against imported preferences).
  */
 @Singleton
-class BackupScheduleCoordinator @Inject constructor(
-    private val application: Application
-) {
+class BackupScheduleCoordinator @Inject constructor(private val application: Application) {
     private val backupScheduleMutex: Mutex = Mutex()
+
     /**
      * Checks whether [path] still points to a location this app holds a persisted read/write
      * permission for, via [ContentResolver.getPersistedUriPermissions]. A previously valid backup
@@ -61,14 +60,21 @@ class BackupScheduleCoordinator @Inject constructor(
     ): Result<Boolean> {
         val canSchedule = enabled && isBackupPathAccessible(backupPath)
         Log.d(
-            "BackupScheduleCoordinator", "applyBackupSchedule called with enabled=$enabled, frequency=$frequency"
+            "BackupScheduleCoordinator",
+            "applyBackupSchedule called with enabled=$enabled, frequency=$frequency"
         )
         return backupScheduleMutex.withLock {
             try {
-                Log.d("BackupScheduleCoordinator", "applyBackupSchedule cancelling previous backup worker")
+                Log.d(
+                    "BackupScheduleCoordinator",
+                    "applyBackupSchedule cancelling previous backup worker"
+                )
                 BackupScheduler.cancel(application).result.await()
                 if (canSchedule) {
-                    Log.d("BackupScheduleCoordinator", "applyBackupSchedule scheduling new backup worker")
+                    Log.d(
+                        "BackupScheduleCoordinator",
+                        "applyBackupSchedule scheduling new backup worker"
+                    )
                     BackupScheduler.scheduleFromUser(application, frequency).result.await()
                 }
                 Result.success(canSchedule)

@@ -9,7 +9,6 @@ import androidx.compose.material3.DropdownMenuGroup
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.DropdownMenuPopup
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MenuDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -27,11 +26,7 @@ import com.diabdata.shared.R
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
-fun UserAvatarMenu(
-    expanded: Boolean,
-    onDismiss: () -> Unit,
-    onEditProfile: () -> Unit
-) {
+fun UserAvatarMenu(expanded: Boolean, onDismiss: () -> Unit, onEditProfile: () -> Unit) {
     var showShareDialog by remember { mutableStateOf<ShareMode?>(null) }
     val groupInteractionSource = remember { MutableInteractionSource() }
 
@@ -66,7 +61,7 @@ fun UserAvatarMenu(
                 onClick = {
                     onDismiss()
                     onEditProfile()
-                },
+                }
             )
         }
 
@@ -91,7 +86,7 @@ fun UserAvatarMenu(
                 onClick = {
                     onDismiss()
                     showShareDialog = ShareMode.COMPANION
-                },
+                }
             )
             // Doctor mode
             DropdownMenuItem(
@@ -106,7 +101,7 @@ fun UserAvatarMenu(
                 onClick = {
                     onDismiss()
                     showShareDialog = ShareMode.MEDICAL
-                },
+                }
             )
         }
     }

@@ -12,12 +12,8 @@ import com.diabdata.shared.utils.dataTypes.TreatmentType
  * @param variant The icon variant (outlined or filled)
  * @return The icon resource ID, or the appropriate fallback if not found
  */
-fun String.toIconRes(
-    type: ResourceType,
-    variant: IconVariant = IconVariant.OUTLINED
-): Int {
-    return type.getIconRes(this, variant)
-}
+fun String.toIconRes(type: ResourceType, variant: IconVariant = IconVariant.OUTLINED): Int =
+    type.getIconRes(this, variant)
 
 /**
  * Sealed class representing different types of resources.
@@ -30,52 +26,46 @@ sealed class ResourceType {
     abstract fun getIconRes(value: String, variant: IconVariant): Int
 
     object Device : ResourceType() {
-        override fun getIconRes(value: String, variant: IconVariant): Int {
-            return try {
-                val deviceType = MedicalDeviceInfoType.valueOf(value)
-                when (variant) {
-                    IconVariant.OUTLINED -> deviceType.iconRes
-                    IconVariant.FILLED -> deviceType.iconFilledRes
-                }
-            } catch (e: IllegalArgumentException) {
-                when (variant) {
-                    IconVariant.OUTLINED -> MedicalDeviceInfoType.UNKNOWN.iconRes
-                    IconVariant.FILLED -> MedicalDeviceInfoType.UNKNOWN.iconFilledRes
-                }
+        override fun getIconRes(value: String, variant: IconVariant): Int = try {
+            val deviceType = MedicalDeviceInfoType.valueOf(value)
+            when (variant) {
+                IconVariant.OUTLINED -> deviceType.iconRes
+                IconVariant.FILLED -> deviceType.iconFilledRes
+            }
+        } catch (e: IllegalArgumentException) {
+            when (variant) {
+                IconVariant.OUTLINED -> MedicalDeviceInfoType.UNKNOWN.iconRes
+                IconVariant.FILLED -> MedicalDeviceInfoType.UNKNOWN.iconFilledRes
             }
         }
     }
 
     object Appointment : ResourceType() {
-        override fun getIconRes(value: String, variant: IconVariant): Int {
-            return try {
-                val appointmentType = AppointmentType.valueOf(value)
-                when (variant) {
-                    IconVariant.OUTLINED -> appointmentType.iconRes
-                    IconVariant.FILLED -> appointmentType.iconFilledRes
-                }
-            } catch (e: IllegalArgumentException) {
-                when (variant) {
-                    IconVariant.OUTLINED -> AppointmentType.APPOINTMENT.iconRes
-                    IconVariant.FILLED -> AppointmentType.APPOINTMENT.iconFilledRes
-                }
+        override fun getIconRes(value: String, variant: IconVariant): Int = try {
+            val appointmentType = AppointmentType.valueOf(value)
+            when (variant) {
+                IconVariant.OUTLINED -> appointmentType.iconRes
+                IconVariant.FILLED -> appointmentType.iconFilledRes
+            }
+        } catch (e: IllegalArgumentException) {
+            when (variant) {
+                IconVariant.OUTLINED -> AppointmentType.APPOINTMENT.iconRes
+                IconVariant.FILLED -> AppointmentType.APPOINTMENT.iconFilledRes
             }
         }
     }
 
     object Treatment : ResourceType() {
-        override fun getIconRes(value: String, variant: IconVariant): Int {
-            return try {
-                val treatmentType = TreatmentType.valueOf(value)
-                when (variant) {
-                    IconVariant.OUTLINED -> treatmentType.iconRes
-                    IconVariant.FILLED -> treatmentType.iconFilledRes
-                }
-            } catch (e: IllegalArgumentException) {
-                when (variant) {
-                    IconVariant.OUTLINED -> TreatmentType.UNKNOWN.iconRes
-                    IconVariant.FILLED -> TreatmentType.UNKNOWN.iconFilledRes
-                }
+        override fun getIconRes(value: String, variant: IconVariant): Int = try {
+            val treatmentType = TreatmentType.valueOf(value)
+            when (variant) {
+                IconVariant.OUTLINED -> treatmentType.iconRes
+                IconVariant.FILLED -> treatmentType.iconFilledRes
+            }
+        } catch (e: IllegalArgumentException) {
+            when (variant) {
+                IconVariant.OUTLINED -> TreatmentType.UNKNOWN.iconRes
+                IconVariant.FILLED -> TreatmentType.UNKNOWN.iconFilledRes
             }
         }
     }

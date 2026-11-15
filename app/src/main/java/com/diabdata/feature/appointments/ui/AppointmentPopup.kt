@@ -21,11 +21,11 @@ import com.diabdata.core.model.nowMillis
 import com.diabdata.core.ui.components.actionInput.EnumDropdown
 import com.diabdata.core.ui.components.addDataPopup.BasePopupLayout
 import com.diabdata.core.ui.components.date_components.DateTimeSelector
+import com.diabdata.shared.R as shared
 import com.diabdata.shared.utils.dataTypes.AddableType
 import com.diabdata.shared.utils.dataTypes.AppointmentType
-import kotlinx.coroutines.launch
 import java.time.LocalDateTime
-import com.diabdata.shared.R as shared
+import kotlinx.coroutines.launch
 
 @Composable
 fun AppointmentPopup(
@@ -46,7 +46,13 @@ fun AppointmentPopup(
 
     BasePopupLayout(
         title = stringResource(
-            if (toUpdate == null) shared.string.popup_title_add else shared.string.popup_title_update,
+            if (toUpdate ==
+                null
+            ) {
+                shared.string.popup_title_add
+            } else {
+                shared.string.popup_title_update
+            },
             AddableType.APPOINTMENT.getDisplayName(context)
         ),
         icon = AddableType.APPOINTMENT.iconRes,

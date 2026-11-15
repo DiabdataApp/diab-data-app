@@ -2,17 +2,17 @@ package com.diabdata
 
 import com.diabdata.core.model.Weight
 import com.diabdata.core.utils.data.GsonFactory
-import org.junit.After
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
-import org.junit.Before
-import org.junit.Test
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.util.TimeZone
 import kotlin.time.Instant
 import kotlin.time.toJavaInstant
+import org.junit.After
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
+import org.junit.Before
+import org.junit.Test
 
 class BackupDateFormatTest {
     private val gson = GsonFactory.create()
@@ -29,13 +29,9 @@ class BackupDateFormatTest {
         TimeZone.setDefault(originalTimeZone)
     }
 
-    private fun readWeight(json: String): Weight {
-        return gson.fromJson(json, Weight::class.java)
-    }
+    private fun readWeight(json: String): Weight = gson.fromJson(json, Weight::class.java)
 
-    private fun writeWeight(weight: Weight): String {
-        return gson.toJson(weight)
-    }
+    private fun writeWeight(weight: Weight): String = gson.toJson(weight)
 
     @Test
     fun oldBackupDateIsReadAsStartOfDay() {

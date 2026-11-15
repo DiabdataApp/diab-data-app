@@ -66,7 +66,7 @@ fun ChangelogDialog(onDismiss: () -> Unit) {
             Column(
                 modifier = Modifier
                     .padding(24.dp)
-                    .fillMaxWidth(),
+                    .fillMaxWidth()
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     SvgIcon(

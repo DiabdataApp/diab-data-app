@@ -10,9 +10,9 @@ import com.google.android.gms.wearable.PutDataMapRequest
 import com.google.android.gms.wearable.Wearable
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
+import java.time.LocalDate
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.tasks.await
-import java.time.LocalDate
 
 @HiltWorker
 class ExpiringDevicesComplicationUpdateWorker @AssistedInject constructor(

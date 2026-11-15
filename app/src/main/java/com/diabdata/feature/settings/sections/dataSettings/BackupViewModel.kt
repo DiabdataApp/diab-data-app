@@ -13,13 +13,13 @@ import com.diabdata.shared.utils.dataTypes.BackupFrequency
 import com.diabdata.shared.utils.dateUtils.formatDateToLocale
 import com.diabdata.shared.utils.utils.uriStringToReadablePath
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @HiltViewModel
 class BackupViewModel @Inject constructor(
@@ -40,7 +40,11 @@ class BackupViewModel @Inject constructor(
                 "About to schedule with frequency=${frequency.days} days, prefs=${preferences.value}"
             )
             repository.setAutoBackupEnabled(enabled)
-            val result = backupScheduleCoordinator.applyBackupSchedule(enabled, frequency, preferences.value?.backupPath)
+            val result = backupScheduleCoordinator.applyBackupSchedule(
+                enabled,
+                frequency,
+                preferences.value?.backupPath
+            )
             result.onFailure {
                 Log.e("BackupDebug", "Failed to apply backup schedule", it)
             }
@@ -56,7 +60,11 @@ class BackupViewModel @Inject constructor(
             )
             repository.setBackupFrequency(frequency.key)
             val result =
-                backupScheduleCoordinator.applyBackupSchedule(preferences.value?.automaticBackupEnabled ?: false, frequency, preferences.value?.backupPath)
+                backupScheduleCoordinator.applyBackupSchedule(
+                    preferences.value?.automaticBackupEnabled ?: false,
+                    frequency,
+                    preferences.value?.backupPath
+                )
             result.onFailure {
                 Log.e("BackupDebug", "Failed to apply backup schedule", it)
             }
@@ -110,7 +118,8 @@ class BackupViewModel @Inject constructor(
             Log.d("BackupDebug", "About to reset backup preferences")
             repository.resetBackupPreferences()
             Log.d(
-                "BackupDebug", "About to schedule with frequency=weekly, prefs=${preferences.value}"
+                "BackupDebug",
+                "About to schedule with frequency=weekly, prefs=${preferences.value}"
             )
             val result = backupScheduleCoordinator.applyBackupSchedule(
                 false,
@@ -123,7 +132,9 @@ class BackupViewModel @Inject constructor(
         }
     }
 
-    val nextBackupTimeMillisFlow: StateFlow<Long?> = workManager.getWorkInfosForUniqueWorkFlow(AUTO_BACKUP_UNIQUE_WORK_NAME)
+    val nextBackupTimeMillisFlow: StateFlow<Long?> = workManager.getWorkInfosForUniqueWorkFlow(
+        AUTO_BACKUP_UNIQUE_WORK_NAME
+    )
         .map { infos -> infos.firstOrNull() }
         .map { info ->
             val t = info?.nextScheduleTimeMillis
@@ -137,10 +148,11 @@ class BackupViewModel @Inject constructor(
                 lastBackupDate = prefs?.lastBackupDate?.formatDateToLocale(),
                 nextBackupEstimate = nextMillis?.formatDateToLocale()
             )
-        }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), BackupStatusState(null, null))
+        }.stateIn(
+            viewModelScope,
+            SharingStarted.WhileSubscribed(5000),
+            BackupStatusState(null, null)
+        )
 }
 
-data class BackupStatusState(
-    val lastBackupDate: String?,
-    val nextBackupEstimate: String?
-)
+data class BackupStatusState(val lastBackupDate: String?, val nextBackupEstimate: String?)

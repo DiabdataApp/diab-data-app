@@ -22,18 +22,18 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.diabdata.core.database.DataViewModel
 import com.diabdata.core.model.Treatment
+import com.diabdata.core.ui.components.cardsList.CardItem
+import com.diabdata.core.ui.components.cardsList.CardsList
+import com.diabdata.core.utils.ui.ColoredIconCircleProps
+import com.diabdata.core.utils.ui.SvgIcon
+import com.diabdata.shared.R as shared
 import com.diabdata.shared.utils.dataTypes.AddableType
 import com.diabdata.shared.utils.dataTypes.TreatmentType
 import com.diabdata.shared.utils.dateUtils.formatLocalDate
 import com.diabdata.shared.utils.dateUtils.toRelativeString
-import com.diabdata.core.utils.ui.ColoredIconCircleProps
-import com.diabdata.core.ui.components.cardsList.CardItem
-import com.diabdata.core.ui.components.cardsList.CardsList
-import com.diabdata.core.utils.ui.SvgIcon
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
 import kotlin.time.Instant
-import com.diabdata.shared.R as shared
 
 data class TreatmentCardData(
     val titleText: String,
@@ -46,9 +46,7 @@ data class TreatmentCardData(
 )
 
 @Composable
-fun UpcomingTreatmentExpirationDatesContent(
-    treatments: List<Treatment>
-) {
+fun UpcomingTreatmentExpirationDatesContent(treatments: List<Treatment>) {
     if (treatments.isEmpty()) return
 
     val context = LocalContext.current
@@ -73,7 +71,7 @@ fun UpcomingTreatmentExpirationDatesContent(
             isExpiringSoon = treatment.expirationDate.isBefore(soonThreshold),
             type = treatment.type.displayName(context),
             remainingText = remainingText,
-            untilDateIcon = untilDateIcon,
+            untilDateIcon = untilDateIcon
         )
     }
 

@@ -28,25 +28,23 @@ import com.diabdata.core.model.MedicalDevice
 import com.diabdata.core.model.MedicalDeviceInfoEntity
 import com.diabdata.core.model.newEntryUuid
 import com.diabdata.core.model.nowMillis
-import com.diabdata.feature.devices.ui.components.AddDeviceFab
-import com.diabdata.feature.devices.ui.components.CurrentConsumableDevicesList
-import com.diabdata.feature.devices.ui.components.CurrentNonConsumableDevicesList
-import com.diabdata.shared.utils.dataTypes.AddableType
-import com.diabdata.feature.dataMatrixScanner.ui.DataMatrixScannerDialog
-import com.diabdata.feature.dataMatrixScanner.ui.ScanResult
-import com.diabdata.feature.dataMatrixScanner.ui.ScannableTypes
 import com.diabdata.core.ui.components.addDataPopup.AddDataPopup
 import com.diabdata.core.ui.components.noDataView.IconTypes
 import com.diabdata.core.ui.components.noDataView.NoDataView
 import com.diabdata.feature.dataMatrixScanner.ScannerViewModel
-import kotlinx.coroutines.launch
+import com.diabdata.feature.dataMatrixScanner.ui.DataMatrixScannerDialog
+import com.diabdata.feature.dataMatrixScanner.ui.ScanResult
+import com.diabdata.feature.dataMatrixScanner.ui.ScannableTypes
+import com.diabdata.feature.devices.ui.components.AddDeviceFab
+import com.diabdata.feature.devices.ui.components.CurrentConsumableDevicesList
+import com.diabdata.feature.devices.ui.components.CurrentNonConsumableDevicesList
+import com.diabdata.shared.utils.dataTypes.AddableType
 import java.time.LocalDate
+import kotlinx.coroutines.launch
 
 @RequiresApi(Build.VERSION_CODES.P)
 @Composable
-fun RecentDevicesScreen(
-    dataViewModel: DataViewModel
-) {
+fun RecentDevicesScreen(dataViewModel: DataViewModel) {
     val scannerViewModel: ScannerViewModel = hiltViewModel()
 
     val availability by dataViewModel.dataAvailability.collectAsState()
@@ -57,7 +55,6 @@ fun RecentDevicesScreen(
 
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
-
 
     Column(
         modifier = Modifier
@@ -81,7 +78,6 @@ fun RecentDevicesScreen(
         } else {
             NoDataView(iconType = IconTypes.DEVICES)
         }
-
     }
 
     AddDeviceFab(onSelect = { showAddDevicePopup = true }, onScanClick = { showScanner = true })
@@ -93,19 +89,23 @@ fun RecentDevicesScreen(
             onDismiss = {
                 showAddDevicePopup = false
             },
-            prefilledMedicalDevice = prefilledDevice,
+            prefilledMedicalDevice = prefilledDevice
         )
     }
 
     if (showScanner) {
         DataMatrixScannerDialog(
-            onDismiss = { showScanner = false }, onResult = { result ->
+            onDismiss = { showScanner = false },
+            onResult = { result ->
                 scope.launch {
                     when (result) {
                         is ScanResult.Device -> {
                             val info = result.data
                             val entity = scannerViewModel.getMedicalDeviceByCode(info.gtin)
-                            Log.d("EXTRACTED-GTIN", "GTIN: ${info.gtin}\n - entity: $entity,\n-device: ${result.data},\n-lot: ${result.data.lot},\n- serial: ${result.data.serialNumber},\n- ref: ${result.data.referenceNumber}")
+                            Log.d(
+                                "EXTRACTED-GTIN",
+                                "GTIN: ${info.gtin}\n - entity: $entity,\n-device: ${result.data},\n-lot: ${result.data.lot},\n- serial: ${result.data.serialNumber},\n- ref: ${result.data.referenceNumber}"
+                            )
 
                             if (entity != null) {
                                 val device = generateMedicalDeviceEntry(result, entity)
@@ -124,13 +124,16 @@ fun RecentDevicesScreen(
                     }
                     showScanner = false
                 }
-            }, visible = showScanner, scannedType = ScannableTypes.DEVICE
+            },
+            visible = showScanner,
+            scannedType = ScannableTypes.DEVICE
         )
     }
 }
 
 fun generateMedicalDeviceEntry(
-    scanResult: ScanResult.Device, medicalDeviceInfo: MedicalDeviceInfoEntity
+    scanResult: ScanResult.Device,
+    medicalDeviceInfo: MedicalDeviceInfoEntity
 ): MedicalDevice {
     val today = LocalDate.now()
     val now = nowMillis()

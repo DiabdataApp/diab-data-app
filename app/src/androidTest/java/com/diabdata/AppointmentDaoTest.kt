@@ -9,6 +9,8 @@ import com.diabdata.core.model.Appointment
 import com.diabdata.core.model.nowMillis
 import com.diabdata.feature.appointments.data.AppointmentDao
 import com.diabdata.shared.utils.dataTypes.AppointmentType
+import java.io.IOException
+import java.time.LocalDate
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.After
@@ -16,8 +18,6 @@ import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import java.io.IOException
-import java.time.LocalDate
 
 /**
  * Tests for [AppointmentDao] found at [com.diabdata.feature.appointments.data.AppointmentDao]
@@ -153,7 +153,7 @@ class AppointmentDaoTest {
     fun getAllUpcomingAppointmentsTest() = runBlocking {
         allAppointments.forEach { appointmentDao.insert(it) }
 
-        val appointments = appointmentDao.getUpcomingAppointmentsFlow(today.atTime(0,0)).first()
+        val appointments = appointmentDao.getUpcomingAppointmentsFlow(today.atTime(0, 0)).first()
         assertEquals(3, appointments.size)
         assertEquals(appointment, appointments[0])
     }

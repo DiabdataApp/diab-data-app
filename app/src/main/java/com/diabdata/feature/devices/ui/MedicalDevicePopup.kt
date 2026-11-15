@@ -30,17 +30,17 @@ import com.diabdata.core.database.converters.toEntity
 import com.diabdata.core.model.MedicalDevice
 import com.diabdata.core.model.newEntryUuid
 import com.diabdata.core.model.nowMillis
-import com.diabdata.shared.utils.dataTypes.AddableType
-import com.diabdata.shared.utils.dataTypes.MedicalDeviceInfoType
 import com.diabdata.core.ui.components.actionInput.EnumDropdown
 import com.diabdata.core.ui.components.addDataPopup.BasePopupLayout
 import com.diabdata.core.ui.components.date_components.DateSelector
 import com.diabdata.core.utils.ui.SvgIcon
 import com.diabdata.core.utils.ui.darken
 import com.diabdata.feature.devices.DevicesViewModel
-import kotlinx.coroutines.launch
-import java.time.LocalDate
 import com.diabdata.shared.R as shared
+import com.diabdata.shared.utils.dataTypes.AddableType
+import com.diabdata.shared.utils.dataTypes.MedicalDeviceInfoType
+import java.time.LocalDate
+import kotlinx.coroutines.launch
 
 @Composable
 fun MedicalDevicePopup(
@@ -90,7 +90,7 @@ fun MedicalDevicePopup(
     var lifeSpanEndDate by remember {
         mutableStateOf(
             prefilled?.lifeSpanEndDate ?: toUpdate?.lifeSpanEndDate
-            ?: today.plusDays(lifeSpan.toLong())
+                ?: today.plusDays(lifeSpan.toLong())
         )
     }
     var isFaulty by remember { mutableStateOf(prefilled?.isFaulty ?: toUpdate?.isFaulty ?: false) }
@@ -111,7 +111,13 @@ fun MedicalDevicePopup(
 
     BasePopupLayout(
         title = stringResource(
-            if (toUpdate == null) shared.string.popup_title_add else shared.string.popup_title_update,
+            if (toUpdate ==
+                null
+            ) {
+                shared.string.popup_title_add
+            } else {
+                shared.string.popup_title_update
+            },
             AddableType.DEVICE.getDisplayName(context)
         ),
         icon = AddableType.DEVICE.iconRes,
@@ -251,13 +257,17 @@ fun MedicalDevicePopup(
             displayText = stringResource(shared.string.devices_device_popup_reported_description),
             checked = isReported,
             onCheckedChange = { isReported = it },
-            icon = shared.drawable.report_icon_vector,
+            icon = shared.drawable.report_icon_vector
         )
 
         if (toUpdate != null) {
             CreateToggle(
-                text = stringResource(shared.string.devices_device_popup_device_lifespan_over_label),
-                displayText = stringResource(shared.string.devices_device_popup_lifespan_over_description),
+                text = stringResource(
+                    shared.string.devices_device_popup_device_lifespan_over_label
+                ),
+                displayText = stringResource(
+                    shared.string.devices_device_popup_lifespan_over_description
+                ),
                 checked = isLifeSpanOver,
                 onCheckedChange = { isLifeSpanOver = it },
                 icon = shared.drawable.recycle_icon_vector,
@@ -267,8 +277,12 @@ fun MedicalDevicePopup(
 
         if (toUpdate == null) {
             CreateToggle(
-                text = stringResource(shared.string.devices_device_popup_update_expired_devices_label),
-                displayText = stringResource(shared.string.devices_device_popup_update_expired_devices_description),
+                text = stringResource(
+                    shared.string.devices_device_popup_update_expired_devices_label
+                ),
+                displayText = stringResource(
+                    shared.string.devices_device_popup_update_expired_devices_description
+                ),
                 checked = setSimilarDevicesToExpired,
                 onCheckedChange = { setSimilarDevicesToExpired = it },
                 icon = shared.drawable.select_all_icon_vector
@@ -342,21 +356,19 @@ enum class ToggleState {
 }
 
 @Composable
-fun ToggleState.getColors(): Pair<Color, Color> {
-    return when (this) {
-        ToggleState.DEFAULT -> Pair(
-            MaterialTheme.colorScheme.primary,
-            MaterialTheme.colorScheme.primaryContainer
-        )
+fun ToggleState.getColors(): Pair<Color, Color> = when (this) {
+    ToggleState.DEFAULT -> Pair(
+        MaterialTheme.colorScheme.primary,
+        MaterialTheme.colorScheme.primaryContainer
+    )
 
-        ToggleState.DESTRUCTIVE -> Pair(
-            MaterialTheme.colorScheme.error,
-            MaterialTheme.colorScheme.errorContainer
-        )
+    ToggleState.DESTRUCTIVE -> Pair(
+        MaterialTheme.colorScheme.error,
+        MaterialTheme.colorScheme.errorContainer
+    )
 
-        ToggleState.SUCCESS -> Pair(
-            Color(0xFF28a745),
-            Color(0xFF28a745).darken()
-        )
-    }
+    ToggleState.SUCCESS -> Pair(
+        Color(0xFF28a745),
+        Color(0xFF28a745).darken()
+    )
 }

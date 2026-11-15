@@ -30,7 +30,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLocale
 import androidx.compose.ui.res.stringResource
@@ -49,21 +48,19 @@ import com.diabdata.feature.settings.sections.dataSettings.BackupStatusState
 import com.diabdata.feature.settings.sections.dataSettings.BackupViewModel
 import com.diabdata.feature.settings.sections.dataSettings.ui.components.AutoBackupCard
 import com.diabdata.feature.userProfile.UserProfileViewModel
+import com.diabdata.shared.R as shared
 import com.diabdata.shared.utils.dataTypes.BackupFrequency
 import com.diabdata.shared.utils.utils.uriStringToReadablePath
+import java.text.SimpleDateFormat
+import java.util.Date
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.text.SimpleDateFormat
-import java.util.Date
-import com.diabdata.shared.R as shared
 
 @Suppress("Unused", "UnusedVariable")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DataSettingsScreen(
-    dataViewModel: DataViewModel,
-) {
+fun DataSettingsScreen(dataViewModel: DataViewModel) {
     val dateFormat = SimpleDateFormat("dd-MM-yyyy", LocalLocale.current.platformLocale)
     val currentDate = dateFormat.format(Date())
     val fileName = "diabdata_export_$currentDate.zip"
@@ -76,11 +73,14 @@ fun DataSettingsScreen(
     var showConfirmDialog by remember { mutableStateOf(false) }
 
     val notifChannelName = stringResource(shared.string.settings_notifications_data_channel_name)
-    val dataExportSuccess = stringResource(shared.string.settings_toasts_data_export_success_message)
-    val dataImportSuccess = stringResource(shared.string.settings_toasts_data_import_success_message)
+    val dataExportSuccess =
+        stringResource(shared.string.settings_toasts_data_export_success_message)
+    val dataImportSuccess =
+        stringResource(shared.string.settings_toasts_data_import_success_message)
     val dataExportError = stringResource(shared.string.settings_toasts_data_export_error_message)
     val dataImportError = stringResource(shared.string.settings_toasts_data_import_error_message)
-    val emptyImportFileError = stringResource(shared.string.settings_toasts_data_empty_file_error_message)
+    val emptyImportFileError =
+        stringResource(shared.string.settings_toasts_data_empty_file_error_message)
 
     val backupViewModel: BackupViewModel = hiltViewModel()
     val backupPrefs by backupViewModel.preferences.collectAsState()
@@ -97,25 +97,32 @@ fun DataSettingsScreen(
         onResult = { uri: Uri? ->
             uri?.let {
                 scope.launch(Dispatchers.IO) {
-                    val result = context.contentResolver.openOutputStream(uri)?.use { outputStream ->
-                        imExViewModel.exportData(outputStream)
-                    } ?: Result.failure(Exception("Unable to open output stream"))
+                    val result =
+                        context.contentResolver.openOutputStream(uri)?.use { outputStream ->
+                            imExViewModel.exportData(outputStream)
+                        } ?: Result.failure(Exception("Unable to open output stream"))
 
                     withContext(Dispatchers.Main) {
                         result.onSuccess {
                             Toast.makeText(context, dataExportSuccess, Toast.LENGTH_SHORT).show()
                             context.showNotification(
                                 title = dataExportSuccess,
-                                content = uri.lastPathSegment.orEmpty().uriStringToReadablePath(context),
-                                channelName = notifChannelName,
+                                content = uri.lastPathSegment.orEmpty().uriStringToReadablePath(
+                                    context
+                                ),
+                                channelName = notifChannelName
                             )
                         }.onFailure { e ->
                             Log.e("Export", "Export failed", e)
-                            Toast.makeText(context, "$dataExportError : ${e.message}", Toast.LENGTH_LONG).show()
+                            Toast.makeText(
+                                context,
+                                "$dataExportError : ${e.message}",
+                                Toast.LENGTH_LONG
+                            ).show()
                             context.showNotification(
                                 title = "$dataExportError : ${e.message}",
                                 content = uri.lastPathSegment.orEmpty(),
-                                channelName = notifChannelName,
+                                channelName = notifChannelName
                             )
                         }
                     }
@@ -157,12 +164,16 @@ fun DataSettingsScreen(
                         .size(48.dp)
                 )
             },
-            title = { Text(stringResource(shared.string.settings_data_import_password_required_title)) },
+            title = {
+                Text(stringResource(shared.string.settings_data_import_password_required_title))
+            },
             text = {
                 OutlinedTextField(
                     value = passwordInput,
                     onValueChange = { passwordInput = it },
-                    label = { Text(stringResource(shared.string.settings_data_import_password_label)) },
+                    label = {
+                        Text(stringResource(shared.string.settings_data_import_password_label))
+                    },
                     visualTransformation = PasswordVisualTransformation(),
                     singleLine = true
                 )

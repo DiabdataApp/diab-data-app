@@ -27,14 +27,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import com.diabdata.shared.utils.dataTypes.AddableType
 import com.diabdata.shared.R as shared
+import com.diabdata.shared.utils.dataTypes.AddableType
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
-fun AddDataFab(
-    onSelect: (AddableType) -> Unit, onScanClick: () -> Unit
-) {
+fun AddDataFab(onSelect: (AddableType) -> Unit, onScanClick: () -> Unit) {
     var fabMenuExpanded by rememberSaveable { mutableStateOf(false) }
 
     BackHandler(fabMenuExpanded) { fabMenuExpanded = false }
@@ -45,7 +43,8 @@ fun AddDataFab(
             shared.drawable.data_matrix_icon_vector
         ) { onScanClick() },
         Triple(
-            stringResource(shared.string.weights_weight_label), shared.drawable.weight_add_icon_vector
+            stringResource(shared.string.weights_weight_label),
+            shared.drawable.weight_add_icon_vector
         ) { onSelect(AddableType.WEIGHT) },
         Triple(stringResource(shared.string.hba1c_label), shared.drawable.hba1c_add_icon_vector) {
             onSelect(
@@ -61,8 +60,10 @@ fun AddDataFab(
             shared.drawable.medication_add_icon_vector
         ) { onSelect(AddableType.TREATMENT) },
         Triple(
-            stringResource(shared.string.appointments_general_label), shared.drawable.event_add_icon_vector
-        ) { onSelect(AddableType.APPOINTMENT) })
+            stringResource(shared.string.appointments_general_label),
+            shared.drawable.event_add_icon_vector
+        ) { onSelect(AddableType.APPOINTMENT) }
+    )
 
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.BottomEnd) {
         if (fabMenuExpanded) {
@@ -70,14 +71,18 @@ fun AddDataFab(
                 modifier = Modifier
                     .fillMaxSize()
                     .background(MaterialTheme.colorScheme.surfaceDim.copy(alpha = 0.95f))
-                    .clickable { fabMenuExpanded = false })
+                    .clickable { fabMenuExpanded = false }
+            )
         }
 
         FloatingActionButtonMenu(
-            expanded = fabMenuExpanded, modifier = Modifier, button = {
+            expanded = fabMenuExpanded,
+            modifier = Modifier,
+            button = {
                 ToggleFloatingActionButton(
                     checked = fabMenuExpanded,
-                    onCheckedChange = { fabMenuExpanded = !fabMenuExpanded }) {
+                    onCheckedChange = { fabMenuExpanded = !fabMenuExpanded }
+                ) {
                     val imageVector by remember {
                         derivedStateOf {
                             if (fabMenuExpanded) Icons.Filled.Close else Icons.Filled.Add
@@ -89,9 +94,9 @@ fun AddDataFab(
                         tint = if (fabMenuExpanded) MaterialTheme.colorScheme.onPrimary else Color.Unspecified,
                         contentDescription = if (fabMenuExpanded) "Fermer menu" else "Ouvrir menu"
                     )
-
                 }
-            }) {
+            }
+        ) {
             fabItems.forEach { (label, iconRes, action) ->
                 FloatingActionButtonMenuItem(
                     onClick = {
@@ -101,7 +106,8 @@ fun AddDataFab(
                     text = { Text(label) },
                     icon = {
                         Icon(
-                            painter = painterResource(id = iconRes), contentDescription = null
+                            painter = painterResource(id = iconRes),
+                            contentDescription = null
                         )
                     }
                 )

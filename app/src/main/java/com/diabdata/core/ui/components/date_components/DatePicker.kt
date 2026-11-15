@@ -28,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import com.diabdata.shared.R as shared
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -35,7 +36,6 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
 import java.util.Locale
-import com.diabdata.shared.R as shared
 
 @Composable
 fun DateSelector(
@@ -57,11 +57,13 @@ fun DateSelector(
 
     val labelText = if (labelRes != null) {
         stringResource(labelRes)
-    } else when {
-        isExpiryDate -> stringResource(shared.string.popup_placeholder_expiration_date)
-        isStartDate -> stringResource(shared.string.popup_placeholder_start_date)
-        isEndDate -> stringResource(shared.string.popup_placeholder_end_date)
-        else -> stringResource(shared.string.popup_placeholder_date)
+    } else {
+        when {
+            isExpiryDate -> stringResource(shared.string.popup_placeholder_expiration_date)
+            isStartDate -> stringResource(shared.string.popup_placeholder_start_date)
+            isEndDate -> stringResource(shared.string.popup_placeholder_end_date)
+            else -> stringResource(shared.string.popup_placeholder_date)
+        }
     }
 
     OutlinedTextField(
@@ -107,10 +109,7 @@ fun DateSelector(
 }
 
 @Composable
-fun DatePickerModal(
-    onDateSelected: (Long?) -> Unit,
-    onDismiss: () -> Unit
-) {
+fun DatePickerModal(onDateSelected: (Long?) -> Unit, onDismiss: () -> Unit) {
     val datePickerState = rememberDatePickerState()
 
     DatePickerDialog(
@@ -189,7 +188,7 @@ fun DateTimeSelector(
                     selectedDate = Instant.ofEpochMilli(it)
                         .atZone(ZoneId.systemDefault())
                         .toLocalDate()
-                    showTimeModal = true  // → passe à l'étape 2
+                    showTimeModal = true // → passe à l'étape 2
                 }
                 showDateModal = false
             },

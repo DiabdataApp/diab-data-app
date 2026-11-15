@@ -16,10 +16,11 @@ fun Uri.toReadablePath(context: Context): String {
     return docId
         ?.replace("primary:", "${context.getString(Shared.string.common_internal_storage)} > ")
         ?.replace("home:", "${context.getString(Shared.string.common_storage_home)} > ")
-        ?.replace(Regex("^([0-9A-F]{4}-[0-9A-F]{4}):"), "${context.getString(Shared.string.common_storage_sd_card)} > ")
+        ?.replace(
+            Regex("^([0-9A-F]{4}-[0-9A-F]{4}):"),
+            "${context.getString(Shared.string.common_storage_sd_card)} > "
+        )
         ?: this.toString()
 }
 
-fun String.uriStringToReadablePath(context: Context): String {
-    return this.toUri().toReadablePath(context)
-}
+fun String.uriStringToReadablePath(context: Context): String = this.toUri().toReadablePath(context)

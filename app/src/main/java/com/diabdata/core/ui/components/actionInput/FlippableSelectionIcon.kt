@@ -15,14 +15,18 @@ import com.diabdata.shared.R as shared
 @Composable
 fun FlippableSelectionIcon(isSelected: Boolean) {
     val animatedRotation by animateFloatAsState(
-        targetValue = if (isSelected) 180f else 0f, animationSpec = tween(durationMillis = 300)
+        targetValue = if (isSelected) 180f else 0f,
+        animationSpec = tween(durationMillis = 300)
     )
 
     val showingSelectedIcon = animatedRotation < 90f || animatedRotation > 270f
 
     SvgIcon(
-        resId = if (showingSelectedIcon) shared.drawable.radio_button_unchecked_icon_vector
-        else shared.drawable.radio_button_checked_icon_vector,
+        resId = if (showingSelectedIcon) {
+            shared.drawable.radio_button_unchecked_icon_vector
+        } else {
+            shared.drawable.radio_button_checked_icon_vector
+        },
         modifier = Modifier
             .size(15.dp)
             .graphicsLayer {

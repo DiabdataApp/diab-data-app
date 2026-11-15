@@ -12,6 +12,8 @@ import com.diabdata.shared.utils.dataTypes.BloodType
 import com.diabdata.shared.utils.dataTypes.DiabetesType
 import com.diabdata.shared.utils.dataTypes.Gender
 import com.diabdata.shared.utils.dataTypes.GlucoseUnit
+import java.io.IOException
+import java.time.LocalDate
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.After
@@ -19,8 +21,6 @@ import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import java.io.IOException
-import java.time.LocalDate
 
 /**
  * Tests for [UserDetailsDao] found at [com.diabdata.feature.userProfile.data.UserDetailsDao].
@@ -103,7 +103,7 @@ class UserDetailsDaoTest {
 
         val updatedUser = testUser.copy(
             firstName = "Updated",
-            lastName = "User",
+            lastName = "User"
         )
 
         userDetailsDao.upsertUserDetails(updatedUser)

@@ -42,10 +42,10 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.diabdata.core.ui.theme.GoogleSansFlexFontFamily
 import com.diabdata.core.utils.ui.SvgIcon
 import com.diabdata.feature.settings.sections.security.SecuritySettingsViewModel
+import com.diabdata.shared.R as shared
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import com.diabdata.shared.R as shared
 
 @Composable
 fun SecuritySettingsScreen() {
@@ -88,7 +88,11 @@ fun SecuritySettingsScreen() {
                     passwordValue = ""
                 }
                 setPassword.onFailure { e ->
-                    Toast.makeText(context, "$setBackupPasswordError : ${e.message}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        context,
+                        "$setBackupPasswordError : ${e.message}",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
         }
@@ -99,18 +103,22 @@ fun SecuritySettingsScreen() {
             .fillMaxSize()
             .padding(horizontal = 32.dp)
             .padding(top = 32.dp)
-            .verticalScroll(rememberScrollState()), verticalArrangement = spacedBy(32.dp)
+            .verticalScroll(rememberScrollState()),
+        verticalArrangement = spacedBy(32.dp)
     ) {
         Column(
-            modifier = Modifier.fillMaxWidth(), verticalArrangement = spacedBy(12.dp)
+            modifier = Modifier.fillMaxWidth(),
+            verticalArrangement = spacedBy(12.dp)
         ) {
             Text(
-                text = stringResource(shared.string.settings_security_settings_section_backup_password_label),
+                text = stringResource(
+                    shared.string.settings_security_settings_section_backup_password_label
+                ),
                 fontFamily = GoogleSansFlexFontFamily
             )
 
             Column(
-                verticalArrangement = spacedBy(ListItemDefaults.SegmentedGap),
+                verticalArrangement = spacedBy(ListItemDefaults.SegmentedGap)
             ) {
                 SegmentedListItem(
                     modifier = Modifier,
@@ -128,7 +136,9 @@ fun SecuritySettingsScreen() {
                                 modifier = Modifier.fillMaxWidth(),
                                 label = {
                                     Text(
-                                        stringResource(shared.string.settings_security_set_backup_password_label),
+                                        stringResource(
+                                            shared.string.settings_security_set_backup_password_label
+                                        ),
                                         fontFamily = GoogleSansFlexFontFamily
                                     )
                                 },
@@ -136,7 +146,8 @@ fun SecuritySettingsScreen() {
                                 onValueChange = { passwordValue = it },
                                 visualTransformation = PasswordVisualTransformation(),
                                 keyboardOptions = KeyboardOptions(
-                                    keyboardType = KeyboardType.Password, imeAction = ImeAction.Done
+                                    keyboardType = KeyboardType.Password,
+                                    imeAction = ImeAction.Done
                                 ),
                                 keyboardActions = KeyboardActions(
                                     onDone = { submitPassword() }
@@ -156,25 +167,27 @@ fun SecuritySettingsScreen() {
                                             color = MaterialTheme.colorScheme.onSecondaryContainer
                                         )
                                     }
-                                })
+                                }
+                            )
                         }
                     },
                     colors = ListItemDefaults.colors(
                         containerColor = containerColor,
                         headlineColor = containerContentColor,
                         supportingColor = containerContentColor
-                    ),
+                    )
                 )
 
                 AnimatedVisibility(
                     visible = hasBackupPassword,
                     enter = expandVertically(MaterialTheme.motionScheme.slowSpatialSpec()),
-                    exit = shrinkVertically(MaterialTheme.motionScheme.slowSpatialSpec()),
+                    exit = shrinkVertically(MaterialTheme.motionScheme.slowSpatialSpec())
                 ) {
                     SegmentedListItem(
                         modifier = Modifier,
                         shapes = ListItemDefaults.segmentedShapes(
-                            if (hasBackupPassword) 1 else 0, backupEncryptionSectionChildCount
+                            if (hasBackupPassword) 1 else 0,
+                            backupEncryptionSectionChildCount
                         ),
                         leadingContent = {
                             SvgIcon(
@@ -185,13 +198,17 @@ fun SecuritySettingsScreen() {
                         },
                         content = {
                             Text(
-                                text = stringResource(shared.string.settings_security_unset_backup_password_label),
+                                text = stringResource(
+                                    shared.string.settings_security_unset_backup_password_label
+                                ),
                                 fontFamily = GoogleSansFlexFontFamily
                             )
                         },
                         supportingContent = {
                             Text(
-                                text = stringResource(shared.string.settings_security_unset_backup_password_description),
+                                text = stringResource(
+                                    shared.string.settings_security_unset_backup_password_description
+                                ),
                                 fontFamily = GoogleSansFlexFontFamily
                             )
                         },
@@ -230,46 +247,55 @@ fun SecuritySettingsScreen() {
                             containerColor = containerColor,
                             headlineColor = MaterialTheme.colorScheme.error,
                             supportingColor = containerContentColor
-                        ),
+                        )
                     )
                 }
 
                 SegmentedListItem(
-                    modifier = Modifier, shapes = ListItemDefaults.segmentedShapes(
-                    if (hasBackupPassword) 2 else 1, backupEncryptionSectionChildCount
-                ), leadingContent = {
-                    SvgIcon(
-                        resId = isBackupEncryptionEnabledIcon,
-                        color = if (backupEncryptionEnabled) MaterialTheme.colorScheme.primary else containerContentColor,
-                        modifier = Modifier.size(24.dp)
-                    )
-                }, trailingContent = {
-                    Switch(checked = backupEncryptionEnabled, onCheckedChange = {
-                        scope.launch(Dispatchers.IO) {
-                            viewModel.toggleBackupEncryption(it)
-                        }
-                    }, enabled = hasBackupPassword, thumbContent = {
+                    modifier = Modifier,
+                    shapes = ListItemDefaults.segmentedShapes(
+                        if (hasBackupPassword) 2 else 1,
+                        backupEncryptionSectionChildCount
+                    ),
+                    leadingContent = {
                         SvgIcon(
-                            resId = lockUnlockIcon,
-                            color = containerContentColor,
-                            modifier = Modifier.size(16.dp)
+                            resId = isBackupEncryptionEnabledIcon,
+                            color = if (backupEncryptionEnabled) MaterialTheme.colorScheme.primary else containerContentColor,
+                            modifier = Modifier.size(24.dp)
                         )
-                    })
-                }, content = {
-                    Text(
-                        text = stringResource(shared.string.settings_security_backup_encryption_label),
-                        fontFamily = GoogleSansFlexFontFamily
+                    },
+                    trailingContent = {
+                        Switch(checked = backupEncryptionEnabled, onCheckedChange = {
+                            scope.launch(Dispatchers.IO) {
+                                viewModel.toggleBackupEncryption(it)
+                            }
+                        }, enabled = hasBackupPassword, thumbContent = {
+                            SvgIcon(
+                                resId = lockUnlockIcon,
+                                color = containerContentColor,
+                                modifier = Modifier.size(16.dp)
+                            )
+                        })
+                    },
+                    content = {
+                        Text(
+                            text = stringResource(
+                                shared.string.settings_security_backup_encryption_label
+                            ),
+                            fontFamily = GoogleSansFlexFontFamily
+                        )
+                    },
+                    supportingContent = {
+                        Text(
+                            text = stringResource(backupToggleSupportingText),
+                            fontFamily = GoogleSansFlexFontFamily
+                        )
+                    },
+                    colors = ListItemDefaults.colors(
+                        containerColor = containerColor,
+                        headlineColor = containerContentColor,
+                        supportingColor = containerContentColor
                     )
-                }, supportingContent = {
-                    Text(
-                        text = stringResource(backupToggleSupportingText),
-                        fontFamily = GoogleSansFlexFontFamily
-                    )
-                }, colors = ListItemDefaults.colors(
-                    containerColor = containerColor,
-                    headlineColor = containerContentColor,
-                    supportingColor = containerContentColor
-                )
                 )
             }
             Row(

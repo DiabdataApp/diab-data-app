@@ -21,5 +21,6 @@ fun SvgIcon(
         contentDescription = contentDescription,
         modifier = modifier,
         contentScale = ContentScale.Fit,
-        colorFilter = color?.let { ColorFilter.tint(it) })
+        colorFilter = color?.let { ColorFilter.tint(it) }
+    )
 }

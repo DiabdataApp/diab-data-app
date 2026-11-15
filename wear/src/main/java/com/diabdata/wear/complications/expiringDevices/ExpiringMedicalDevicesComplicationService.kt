@@ -8,15 +8,13 @@ import androidx.wear.watchface.complications.data.PlainComplicationText
 import androidx.wear.watchface.complications.data.RangedValueComplicationData
 import androidx.wear.watchface.complications.datasource.ComplicationRequest
 import androidx.wear.watchface.complications.datasource.SuspendingComplicationDataSourceService
+import com.diabdata.shared.R as shared
 import com.diabdata.shared.utils.dataTypes.MedicalDeviceInfoType
 import com.diabdata.shared.utils.imgUtils.toDeviceIcon
-import com.diabdata.shared.R as shared
 
-class ExpiringMedicalDevicesComplicationService :
-    SuspendingComplicationDataSourceService() {
+class ExpiringMedicalDevicesComplicationService : SuspendingComplicationDataSourceService() {
 
     override suspend fun onComplicationRequest(request: ComplicationRequest): ComplicationData {
-
         val prefs = getSharedPreferences("complications_medical_device_expiry", MODE_PRIVATE)
         val devicesDaysBeforeExpiry = prefs.getString("nextDeviceExpiry", "0") ?: "0"
         val daysBeforeExpiry = devicesDaysBeforeExpiry.toInt()
@@ -37,12 +35,15 @@ class ExpiringMedicalDevicesComplicationService :
 
         val rangeValue: Float = deviceLifespanValue.toFloat() - devicesDaysBeforeExpiry.toFloat()
 
-
         return RangedValueComplicationData.Builder(
             value = rangeValue.coerceAtLeast(0f),
             min = 0f,
             max = if (deviceLifespanValue.toFloat() > 0f) deviceLifespanValue.toFloat() else 1f,
-            contentDescription = PlainComplicationText.Builder(getString(shared.string.devices_wear_complication_expiring_devices_plain_text_builder))
+            contentDescription = PlainComplicationText.Builder(
+                getString(
+                    shared.string.devices_wear_complication_expiring_devices_plain_text_builder
+                )
+            )
                 .build()
         )
             .setTitle(PlainComplicationText.Builder(daysCountText).build())
@@ -54,13 +55,16 @@ class ExpiringMedicalDevicesComplicationService :
             .build()
     }
 
-    override fun getPreviewData(type: ComplicationType): ComplicationData {
-
-        return RangedValueComplicationData.Builder(
+    override fun getPreviewData(type: ComplicationType): ComplicationData =
+        RangedValueComplicationData.Builder(
             value = 2f,
             min = 0f,
             max = 3f,
-            contentDescription = PlainComplicationText.Builder(getString(shared.string.devices_wear_complication_expiring_devices_plain_text_builder))
+            contentDescription = PlainComplicationText.Builder(
+                getString(
+                    shared.string.devices_wear_complication_expiring_devices_plain_text_builder
+                )
+            )
                 .build()
         )
             .setTitle(PlainComplicationText.Builder("2D").build())
@@ -73,5 +77,4 @@ class ExpiringMedicalDevicesComplicationService :
                 ).build()
             )
             .build()
-    }
 }

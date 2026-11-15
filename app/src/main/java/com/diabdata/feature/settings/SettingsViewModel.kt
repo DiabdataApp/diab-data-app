@@ -15,19 +15,19 @@ import com.diabdata.workers.reminders.scheduleAppointmentReminders
 import com.diabdata.workers.reminders.scheduleMedicationExpirationReminders
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
+import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
     private val workManager: WorkManager,
     private val repository: DataRepository,
-    private val db: DiabDataDatabase,
+    private val db: DiabDataDatabase
 ) : ViewModel() {
     val preferences: StateFlow<UserPreferences?> = repository
         .getUserPreferences()
@@ -86,7 +86,10 @@ class SettingsViewModel @Inject constructor(
                     remove("appointment_reminder")
                 }
 
-                Log.d("Settings", "Migrated SharedPrefs to Room: expiration=$expirationEnabled, appointment=$appointmentEnabled")
+                Log.d(
+                    "Settings",
+                    "Migrated SharedPrefs to Room: expiration=$expirationEnabled, appointment=$appointmentEnabled"
+                )
             }
         }
     }

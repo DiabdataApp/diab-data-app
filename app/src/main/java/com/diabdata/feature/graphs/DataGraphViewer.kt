@@ -42,24 +42,22 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.diabdata.core.database.DataViewModel
-import com.diabdata.shared.utils.dataTypes.AddableType
-import com.diabdata.shared.utils.dateUtils.formatLocalDate
-import com.diabdata.shared.utils.dateUtils.toCountString
 import com.diabdata.core.ui.components.date_components.DateRangeModal
-import com.diabdata.feature.graphs.components.LineGraph
-import com.diabdata.core.utils.ui.SvgIcon
 import com.diabdata.core.ui.components.noDataView.NoDataView
 import com.diabdata.core.utils.ScreenSize
 import com.diabdata.core.utils.getScreenSize
+import com.diabdata.core.utils.ui.SvgIcon
+import com.diabdata.feature.graphs.components.LineGraph
+import com.diabdata.shared.R as shared
+import com.diabdata.shared.utils.dataTypes.AddableType
+import com.diabdata.shared.utils.dateUtils.formatLocalDate
+import com.diabdata.shared.utils.dateUtils.toCountString
 import java.time.LocalDate
 import java.time.Period
-import com.diabdata.shared.R as shared
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
-fun GraphViewer(
-    viewModel: DataViewModel = viewModel(),
-) {
+fun GraphViewer(viewModel: DataViewModel = viewModel()) {
     val scrollState = rememberScrollState()
     val options = listOf(
         stringResource(shared.string.time_range_month),
@@ -100,12 +98,12 @@ fun GraphViewer(
             .padding(horizontal = 16.dp)
             .padding(20.dp)
             .verticalScroll(scrollState),
-        verticalArrangement = Arrangement.spacedBy(12.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         Row(
             horizontalArrangement = Arrangement.spacedBy(
                 ButtonGroupDefaults.ConnectedSpaceBetween
-            ),
+            )
         ) {
             options.forEachIndexed { index, label ->
                 ToggleButton(
@@ -123,7 +121,7 @@ fun GraphViewer(
                         0 -> ButtonGroupDefaults.connectedLeadingButtonShapes()
                         options.lastIndex -> ButtonGroupDefaults.connectedTrailingButtonShapes()
                         else -> ButtonGroupDefaults.connectedMiddleButtonShapes()
-                    },
+                    }
                 ) {
                     if (selectedIndex == index) {
                         Icon(
@@ -156,10 +154,11 @@ fun GraphViewer(
             IconButton(
                 onClick = { showRegressionLine = !showRegressionLine },
                 colors = IconButtonDefaults.filledIconButtonColors(
-                    containerColor = if (showRegressionLine)
+                    containerColor = if (showRegressionLine) {
                         MaterialTheme.colorScheme.primaryContainer
-                    else
+                    } else {
                         MaterialTheme.colorScheme.surfaceContainer
+                    }
                 ),
                 modifier = Modifier
                     .padding(start = 8.dp)
@@ -168,10 +167,11 @@ fun GraphViewer(
             ) {
                 SvgIcon(
                     resId = shared.drawable.trending_up_icon_vector,
-                    color = if (showRegressionLine)
+                    color = if (showRegressionLine) {
                         MaterialTheme.colorScheme.onPrimaryContainer
-                    else
+                    } else {
                         MaterialTheme.colorScheme.onSurface
+                    }
                 )
             }
         }
@@ -212,7 +212,7 @@ fun GraphViewer(
                         showTrendLine = showRegressionLine,
                         modifier = Modifier
                             .weight(1f)
-                            .height(340.dp),
+                            .height(340.dp)
                     )
                     LineGraph(
                         points = hba1cPoints,
@@ -221,7 +221,7 @@ fun GraphViewer(
                         showTrendLine = showRegressionLine,
                         modifier = Modifier
                             .weight(1f)
-                            .height(340.dp),
+                            .height(340.dp)
                     )
                 }
             } else {
@@ -232,7 +232,7 @@ fun GraphViewer(
                     showTrendLine = showRegressionLine,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(240.dp),
+                        .height(240.dp)
                 )
                 LineGraph(
                     points = hba1cPoints,
@@ -241,7 +241,7 @@ fun GraphViewer(
                     showTrendLine = showRegressionLine,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(240.dp),
+                        .height(240.dp)
                 )
             }
         } else {
