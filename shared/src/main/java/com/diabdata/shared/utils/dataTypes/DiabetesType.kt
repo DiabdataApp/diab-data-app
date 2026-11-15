@@ -4,9 +4,9 @@ import android.content.Context
 import androidx.annotation.StringRes
 import com.diabdata.shared.R as R
 
-enum class DiabetesType (
+enum class DiabetesType(
     @param:StringRes
-    val displayNameRes: Int,
+    val displayNameRes: Int
 ) {
     TYPE_1(
         displayNameRes = R.string.profile_user_diabetes_type_1

@@ -40,7 +40,6 @@ import com.diabdata.core.ui.theme.ExtendedTheme
 import com.diabdata.core.ui.theme.GoogleSansFlexFontFamily
 import com.diabdata.core.utils.ui.ColoredIconCircle
 import com.diabdata.core.utils.ui.SvgIcon
-import com.diabdata.feature.settings.sections.dataSettings.ui.components.locale
 import com.diabdata.shared.R as shared
 
 @Composable
@@ -56,13 +55,13 @@ fun AppInfoCard(
         ),
         modifier = Modifier
             .fillMaxWidth(),
-        shape = RoundedCornerShape(15.dp),
+        shape = RoundedCornerShape(15.dp)
 
     ) {
         Row(
             modifier = Modifier
                 .padding(start = 22.dp, top = 22.dp, end = 22.dp, bottom = 12.dp),
-            horizontalArrangement = spacedBy(10.dp),
+            horizontalArrangement = spacedBy(10.dp)
         ) {
             ColoredIconCircle(
                 baseColor = if (isBeta) {
@@ -94,7 +93,7 @@ fun AppInfoCard(
                 Text(
                     text = stringResource(shared.string.app_tagline),
                     style = MaterialTheme.typography.titleMedium,
-                    fontFamily = GoogleSansFlexFontFamily,
+                    fontFamily = GoogleSansFlexFontFamily
                 )
             }
         }
@@ -103,7 +102,7 @@ fun AppInfoCard(
             modifier = Modifier
                 .padding(start = 22.dp, end = 22.dp, bottom = 22.dp)
                 .fillMaxWidth(),
-            horizontalArrangement = spacedBy(8.dp),
+            horizontalArrangement = spacedBy(8.dp)
         ) {
             val uriHandler = LocalUriHandler.current
 
@@ -112,7 +111,7 @@ fun AppInfoCard(
                     Text(
                         "v$versionName${if (isBeta) "-beta" else ""}",
                         fontFamily = GoogleSansFlexFontFamily,
-                        fontWeight = FontWeight(600),
+                        fontWeight = FontWeight(600)
                     )
                 },
                 leadingIcon = {
@@ -145,7 +144,7 @@ fun AppInfoCard(
                         ExtendedTheme.colors.onReleaseVersionContainer
                     }
                 ),
-                onClick = {},
+                onClick = {}
             )
 
             AssistChip(
@@ -164,7 +163,7 @@ fun AppInfoCard(
                     Text(
                         "Github",
                         fontFamily = GoogleSansFlexFontFamily,
-                        fontWeight = FontWeight(600),
+                        fontWeight = FontWeight(600)
                     )
                 },
                 leadingIcon = {
@@ -184,7 +183,7 @@ fun AppInfoCard(
                 colors = AssistChipDefaults.assistChipColors(
                     containerColor = MaterialTheme.colorScheme.surfaceContainer,
                     labelColor = MaterialTheme.colorScheme.onSurface
-                ),
+                )
             )
 
             AssistChip(
@@ -193,7 +192,7 @@ fun AppInfoCard(
                     Text(
                         stringResource(shared.string.settings_changelogs_chip_label),
                         fontFamily = GoogleSansFlexFontFamily,
-                        fontWeight = FontWeight(600),
+                        fontWeight = FontWeight(600)
                     )
                 },
                 leadingIcon = {
@@ -213,7 +212,7 @@ fun AppInfoCard(
                 colors = AssistChipDefaults.assistChipColors(
                     containerColor = MaterialTheme.colorScheme.surfaceContainer,
                     labelColor = MaterialTheme.colorScheme.onSurface
-                ),
+                )
             )
 
             AssistChip(
@@ -222,7 +221,7 @@ fun AppInfoCard(
                     Text(
                         stringResource(shared.string.settings_licenses_chip_label),
                         fontFamily = GoogleSansFlexFontFamily,
-                        fontWeight = FontWeight(600),
+                        fontWeight = FontWeight(600)
                     )
                 },
                 leadingIcon = {
@@ -242,7 +241,7 @@ fun AppInfoCard(
                 colors = AssistChipDefaults.assistChipColors(
                     containerColor = MaterialTheme.colorScheme.surfaceContainer,
                     labelColor = MaterialTheme.colorScheme.onSurface
-                ),
+                )
             )
 
             AssistChip(
@@ -253,7 +252,7 @@ fun AppInfoCard(
                     Text(
                         stringResource(shared.string.settings_website_chip_label),
                         fontFamily = GoogleSansFlexFontFamily,
-                        fontWeight = FontWeight(600),
+                        fontWeight = FontWeight(600)
                     )
                 },
                 leadingIcon = {
@@ -273,13 +272,15 @@ fun AppInfoCard(
                 colors = AssistChipDefaults.assistChipColors(
                     containerColor = MaterialTheme.colorScheme.surfaceContainer,
                     labelColor = MaterialTheme.colorScheme.onSurface
-                ),
+                )
             )
         }
     }
 }
 
-@Preview(name = "Interactive", showBackground = true, locale = locale)
+private const val PREVIEW_LOCALE = "fr"
+
+@Preview(name = "Interactive", showBackground = true, locale = PREVIEW_LOCALE)
 @Composable
 fun AppInfoCardInteractivePreview() {
     var darkTheme by remember { mutableStateOf(false) }
@@ -289,7 +290,7 @@ fun AppInfoCardInteractivePreview() {
         Box(
             modifier = Modifier
                 .background(MaterialTheme.colorScheme.surfaceContainer)
-                .padding(24.dp),
+                .padding(24.dp)
         ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -321,7 +322,7 @@ fun AppInfoCardInteractivePreview() {
                             color = MaterialTheme.colorScheme.onSurface,
                             style = MaterialTheme.typography.labelLarge,
                             fontFamily = GoogleSansFlexFontFamily,
-                            fontWeight = FontWeight(800),
+                            fontWeight = FontWeight(800)
                         )
                         Switch(
                             checked = darkTheme,
@@ -339,7 +340,7 @@ fun AppInfoCardInteractivePreview() {
                             color = MaterialTheme.colorScheme.onSurface,
                             style = MaterialTheme.typography.labelLarge,
                             fontFamily = GoogleSansFlexFontFamily,
-                            fontWeight = FontWeight(800),
+                            fontWeight = FontWeight(800)
                         )
                         Switch(
                             checked = betaMode,

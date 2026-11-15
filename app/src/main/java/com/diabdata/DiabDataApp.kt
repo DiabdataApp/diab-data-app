@@ -10,15 +10,17 @@ import androidx.work.WorkManager
 import com.diabdata.core.database.DataRepository
 import com.diabdata.workers.main.WorkersInitializer
 import dagger.hilt.android.HiltAndroidApp
+import javax.inject.Inject
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
-import java.time.LocalDate
-import javax.inject.Inject
 
 @HiltAndroidApp
-class DiabDataApp : Application(), Configuration.Provider {
+class DiabDataApp :
+    Application(),
+    Configuration.Provider {
     @Inject lateinit var repository: DataRepository
+
     @Inject lateinit var workerFactory: HiltWorkerFactory
 
     override val workManagerConfiguration: Configuration

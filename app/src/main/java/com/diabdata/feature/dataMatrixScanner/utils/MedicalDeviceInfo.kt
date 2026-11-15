@@ -22,7 +22,9 @@ fun parseMedicalDevice(raw: String): MedicalDeviceInfo {
 
     fun parsePart(part: String) {
         val subRegex =
-            Regex("(01\\d{14})|(10[^\\u001D]*)|(11\\d{6})|(17\\d{6,8})|(21[^\\u001D]*)|(241[^\\u001D]*)")
+            Regex(
+                "(01\\d{14})|(10[^\\u001D]*)|(11\\d{6})|(17\\d{6,8})|(21[^\\u001D]*)|(241[^\\u001D]*)"
+            )
         subRegex.findAll(part).forEach { match ->
             val data = match.value
             when {
@@ -47,22 +49,20 @@ fun parseMedicalDevice(raw: String): MedicalDeviceInfo {
     )
 }
 
-private fun parseDate(raw: String): String {
-    return when (raw.length) {
-        6 -> {
-            val yy = raw.substring(0, 2)
-            val mm = raw.substring(2, 4)
-            val dd = raw.substring(4, 6)
-            "20$yy-$mm-$dd"
-        }
-
-        8 -> {
-            val yyyy = raw.substring(0, 4)
-            val mm = raw.substring(4, 6)
-            val dd = raw.substring(6, 8)
-            "$yyyy-$mm-$dd"
-        }
-
-        else -> raw
+private fun parseDate(raw: String): String = when (raw.length) {
+    6 -> {
+        val yy = raw.substring(0, 2)
+        val mm = raw.substring(2, 4)
+        val dd = raw.substring(4, 6)
+        "20$yy-$mm-$dd"
     }
+
+    8 -> {
+        val yyyy = raw.substring(0, 4)
+        val mm = raw.substring(4, 6)
+        val dd = raw.substring(6, 8)
+        "$yyyy-$mm-$dd"
+    }
+
+    else -> raw
 }

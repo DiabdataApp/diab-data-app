@@ -1,9 +1,9 @@
 package com.diabdata
 
 import com.diabdata.widget.workers.getDaysLeft
+import java.time.LocalDate
 import org.junit.Assert.assertEquals
 import org.junit.Test
-import java.time.LocalDate
 
 class GetDaysLeftTest {
     @Test
@@ -12,11 +12,10 @@ class GetDaysLeftTest {
         val endDate = today.plusDays(10)
 
         assertEquals(10, getDaysLeft(endDate))
-
     }
 
     @Test
-    fun getDaysLeft_isZero(){
+    fun getDaysLeft_isZero() {
         val today = LocalDate.now()
 
         assertEquals(0, getDaysLeft(today))

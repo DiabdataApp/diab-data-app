@@ -62,12 +62,7 @@ import com.diabdata.core.ui.components.cardsList.CardListItem
  * @see Color.darken            Extension function used to darken the base color for the icon tint.
  */
 @Composable
-fun ColoredIconCircle(
-    iconRes: Int,
-    baseColor: Color,
-    size: Dp?,
-    iconSize: Dp?
-) {
+fun ColoredIconCircle(iconRes: Int, baseColor: Color, size: Dp?, iconSize: Dp?) {
     val size = size ?: 40.dp
     val iconSize = iconSize ?: 24.dp
 

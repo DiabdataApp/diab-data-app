@@ -35,6 +35,7 @@ import com.google.android.gms.wearable.DataMapItem
 import com.google.android.gms.wearable.Wearable
 import com.google.common.util.concurrent.ListenableFuture
 import com.google.gson.Gson
+import java.util.concurrent.Executors
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -44,7 +45,6 @@ import kotlinx.coroutines.guava.future
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeoutOrNull
-import java.util.concurrent.Executors
 
 data class TileData(
     val device: DeviceInfo?,
@@ -91,15 +91,13 @@ class GlanceTileService : TileService() {
 
     override fun onTileResourcesRequest(
         requestParams: RequestBuilders.ResourcesRequest
-    ): ListenableFuture<ResourceBuilders.Resources> {
-        return serviceScope.future {
-            ResourceBuilders.Resources.Builder()
-                .setVersion(TILE_VERSION)
-                .apply {
-                    registerAllImages(this)
-                }
-                .build()
-        }
+    ): ListenableFuture<ResourceBuilders.Resources> = serviceScope.future {
+        ResourceBuilders.Resources.Builder()
+            .setVersion(TILE_VERSION)
+            .apply {
+                registerAllImages(this)
+            }
+            .build()
     }
 
     private fun registerAllImages(builder: ResourceBuilders.Resources.Builder) {
@@ -156,184 +154,171 @@ class GlanceTileService : TileService() {
 
     override fun onTileRequest(
         requestParams: RequestBuilders.TileRequest
-    ): ListenableFuture<TileBuilders.Tile> {
-        return serviceScope.future {
-            val tileData = getCachedOrFreshData()
+    ): ListenableFuture<TileBuilders.Tile> = serviceScope.future {
+        val tileData = getCachedOrFreshData()
 
-            TileBuilders.Tile.Builder()
-                .setResourcesVersion(TILE_VERSION)
-                .setTileTimeline(
-                    TimelineBuilders.Timeline.fromLayoutElement(
-                        createLayout(tileData, requestParams.deviceConfiguration)
-                    )
+        TileBuilders.Tile.Builder()
+            .setResourcesVersion(TILE_VERSION)
+            .setTileTimeline(
+                TimelineBuilders.Timeline.fromLayoutElement(
+                    createLayout(tileData, requestParams.deviceConfiguration)
                 )
-                .build()
-        }
+            )
+            .build()
     }
 
     private fun createLayout(
         data: TileData?,
         deviceConfiguration: DeviceParametersBuilders.DeviceParameters
-    ): LayoutElement {
-        return materialScope(
-            context = this,
-            deviceConfiguration = deviceConfiguration,
-            allowDynamicTheme = true
-        ) {
-            if (data != null) {
-                buildDataLayout(data)
-            } else {
-                buildEmptyLayout()
-            }
+    ): LayoutElement = materialScope(
+        context = this,
+        deviceConfiguration = deviceConfiguration,
+        allowDynamicTheme = true
+    ) {
+        if (data != null) {
+            buildDataLayout(data)
+        } else {
+            buildEmptyLayout()
         }
     }
 
     // Extension function pour MaterialScope pour construire la mise en page avec données
-    private fun MaterialScope.buildDataLayout(data: TileData): LayoutElement {
-        return primaryLayout(
-            mainSlot = {
-                column {
-                    setWidth(expand())
+    private fun MaterialScope.buildDataLayout(data: TileData): LayoutElement = primaryLayout(
+        mainSlot = {
+            column {
+                setWidth(expand())
 
-                    data.device?.let { device ->
-                        addContent(
-                            createDataCard(
-                                device.type,
-                                device.name,
-                                "Expire dans ${device.daysUntilExpiry}j",
-                                getCardColors(device.daysUntilExpiry)
-                            )
+                data.device?.let { device ->
+                    addContent(
+                        createDataCard(
+                            device.type,
+                            device.name,
+                            "Expire dans ${device.daysUntilExpiry}j",
+                            getCardColors(device.daysUntilExpiry)
                         )
-                        addContent(Spacer.Builder().setHeight(dp(8f)).build())
-                    }
+                    )
+                    addContent(Spacer.Builder().setHeight(dp(8f)).build())
+                }
 
-                    data.treatment?.let { treatment ->
-                        addContent(
-                            createDataCard(
-                                treatment.type,
-                                treatment.name,
-                                "Expire dans ${treatment.daysUntilExpiry}j",
-                                getCardColors(treatment.daysUntilExpiry)
-                            )
+                data.treatment?.let { treatment ->
+                    addContent(
+                        createDataCard(
+                            treatment.type,
+                            treatment.name,
+                            "Expire dans ${treatment.daysUntilExpiry}j",
+                            getCardColors(treatment.daysUntilExpiry)
                         )
-                        addContent(Spacer.Builder().setHeight(dp(8f)).build())
-                    }
+                    )
+                    addContent(Spacer.Builder().setHeight(dp(8f)).build())
+                }
 
-                    data.appointment?.let { appointment ->
-                        addContent(
-                            createDataCard(
-                                appointment.type,
-                                appointment.name,
-                                "Dans ${appointment.daysUntil}j - ${appointment.doctor}",
-                                colors = CardColors(ColorScheme().primary)
-                            )
+                data.appointment?.let { appointment ->
+                    addContent(
+                        createDataCard(
+                            appointment.type,
+                            appointment.name,
+                            "Dans ${appointment.daysUntil}j - ${appointment.doctor}",
+                            colors = CardColors(ColorScheme().primary)
                         )
-                    }
+                    )
                 }
             }
-        )
-    }
+        }
+    )
 
     private fun MaterialScope.createDataCard(
         iconId: String,
         primaryText: String,
         secondaryText: String,
         colors: CardColors
-    ): LayoutElement {
-        return iconDataCard(
-            secondaryIcon = {
-                icon(
-                    protoLayoutResourceId = iconId,
-                    width = dp(24f),
-                    height = dp(24f),
-                    tintColor = colorScheme.onSurfaceVariant
-                )
-            },
-            title = {
-                text(
-                    text = primaryText.layoutString,
-                    typography = Typography.BODY_MEDIUM,
-                    color = colors.titleColor
-                )
-            },
-            content = {
-                text(
-                    text = secondaryText.layoutString,
-                    typography = Typography.LABEL_SMALL,
-                    color = colors.contentColor
-                )
-            },
-            shape = shapes.medium,
-            colors = colors,
-            onClick = clickable()
-        )
-    }
+    ): LayoutElement = iconDataCard(
+        secondaryIcon = {
+            icon(
+                protoLayoutResourceId = iconId,
+                width = dp(24f),
+                height = dp(24f),
+                tintColor = colorScheme.onSurfaceVariant
+            )
+        },
+        title = {
+            text(
+                text = primaryText.layoutString,
+                typography = Typography.BODY_MEDIUM,
+                color = colors.titleColor
+            )
+        },
+        content = {
+            text(
+                text = secondaryText.layoutString,
+                typography = Typography.LABEL_SMALL,
+                color = colors.contentColor
+            )
+        },
+        shape = shapes.medium,
+        colors = colors,
+        onClick = clickable()
+    )
 
-    private fun MaterialScope.buildEmptyLayout(): LayoutElement {
-        return primaryLayout(
-            mainSlot = {
-                Column.Builder()
-                    .setHorizontalAlignment(LayoutElementBuilders.HORIZONTAL_ALIGN_CENTER)
-                    .setWidth(expand())
-                    .setHeight(expand())
-                    .addContent(
-                        icon(
-                            protoLayoutResourceId = "sync_icon",
-                            width = dp(48f),
-                            height = dp(48f),
-                            tintColor = colorScheme.onSurfaceVariant
-                        )
+    private fun MaterialScope.buildEmptyLayout(): LayoutElement = primaryLayout(
+        mainSlot = {
+            Column.Builder()
+                .setHorizontalAlignment(LayoutElementBuilders.HORIZONTAL_ALIGN_CENTER)
+                .setWidth(expand())
+                .setHeight(expand())
+                .addContent(
+                    icon(
+                        protoLayoutResourceId = "sync_icon",
+                        width = dp(48f),
+                        height = dp(48f),
+                        tintColor = colorScheme.onSurfaceVariant
                     )
-                    .addContent(Spacer.Builder().setHeight(dp(12f)).build())
-                    .addContent(
-                        text(
-                            text = "En attente de synchronisation".layoutString,
-                            typography = Typography.BODY_MEDIUM,
-                            color = colorScheme.onSurface
-                        )
+                )
+                .addContent(Spacer.Builder().setHeight(dp(12f)).build())
+                .addContent(
+                    text(
+                        text = "En attente de synchronisation".layoutString,
+                        typography = Typography.BODY_MEDIUM,
+                        color = colorScheme.onSurface
                     )
-                    .addContent(Spacer.Builder().setHeight(dp(4f)).build())
-                    .addContent(
-                        text(
-                            text = "Ouvrir l'application".layoutString,
-                            typography = Typography.LABEL_SMALL,
-                            color = colorScheme.onSurfaceVariant
-                        )
+                )
+                .addContent(Spacer.Builder().setHeight(dp(4f)).build())
+                .addContent(
+                    text(
+                        text = "Ouvrir l'application".layoutString,
+                        typography = Typography.LABEL_SMALL,
+                        color = colorScheme.onSurfaceVariant
                     )
-                    .build()
-            }
-        )
-    }
+                )
+                .build()
+        }
+    )
 
-    private fun MaterialScope.getCardColors(daysUntilExpiry: Int): CardColors {
-        return when {
-            daysUntilExpiry <= 3 -> {
-                // Rouge pour urgence
-                CardColors(
-                    backgroundColor = LayoutColor("#B71C1C".toColorInt()),
-                    contentColor = colorScheme.onError
-                )
-            }
-            daysUntilExpiry <= 7 -> {
-                // Orange pour attention
-                CardColors(
-                    backgroundColor = LayoutColor("#E65100".toColorInt()),
-                    contentColor = colorScheme.onPrimary
-                )
-            }
-            else -> {
-                // Vert pour OK
-                CardColors(
-                    backgroundColor = LayoutColor("#1B5E20".toColorInt()),
-                    contentColor = colorScheme.onPrimary
-                )
-            }
+    private fun MaterialScope.getCardColors(daysUntilExpiry: Int): CardColors = when {
+        daysUntilExpiry <= 3 -> {
+            // Rouge pour urgence
+            CardColors(
+                backgroundColor = LayoutColor("#B71C1C".toColorInt()),
+                contentColor = colorScheme.onError
+            )
+        }
+        daysUntilExpiry <= 7 -> {
+            // Orange pour attention
+            CardColors(
+                backgroundColor = LayoutColor("#E65100".toColorInt()),
+                contentColor = colorScheme.onPrimary
+            )
+        }
+        else -> {
+            // Vert pour OK
+            CardColors(
+                backgroundColor = LayoutColor("#1B5E20".toColorInt()),
+                contentColor = colorScheme.onPrimary
+            )
         }
     }
 
-    private fun column(builder: Column.Builder.() -> Unit): Column {
-        return Column.Builder().apply(builder).build()
-    }
+    private fun column(builder: Column.Builder.() -> Unit): Column =
+        Column.Builder().apply(builder).build()
 
     private suspend fun getCachedOrFreshData(): TileData? {
         val currentTime = System.currentTimeMillis()
@@ -347,32 +332,30 @@ class GlanceTileService : TileService() {
         }
     }
 
-    private suspend fun fetchTileData(): TileData? {
-        return try {
-            withContext(Dispatchers.IO) {
-                val dataClient = Wearable.getDataClient(applicationContext)
-                val dataItems = dataClient.getDataItems(DATA_PATH.toUri()).await()
+    private suspend fun fetchTileData(): TileData? = try {
+        withContext(Dispatchers.IO) {
+            val dataClient = Wearable.getDataClient(applicationContext)
+            val dataItems = dataClient.getDataItems(DATA_PATH.toUri()).await()
 
-                val result = dataItems.firstOrNull()?.let { item ->
-                    val dataMap = DataMapItem.fromDataItem(item).dataMap
-                    val jsonData = dataMap.getString("json_data")
-                    jsonData?.let {
-                        try {
-                            gson.fromJson(it, TileData::class.java)
-                        } catch (e: Exception) {
-                            Log.e("GlanceTileService", "Error parsing JSON", e)
-                            null
-                        }
+            val result = dataItems.firstOrNull()?.let { item ->
+                val dataMap = DataMapItem.fromDataItem(item).dataMap
+                val jsonData = dataMap.getString("json_data")
+                jsonData?.let {
+                    try {
+                        gson.fromJson(it, TileData::class.java)
+                    } catch (e: Exception) {
+                        Log.e("GlanceTileService", "Error parsing JSON", e)
+                        null
                     }
                 }
-
-                dataItems.release()
-                result
             }
-        } catch (e: Exception) {
-            Log.e("GlanceTileService", "Error fetching data", e)
-            null
+
+            dataItems.release()
+            result
         }
+    } catch (e: Exception) {
+        Log.e("GlanceTileService", "Error fetching data", e)
+        null
     }
 
     override fun onDestroy() {

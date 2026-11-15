@@ -4,14 +4,14 @@ import android.content.Context
 import androidx.annotation.StringRes
 import com.diabdata.shared.R as R
 
-enum class GlucoseUnit (
+enum class GlucoseUnit(
     @param:StringRes
-    val displayNameRes: Int,
+    val displayNameRes: Int
 ) {
-    MG_DL (
+    MG_DL(
         displayNameRes = R.string.profile_user_glucose_unit_label_mg_dl
     ),
-    MMOL_L (
+    MMOL_L(
         displayNameRes = R.string.profile_user_glucose_unit_label_mmol_l
     );
 

@@ -16,7 +16,9 @@ class ExpiringDevicesDataSyncListenerService : WearableListenerService() {
 
     override fun onDataChanged(dataEvents: DataEventBuffer) {
         dataEvents.forEach { event ->
-            if (event.type == DataEvent.TYPE_CHANGED && event.dataItem.uri.path == "/complications/medical_device_expiry") {
+            if (event.type == DataEvent.TYPE_CHANGED &&
+                event.dataItem.uri.path == "/complications/medical_device_expiry"
+            ) {
                 val dataMap = DataMapItem.fromDataItem(event.dataItem).dataMap
                 val date = dataMap.getString("nextDeviceExpiry")
                 val lifespan = dataMap.getString("nextDeviceLifespan")

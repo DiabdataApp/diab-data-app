@@ -16,8 +16,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.diabdata.core.utils.ui.SvgIcon
-import kotlinx.coroutines.delay
 import com.diabdata.shared.R as shared
+import kotlinx.coroutines.delay
 
 data class ButtonSize(val circle: Int, val icon: Int)
 
@@ -31,7 +31,6 @@ fun FaultyToggleButton(
     onClick: () -> Unit,
     animatedContainerColor: Color,
     animatedIconColor: Color,
-
     sizing: ButtonSize = ButtonSize(30, 20)
 ) {
     var clicked by remember { mutableStateOf(false) }
@@ -57,7 +56,7 @@ fun FaultyToggleButton(
         colors = IconButtonDefaults.iconButtonColors(
             containerColor = animatedContainerColor,
             contentColor = animatedIconColor
-        ),
+        )
     ) {
         SvgIcon(
             resId = when (type) {
@@ -79,6 +78,7 @@ fun FaultyToggleButton(
     }
 }
 
-enum class ButtonType() {
-    FAULTY, REPORT
+enum class ButtonType {
+    FAULTY,
+    REPORT
 }

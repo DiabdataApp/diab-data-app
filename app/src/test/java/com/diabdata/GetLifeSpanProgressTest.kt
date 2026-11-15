@@ -1,9 +1,9 @@
 package com.diabdata
 
 import com.diabdata.widget.workers.getLifeSpanProgress
+import java.time.LocalDate
 import org.junit.Assert.assertEquals
 import org.junit.Test
-import java.time.LocalDate
 
 class GetLifeSpanProgressTest {
     @Test
@@ -11,7 +11,7 @@ class GetLifeSpanProgressTest {
         val today = LocalDate.now()
         val end = today.plusDays(10)
 
-        assertEquals(0,getLifeSpanProgress(today, end))
+        assertEquals(0, getLifeSpanProgress(today, end))
     }
 
     @Test
@@ -30,7 +30,7 @@ class GetLifeSpanProgressTest {
         assertEquals(100, getLifeSpanProgress(start, end))
     }
 
-    @Test (expected = IllegalArgumentException::class)
+    @Test(expected = IllegalArgumentException::class)
     fun getLifeSpanProgress_startDateBeforeEndDate() {
         val today = LocalDate.now()
         val start = today.plusDays(1)

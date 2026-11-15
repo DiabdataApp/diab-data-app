@@ -8,10 +8,7 @@ data class RegisterMessage(
     val expiresAt: Long
 )
 
-data class UnregisterMessage(
-    val type: String = "UNREGISTER",
-    val sessionId: String
-)
+data class UnregisterMessage(val type: String = "UNREGISTER", val sessionId: String)
 
 data class ResponseMessage(
     val type: String = "RESPONSE",
@@ -20,10 +17,7 @@ data class ResponseMessage(
     val payload: String
 )
 
-data class RegisterOkMessage(
-    val type: String = "REGISTER_OK",
-    val sessionId: String
-)
+data class RegisterOkMessage(val type: String = "REGISTER_OK", val sessionId: String)
 
 data class ForwardMessage(
     val type: String = "FORWARD",
@@ -32,11 +26,6 @@ data class ForwardMessage(
     val payload: String
 )
 
-data class SessionClosedMessage(
-    val type: String = "SESSION_CLOSED",
-    val reason: String
-)
+data class SessionClosedMessage(val type: String = "SESSION_CLOSED", val reason: String)
 
-data class BaseMessage(
-    val type: String
-)
+data class BaseMessage(val type: String)

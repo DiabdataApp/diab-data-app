@@ -16,7 +16,9 @@ class ExpiringTreatmentsDataSyncListenerService : WearableListenerService() {
 
     override fun onDataChanged(dataEvents: DataEventBuffer) {
         dataEvents.forEach { event ->
-            if (event.type == DataEvent.TYPE_CHANGED && event.dataItem.uri.path == "/complications/treatment_expiry") {
+            if (event.type == DataEvent.TYPE_CHANGED &&
+                event.dataItem.uri.path == "/complications/treatment_expiry"
+            ) {
                 val dataMap = DataMapItem.fromDataItem(event.dataItem).dataMap
                 val nextTreatmentExpiryDays = dataMap.getInt("nextTreatmentExpiryDays", -1)
                 val elapsedTreatmentConservation =
@@ -35,11 +37,7 @@ class ExpiringTreatmentsDataSyncListenerService : WearableListenerService() {
         }
     }
 
-    private fun storeDataLocally(
-        expiryDays: Int,
-        elapsedConservation: Int,
-        iconRes: String
-    ) {
+    private fun storeDataLocally(expiryDays: Int, elapsedConservation: Int, iconRes: String) {
         val prefs = getSharedPreferences("complications_treatment_expiry", MODE_PRIVATE)
         prefs.edit {
             putString("nextTreatmentExpiry", expiryDays.toString())

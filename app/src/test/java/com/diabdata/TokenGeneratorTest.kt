@@ -2,8 +2,8 @@ package com.diabdata
 
 import com.diabdata.feature.casting.relay.ShareMode
 import com.diabdata.feature.casting.relay.TokenGenerator
-import org.junit.Assert.assertNotEquals
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
@@ -11,12 +11,16 @@ class TokenGeneratorTest {
     // Token generation test
     @Test
     fun generateToken_companionMode_startsWithCPrefix() {
-        assertTrue(TokenGenerator.generateToken(ShareMode.COMPANION).matches("C-[A-Z0-9]{6}".toRegex()))
+        assertTrue(
+            TokenGenerator.generateToken(ShareMode.COMPANION).matches("C-[A-Z0-9]{6}".toRegex())
+        )
     }
 
     @Test
     fun generateToken_medicalMode_startsWithMPrefix() {
-        assertTrue(TokenGenerator.generateToken(ShareMode.MEDICAL).matches("M-[A-Z0-9]{6}".toRegex()))
+        assertTrue(
+            TokenGenerator.generateToken(ShareMode.MEDICAL).matches("M-[A-Z0-9]{6}".toRegex())
+        )
     }
 
     @Test
@@ -31,22 +35,32 @@ class TokenGeneratorTest {
 
     @Test
     fun generateToken_companionMode_returnsNoCharactersOutsideChars() {
-        assertTrue(!Regex("[IL10O]").containsMatchIn(TokenGenerator.generateToken(ShareMode.COMPANION)))
+        assertTrue(
+            !Regex("[IL10O]").containsMatchIn(TokenGenerator.generateToken(ShareMode.COMPANION))
+        )
     }
 
     @Test
     fun generateToken_medicalMode_returnsNoCharactersOutsideChars() {
-        assertTrue(!Regex("[IL10O]").containsMatchIn(TokenGenerator.generateToken(ShareMode.MEDICAL)))
+        assertTrue(
+            !Regex("[IL10O]").containsMatchIn(TokenGenerator.generateToken(ShareMode.MEDICAL))
+        )
     }
 
     @Test
     fun generateToken_companionMode_returnsUniqueToken() {
-        assertNotEquals(TokenGenerator.generateToken(ShareMode.COMPANION), TokenGenerator.generateToken(ShareMode.COMPANION))
+        assertNotEquals(
+            TokenGenerator.generateToken(ShareMode.COMPANION),
+            TokenGenerator.generateToken(ShareMode.COMPANION)
+        )
     }
 
     @Test
     fun generateToken_medicalMode_returnsUniqueToken() {
-        assertNotEquals(TokenGenerator.generateToken(ShareMode.MEDICAL), TokenGenerator.generateToken(ShareMode.MEDICAL))
+        assertNotEquals(
+            TokenGenerator.generateToken(ShareMode.MEDICAL),
+            TokenGenerator.generateToken(ShareMode.MEDICAL)
+        )
     }
 
     // Token hashing tests
@@ -66,7 +80,7 @@ class TokenGeneratorTest {
     }
 
     @Test
-    fun hashToken_sameTokenReturnsSameHash(){
+    fun hashToken_sameTokenReturnsSameHash() {
         val testToken = TokenGenerator.generateToken(ShareMode.COMPANION)
 
         assertEquals(TokenGenerator.hashToken(testToken), TokenGenerator.hashToken(testToken))

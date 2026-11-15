@@ -38,14 +38,13 @@ import com.diabdata.core.ui.theme.DiabDataTheme
 import com.diabdata.core.ui.theme.GoogleSansFlexFontFamily
 import com.diabdata.core.utils.ui.ColoredIconCircleProps
 import com.diabdata.core.utils.ui.SvgIcon
-import com.diabdata.feature.settings.sections.dataSettings.ui.components.locale
 import com.diabdata.feature.userProfile.UserProfileViewModel
+import com.diabdata.shared.R as shared
 import com.diabdata.shared.utils.dataTypes.AddableType
 import com.diabdata.shared.utils.dataTypes.DiabetesType
 import com.diabdata.shared.utils.dateUtils.formatLocalDate
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
-import com.diabdata.shared.R as shared
 
 @Composable
 fun ImportantDatesList(viewModel: DataViewModel) {
@@ -174,9 +173,9 @@ fun ImportantDatesListContent(
     )
 }
 
-const val locale = "fr"
+private const val PREVIEW_LOCALE = "fr"
 
-@Preview(name = "Interactive", showBackground = true, locale = locale)
+@Preview(name = "Interactive", showBackground = true, locale = PREVIEW_LOCALE)
 @Composable
 fun ImportantDatesListPreview() {
     var darkTheme by remember { mutableStateOf(false) }
@@ -218,7 +217,7 @@ fun ImportantDatesListPreview() {
         Box(
             modifier = Modifier
                 .background(MaterialTheme.colorScheme.surfaceContainer)
-                .padding(24.dp),
+                .padding(24.dp)
         ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -246,7 +245,7 @@ fun ImportantDatesListPreview() {
                             color = MaterialTheme.colorScheme.onSurface,
                             style = MaterialTheme.typography.labelLarge,
                             fontFamily = GoogleSansFlexFontFamily,
-                            fontWeight = FontWeight(800),
+                            fontWeight = FontWeight(800)
                         )
                         Switch(
                             checked = darkTheme,

@@ -27,7 +27,8 @@ object BackupScheduler {
     private fun buildWorkRequest(frequency: BackupFrequency): PeriodicWorkRequest {
         Log.d("BackupDebug", "Building Periodic work request")
         return PeriodicWorkRequestBuilder<BackupWorker>(
-            frequency.days, TimeUnit.DAYS
+            frequency.days,
+            TimeUnit.DAYS
         )
             .setConstraints(
                 Constraints.Builder()

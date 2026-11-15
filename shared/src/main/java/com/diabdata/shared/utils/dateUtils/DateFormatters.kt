@@ -8,25 +8,18 @@ import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 import java.util.Locale
 
-fun shortenedFormatLocalDate(
-    date: LocalDate,
-    locale: Locale = Locale.getDefault()
-): String {
+fun shortenedFormatLocalDate(date: LocalDate, locale: Locale = Locale.getDefault()): String {
     val formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT).withLocale(locale)
     return date.format(formatter)
 }
 
-fun String.toShortenedFormatLocalDate(
-    locale: Locale = Locale.getDefault()
-): String {
+fun String.toShortenedFormatLocalDate(locale: Locale = Locale.getDefault()): String {
     val date = LocalDate.parse(this)
     return shortenedFormatLocalDate(date, locale)
 }
 
 @Suppress("unused")
-fun String.toShortenedFormatLocalDateTime(
-    locale: Locale = Locale.getDefault()
-): String {
+fun String.toShortenedFormatLocalDateTime(locale: Locale = Locale.getDefault()): String {
     val date = LocalDateTime.parse(this)
     return shortenedFormatLocalDate(date.toLocalDate())
 }
@@ -50,9 +43,7 @@ fun formatLocalDateTime(
 }
 
 @Suppress("unused")
-fun String.toFormatLocalDate(
-    locale: Locale = Locale.getDefault()
-): String {
+fun String.toFormatLocalDate(locale: Locale = Locale.getDefault()): String {
     val date = LocalDate.parse(this)
     return formatLocalDate(date, locale = locale)
 }

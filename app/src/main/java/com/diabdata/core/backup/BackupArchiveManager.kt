@@ -15,6 +15,13 @@ import com.diabdata.core.utils.data.GsonFactory
 import com.diabdata.shared.utils.dataTypes.BackupFrequency
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import java.io.ByteArrayInputStream
+import java.io.File
+import java.io.InputStream
+import java.io.OutputStream
+import javax.inject.Inject
+import kotlin.coroutines.cancellation.CancellationException
+import kotlin.time.Clock
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
@@ -24,13 +31,6 @@ import net.lingala.zip4j.io.outputstream.ZipOutputStream
 import net.lingala.zip4j.model.ZipParameters
 import net.lingala.zip4j.model.enums.AesKeyStrength
 import net.lingala.zip4j.model.enums.EncryptionMethod
-import java.io.ByteArrayInputStream
-import java.io.File
-import java.io.InputStream
-import java.io.OutputStream
-import javax.inject.Inject
-import kotlin.coroutines.cancellation.CancellationException
-import kotlin.time.Clock
 
 private const val PROFILE_PHOTO_ENTRY = "profile_photo.jpg"
 
@@ -48,7 +48,7 @@ class BackupArchiveManager @Inject constructor(
     private val repository: DataRepository,
     private val application: Application,
     private val backupEncryptionKeyManager: BackupEncryptionKeyManager,
-    private val backupScheduleCoordinator: BackupScheduleCoordinator,
+    private val backupScheduleCoordinator: BackupScheduleCoordinator
 ) {
     private val backupManagerTag = "BackupArchiveManager"
 
@@ -87,7 +87,8 @@ class BackupArchiveManager @Inject constructor(
      * @return The detected [BackupFormat].
      */
     private fun detectBackupFormat(byteArray: ByteArray): BackupFormat {
-        val isZip = byteArray.size >= 2 && byteArray[0] == 0x50.toByte() && byteArray[1] == 0x4B.toByte()
+        val isZip =
+            byteArray.size >= 2 && byteArray[0] == 0x50.toByte() && byteArray[1] == 0x4B.toByte()
         if (!isZip) {
             return if (byteArray.isNotEmpty()) BackupFormat.LegacyRawJson else BackupFormat.Invalid
         }
@@ -101,7 +102,11 @@ class BackupArchiveManager @Inject constructor(
                 entryNames += entry.fileName
 
                 if (entry.fileName == "metadata.json") {
-                    metadata = gson.fromJson(zip.readBytes().toString(Charsets.UTF_8), BackupMetadata::class.java)
+                    metadata =
+                        gson.fromJson(
+                            zip.readBytes().toString(Charsets.UTF_8),
+                            BackupMetadata::class.java
+                        )
                     return BackupFormat.NewFormat(metadata)
                 }
 
@@ -162,20 +167,23 @@ class BackupArchiveManager @Inject constructor(
      * @return [Result.success] on success, [Result.failure] with the underlying exception otherwise.
      */
     suspend fun writeBackup(
-        output: OutputStream, isScheduledBackup: Boolean = false, isEncrypted: Boolean = false
+        output: OutputStream,
+        isScheduledBackup: Boolean = false,
+        isEncrypted: Boolean = false
     ): Result<Unit> {
         var encryptionKey: CharArray? = null
 
         return try {
             withContext(Dispatchers.IO) {
-
                 if (isEncrypted) {
                     encryptionKey = backupEncryptionKeyManager.getPassword().let {
                         if (it.isSuccess) {
                             it.getOrNull()?.toCharArray()
                                 ?: throw BackupExportException.EncryptionKeyUnavailable()
                         } else {
-                            throw BackupExportException.EncryptionKeyUnavailable(cause = it.exceptionOrNull())
+                            throw BackupExportException.EncryptionKeyUnavailable(
+                                cause = it.exceptionOrNull()
+                            )
                         }
                     }
                 }
@@ -198,7 +206,9 @@ class BackupArchiveManager @Inject constructor(
                 val userPreferences = repository.getUserPreferences().first()
 
                 val totalEntriesCount =
-                    weightCount + hba1cCount + appointmentsCount + treatmentsCount + importantDatesCount + medicalDevicesCount
+                    weightCount + hba1cCount + appointmentsCount + treatmentsCount +
+                        importantDatesCount +
+                        medicalDevicesCount
 
                 val backupMetadata = BackupMetadata(
                     app = BuildConfig.APPLICATION_ID,
@@ -218,7 +228,7 @@ class BackupArchiveManager @Inject constructor(
                         medicalDeviceEntriesCount = medicalDevicesCount,
                         hasUserProfile = userDetails != null,
                         hasUserPreferences = userPreferences != null,
-                        hasProfilePhoto = userDetails?.profilePhotoPath != null,
+                        hasProfilePhoto = userDetails?.profilePhotoPath != null
                     )
                 )
 
@@ -226,27 +236,58 @@ class BackupArchiveManager @Inject constructor(
                     add(Triple("metadata.json", gson.toJson(backupMetadata).toByteArray(), false))
                 }
 
-                val photoToEncrypt: Triple<String, ByteArray, Boolean>? = userDetails?.profilePhotoPath?.let { path ->
-                    val photoFile = File(path)
-                    if (photoFile.exists()) {
-                        Triple(PROFILE_PHOTO_ENTRY, photoFile.readBytes(), isEncrypted)
-                    } else {
-                        null
+                val photoToEncrypt: Triple<String, ByteArray, Boolean>? =
+                    userDetails?.profilePhotoPath?.let { path ->
+                        val photoFile = File(path)
+                        if (photoFile.exists()) {
+                            Triple(PROFILE_PHOTO_ENTRY, photoFile.readBytes(), isEncrypted)
+                        } else {
+                            null
+                        }
                     }
-                }
 
                 val filesToEncrypt: List<Triple<String, ByteArray, Boolean>> = buildList {
                     add(Triple("weights.json", gson.toJsonList(weights).toByteArray(), isEncrypted))
                     add(Triple("hba1c.json", gson.toJsonList(hba1cs).toByteArray(), isEncrypted))
-                    add(Triple("appointments.json", gson.toJsonList(appointments).toByteArray(), isEncrypted))
-                    add(Triple("treatments.json", gson.toJsonList(treatments).toByteArray(), isEncrypted))
-                    add(Triple("important_dates.json", gson.toJsonList(importantDates).toByteArray(), isEncrypted))
-                    add(Triple("medical_devices.json", gson.toJsonList(medicalDevices).toByteArray(), isEncrypted))
+                    add(
+                        Triple(
+                            "appointments.json",
+                            gson.toJsonList(appointments).toByteArray(),
+                            isEncrypted
+                        )
+                    )
+                    add(
+                        Triple(
+                            "treatments.json",
+                            gson.toJsonList(treatments).toByteArray(),
+                            isEncrypted
+                        )
+                    )
+                    add(
+                        Triple(
+                            "important_dates.json",
+                            gson.toJsonList(importantDates).toByteArray(),
+                            isEncrypted
+                        )
+                    )
+                    add(
+                        Triple(
+                            "medical_devices.json",
+                            gson.toJsonList(medicalDevices).toByteArray(),
+                            isEncrypted
+                        )
+                    )
                     userDetails?.let {
                         add(Triple("user_profile.json", gson.toJson(it).toByteArray(), isEncrypted))
                     }
                     userPreferences?.let {
-                        add(Triple("user_preferences.json", gson.toJson(it).toByteArray(), isEncrypted))
+                        add(
+                            Triple(
+                                "user_preferences.json",
+                                gson.toJson(it).toByteArray(),
+                                isEncrypted
+                            )
+                        )
                     }
                 }
 
@@ -258,14 +299,16 @@ class BackupArchiveManager @Inject constructor(
 
                 ZipOutputStream(output, encryptionKey).use { zip ->
                     fileList.forEach {
-                        zip.putNextEntry(ZipParameters().apply {
-                            fileNameInZip = it.first
-                            isEncryptFiles = it.third
-                            if (it.third) {
-                                encryptionMethod = EncryptionMethod.AES
-                                aesKeyStrength = AesKeyStrength.KEY_STRENGTH_256
+                        zip.putNextEntry(
+                            ZipParameters().apply {
+                                fileNameInZip = it.first
+                                isEncryptFiles = it.third
+                                if (it.third) {
+                                    encryptionMethod = EncryptionMethod.AES
+                                    aesKeyStrength = AesKeyStrength.KEY_STRENGTH_256
+                                }
                             }
-                        })
+                        )
                         zip.write(it.second)
                         zip.closeEntry()
                     }
@@ -276,7 +319,9 @@ class BackupArchiveManager @Inject constructor(
             throw e
         } catch (e: Exception) {
             Log.e(
-                backupManagerTag, "writeBackup Exception: ${e.message}", e
+                backupManagerTag,
+                "writeBackup Exception: ${e.message}",
+                e
             )
             Result.failure(exception = e)
         }
@@ -292,34 +337,35 @@ class BackupArchiveManager @Inject constructor(
      * @return [Result.success] on success, [Result.failure] with the underlying exception
      * otherwise. See [BackupImportException] for the specific business errors that can occur.
      */
-    suspend fun readBackup(input: InputStream, password: CharArray? = null): Result<Unit> = withContext(Dispatchers.IO) {
-        return@withContext try {
-            val bytes = input.readBytes()
+    suspend fun readBackup(input: InputStream, password: CharArray? = null): Result<Unit> =
+        withContext(Dispatchers.IO) {
+            return@withContext try {
+                val bytes = input.readBytes()
 
-            when (val backupType = detectBackupFormat(bytes)) {
-                is BackupFormat.LegacyRawJson -> legacyJsonImport(String(bytes, Charsets.UTF_8))
-                is BackupFormat.LegacyZip -> legacyZipImport(bytes)
-                is BackupFormat.NewFormat -> {
-                    if (!backupType.metadata.isEncrypted || password != null) {
-                        zipImport(bytes, password)
-                    } else {
-                        val resolvedPassword = resolvePassword(bytes)
-                        if (resolvedPassword != null) {
-                            zipImport(bytes, resolvedPassword)
+                when (val backupType = detectBackupFormat(bytes)) {
+                    is BackupFormat.LegacyRawJson -> legacyJsonImport(String(bytes, Charsets.UTF_8))
+                    is BackupFormat.LegacyZip -> legacyZipImport(bytes)
+                    is BackupFormat.NewFormat -> {
+                        if (!backupType.metadata.isEncrypted || password != null) {
+                            zipImport(bytes, password)
                         } else {
-                            Result.failure(BackupImportException.PasswordRequired())
+                            val resolvedPassword = resolvePassword(bytes)
+                            if (resolvedPassword != null) {
+                                zipImport(bytes, resolvedPassword)
+                            } else {
+                                Result.failure(BackupImportException.PasswordRequired())
+                            }
                         }
                     }
+                    is BackupFormat.Invalid -> Result.failure(BackupImportException.InvalidFormat())
                 }
-                is BackupFormat.Invalid -> Result.failure(BackupImportException.InvalidFormat())
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                Log.e(backupManagerTag, "readBackup Exception: ${e.message}", e)
+                Result.failure(e)
             }
-        } catch (e: CancellationException) {
-            throw e
-        } catch (e: Exception) {
-            Log.e(backupManagerTag, "readBackup Exception: ${e.message}", e)
-            Result.failure(e)
         }
-    }
 
     /**
      * Imports a [BackupFormat.LegacyRawJson] backup: [jsonContent] is the entire backup content,
@@ -348,29 +394,27 @@ class BackupArchiveManager @Inject constructor(
      * @param input The full ZIP archive content, buffered in memory.
      * @return [Result.success] on success, [Result.failure] with the underlying exception otherwise.
      */
-    private suspend fun legacyZipImport(input: ByteArray): Result<Unit> {
-        return try {
-            val entries = mutableMapOf<String, ByteArray>()
-            ZipInputStream(ByteArrayInputStream(input)).use { zis ->
-                var entry = zis.nextEntry
-                while (entry != null) {
-                    entries[entry.fileName] = zis.readBytes()
-                    entry = zis.nextEntry
-                }
+    private suspend fun legacyZipImport(input: ByteArray): Result<Unit> = try {
+        val entries = mutableMapOf<String, ByteArray>()
+        ZipInputStream(ByteArrayInputStream(input)).use { zis ->
+            var entry = zis.nextEntry
+            while (entry != null) {
+                entries[entry.fileName] = zis.readBytes()
+                entry = zis.nextEntry
             }
-
-            val jsonContent = entries["data.json"]!!.toString(Charsets.UTF_8)
-            val photoBytes: ByteArray? = entries[PROFILE_PHOTO_ENTRY]
-
-            repository.importDataFromJsonString(jsonContent)
-
-            photoBytes?.let { repository.saveProfilePhotoBytes(it, application.filesDir) }
-
-            Result.success(Unit)
-        } catch (e: Exception) {
-            Log.e(backupManagerTag, "legacyZipImport Exception: ${e.message}", e)
-            Result.failure(exception = e)
         }
+
+        val jsonContent = entries["data.json"]!!.toString(Charsets.UTF_8)
+        val photoBytes: ByteArray? = entries[PROFILE_PHOTO_ENTRY]
+
+        repository.importDataFromJsonString(jsonContent)
+
+        photoBytes?.let { repository.saveProfilePhotoBytes(it, application.filesDir) }
+
+        Result.success(Unit)
+    } catch (e: Exception) {
+        Log.e(backupManagerTag, "legacyZipImport Exception: ${e.message}", e)
+        Result.failure(exception = e)
     }
 
     /**
@@ -381,15 +425,42 @@ class BackupArchiveManager @Inject constructor(
      * [zipImport] itself.
      */
     private val importHandlers: Map<String, suspend (ByteArray) -> Unit> = mapOf(
-        "weights.json" to { bytes -> repository.importWeights(gson.fromJsonList(bytes.toString(Charsets.UTF_8))) },
-        "hba1c.json" to { bytes -> repository.importHba1c(gson.fromJsonList(bytes.toString(Charsets.UTF_8))) },
-        "appointments.json" to { bytes -> repository.importAppointments(gson.fromJsonList(bytes.toString(Charsets.UTF_8))) },
-        "treatments.json" to { bytes -> repository.importTreatments(gson.fromJsonList(bytes.toString(Charsets.UTF_8))) },
-        "important_dates.json" to { bytes -> repository.importImportantDates(gson.fromJsonList(bytes.toString(Charsets.UTF_8))) },
-        "medical_devices.json" to { bytes -> repository.importMedicalDevices(gson.fromJsonList(bytes.toString(Charsets.UTF_8))) },
-        "user_preferences.json" to { bytes -> repository.importUserPreferences(gson.fromJson(bytes.toString(Charsets.UTF_8), UserPreferences::class.java)) },
-        "user_profile.json" to { bytes -> repository.importUserDetails(gson.fromJson(bytes.toString(Charsets.UTF_8), UserDetails::class.java)) },
-        PROFILE_PHOTO_ENTRY to { bytes -> repository.saveProfilePhotoBytes(bytes, application.filesDir) }
+        "weights.json" to
+            { bytes ->
+                repository.importWeights(gson.fromJsonList(bytes.toString(Charsets.UTF_8)))
+            },
+        "hba1c.json" to
+            { bytes -> repository.importHba1c(gson.fromJsonList(bytes.toString(Charsets.UTF_8))) },
+        "appointments.json" to
+            { bytes ->
+                repository.importAppointments(gson.fromJsonList(bytes.toString(Charsets.UTF_8)))
+            },
+        "treatments.json" to
+            { bytes ->
+                repository.importTreatments(gson.fromJsonList(bytes.toString(Charsets.UTF_8)))
+            },
+        "important_dates.json" to
+            { bytes ->
+                repository.importImportantDates(gson.fromJsonList(bytes.toString(Charsets.UTF_8)))
+            },
+        "medical_devices.json" to
+            { bytes ->
+                repository.importMedicalDevices(gson.fromJsonList(bytes.toString(Charsets.UTF_8)))
+            },
+        "user_preferences.json" to
+            { bytes ->
+                repository.importUserPreferences(
+                    gson.fromJson(bytes.toString(Charsets.UTF_8), UserPreferences::class.java)
+                )
+            },
+        "user_profile.json" to
+            { bytes ->
+                repository.importUserDetails(
+                    gson.fromJson(bytes.toString(Charsets.UTF_8), UserDetails::class.java)
+                )
+            },
+        PROFILE_PHOTO_ENTRY to
+            { bytes -> repository.saveProfilePhotoBytes(bytes, application.filesDir) }
     )
 
     /**
@@ -428,7 +499,9 @@ class BackupArchiveManager @Inject constructor(
 
             importedPrefs?.let {
                 val scheduleResult = backupScheduleCoordinator.applyBackupSchedule(
-                    it.automaticBackupEnabled, BackupFrequency.fromKey(it.frequency), it.backupPath
+                    it.automaticBackupEnabled,
+                    BackupFrequency.fromKey(it.frequency),
+                    it.backupPath
                 )
                 scheduleResult.onSuccess { didSchedule ->
                     if (it.automaticBackupEnabled && !didSchedule) {
@@ -439,9 +512,11 @@ class BackupArchiveManager @Inject constructor(
 
             Result.success(Unit)
         } catch (e: ZipException) {
-            if (e.type == ZipException.Type.WRONG_PASSWORD) return Result.failure(
-                BackupImportException.WrongPassword()
-            )
+            if (e.type == ZipException.Type.WRONG_PASSWORD) {
+                return Result.failure(
+                    BackupImportException.WrongPassword()
+                )
+            }
             Result.failure(e)
         } catch (e: Exception) {
             Log.e(backupManagerTag, "zipImport Exception: ${e.message}", e)

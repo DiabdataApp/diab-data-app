@@ -28,11 +28,11 @@ import com.diabdata.core.ui.components.cardsList.CardItem
 import com.diabdata.core.ui.components.cardsList.CardsList
 import com.diabdata.core.utils.ui.ColoredIconCircleProps
 import com.diabdata.core.utils.ui.SvgIcon
+import com.diabdata.shared.R as shared
 import com.diabdata.shared.utils.dataTypes.AddableType
 import com.diabdata.shared.utils.dateUtils.formatLocalDate
 import java.time.LocalDate
 import kotlin.time.Instant
-import com.diabdata.shared.R as shared
 
 data class MeasureCardData(
     val textColor: Color,
@@ -43,10 +43,7 @@ data class MeasureCardData(
 )
 
 @Composable
-fun LatestMeasuresContent(
-    weightEntries: List<Weight>,
-    hba1cEntries: List<Hba1c>
-) {
+fun LatestMeasuresContent(weightEntries: List<Weight>, hba1cEntries: List<Hba1c>) {
     val primaryColor = MaterialTheme.colorScheme.primary
     val today = LocalDate.now()
     val oneYearAgo = today.minusYears(1)
@@ -58,7 +55,11 @@ fun LatestMeasuresContent(
             add(
                 MeasureCardData(
                     textColor = primaryColor,
-                    titleText = String.format(LocalLocale.current.platformLocale, "%.2f kg", latest.value),
+                    titleText = String.format(
+                        LocalLocale.current.platformLocale,
+                        "%.2f kg",
+                        latest.value
+                    ),
                     dateText = stringResource(
                         shared.string.weight_on_date_text,
                         formatLocalDate(latest.date)
@@ -80,7 +81,11 @@ fun LatestMeasuresContent(
                         latest.value >= 8.6 -> MaterialTheme.colorScheme.error
                         else -> primaryColor
                     },
-                    titleText = String.format(LocalLocale.current.platformLocale, "%.1f%%", latest.value),
+                    titleText = String.format(
+                        LocalLocale.current.platformLocale,
+                        "%.1f%%",
+                        latest.value
+                    ),
                     dateText = stringResource(
                         shared.string.hba1c_on_date_text,
                         formatLocalDate(latest.date)
@@ -102,7 +107,13 @@ fun LatestMeasuresContent(
             CardItem(
                 leadingColoredCircleIcon = ColoredIconCircleProps(
                     iconRes = card.addableType.iconRes,
-                    baseColor = if (card.textColor != primaryColor) card.textColor else card.addableType.baseColor,
+                    baseColor = if (card.textColor !=
+                        primaryColor
+                    ) {
+                        card.textColor
+                    } else {
+                        card.addableType.baseColor
+                    },
                     size = 40.dp,
                     iconSize = 25.dp
                 ),

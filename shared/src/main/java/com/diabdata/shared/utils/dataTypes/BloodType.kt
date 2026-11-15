@@ -4,10 +4,9 @@ import android.content.Context
 import androidx.annotation.StringRes
 import com.diabdata.shared.R as R
 
-
 enum class BloodType(
     @param:StringRes
-    val displayNameRes: Int,
+    val displayNameRes: Int
 ) {
     A_POSITIVE(R.string.profile_user_blood_type_label_a_positive),
     A_NEGATIVE(R.string.profile_user_blood_type_label_a_negative),

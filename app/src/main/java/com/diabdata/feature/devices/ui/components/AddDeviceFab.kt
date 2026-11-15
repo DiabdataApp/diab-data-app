@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.FloatingActionButtonMenu
 import androidx.compose.material3.FloatingActionButtonMenuItem
 import androidx.compose.material3.Icon
@@ -27,14 +26,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import com.diabdata.shared.utils.dataTypes.AddableType
 import com.diabdata.shared.R as shared
+import com.diabdata.shared.utils.dataTypes.AddableType
 
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
-fun AddDeviceFab(
-    onSelect: (AddableType) -> Unit, onScanClick: () -> Unit
-) {
+fun AddDeviceFab(onSelect: (AddableType) -> Unit, onScanClick: () -> Unit) {
     var fabMenuExpanded by rememberSaveable { mutableStateOf(false) }
 
     BackHandler(fabMenuExpanded) { fabMenuExpanded = false }
@@ -47,7 +43,8 @@ fun AddDeviceFab(
         Triple(
             stringResource(shared.string.devices_addable_device),
             shared.drawable.medical_device_add_icon_vector
-        ) { onSelect(AddableType.APPOINTMENT) })
+        ) { onSelect(AddableType.APPOINTMENT) }
+    )
 
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.BottomEnd) {
         if (fabMenuExpanded) {
@@ -55,28 +52,44 @@ fun AddDeviceFab(
                 modifier = Modifier
                     .fillMaxSize()
                     .background(MaterialTheme.colorScheme.surfaceDim.copy(alpha = 0.95f))
-                    .clickable { fabMenuExpanded = false })
+                    .clickable { fabMenuExpanded = false }
+            )
         }
 
         FloatingActionButtonMenu(
-            expanded = fabMenuExpanded, modifier = Modifier, button = {
+            expanded = fabMenuExpanded,
+            modifier = Modifier,
+            button = {
                 ToggleFloatingActionButton(
                     checked = fabMenuExpanded,
-                    onCheckedChange = { fabMenuExpanded = !fabMenuExpanded }) {
+                    onCheckedChange = { fabMenuExpanded = !fabMenuExpanded }
+                ) {
                     val imageVector by remember {
                         derivedStateOf {
-                            if (fabMenuExpanded) Icons.Filled.Close else Icons.Filled.Add
+                            if (fabMenuExpanded) {
+                                Icons.Filled.Close
+                            } else {
+                                Icons.Filled.Add
+                            }
                         }
                     }
 
                     Icon(
                         imageVector = imageVector,
-                        tint = if (fabMenuExpanded) MaterialTheme.colorScheme.onPrimary else Color.Unspecified,
-                        contentDescription = if (fabMenuExpanded) "Fermer menu" else "Ouvrir menu"
+                        tint = if (fabMenuExpanded) {
+                            MaterialTheme.colorScheme.onPrimary
+                        } else {
+                            Color.Unspecified
+                        },
+                        contentDescription = if (fabMenuExpanded) {
+                            "Fermer menu"
+                        } else {
+                            "Ouvrir menu"
+                        }
                     )
-
                 }
-            }) {
+            }
+        ) {
             fabItems.forEach { (label, iconRes, action) ->
                 FloatingActionButtonMenuItem(
                     onClick = {
@@ -86,7 +99,8 @@ fun AddDeviceFab(
                     text = { Text(label) },
                     icon = {
                         Icon(
-                            painter = painterResource(id = iconRes), contentDescription = null
+                            painter = painterResource(id = iconRes),
+                            contentDescription = null
                         )
                     }
                 )

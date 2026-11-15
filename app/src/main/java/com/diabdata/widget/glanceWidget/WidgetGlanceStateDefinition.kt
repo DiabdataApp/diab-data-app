@@ -16,10 +16,6 @@ object WidgetGlanceStateDefinition :
         return File(dir, "widget_state.json")
     }
 
-    override suspend fun getDataStore(
-        context: Context,
-        fileKey: String
-    ): DataStore<WidgetState> {
-        return context.widgetDataStore
-    }
+    override suspend fun getDataStore(context: Context, fileKey: String): DataStore<WidgetState> =
+        context.widgetDataStore
 }

@@ -49,7 +49,7 @@ import com.diabdata.core.ui.components.cardsList.CardsList
  *
  * @param index  Zero-based position of the card within the list.
  * @param size   Total number of cards in the list. Must be greater than 0.
- * @return       A [RoundedCornerShape] with corners adjusted to the card's position.
+ * @return A [RoundedCornerShape] with corners adjusted to the card's position.
  *
  * @see CardListItem  Composable that uses this function to shape individual cards.
  * @see CardsList     Parent composable orchestrating the full card stack.
@@ -60,12 +60,16 @@ fun getItemShape(index: Int, size: Int): Shape {
     }
     return when (index) {
         0 -> RoundedCornerShape(
-            topStart = 15.dp, topEnd = 15.dp,
-            bottomStart = 3.dp, bottomEnd = 3.dp
+            topStart = 15.dp,
+            topEnd = 15.dp,
+            bottomStart = 3.dp,
+            bottomEnd = 3.dp
         )
         size - 1 -> RoundedCornerShape(
-            topStart = 3.dp, topEnd = 3.dp,
-            bottomStart = 15.dp, bottomEnd = 15.dp
+            topStart = 3.dp,
+            topEnd = 3.dp,
+            bottomStart = 15.dp,
+            bottomEnd = 15.dp
         )
 
         else -> RoundedCornerShape(3.dp)

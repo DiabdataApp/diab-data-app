@@ -16,7 +16,9 @@ class UpcomingAppointmentDataSyncListenerService : WearableListenerService() {
 
     override fun onDataChanged(dataEvents: DataEventBuffer) {
         dataEvents.forEach { event ->
-            if (event.type == DataEvent.TYPE_CHANGED && event.dataItem.uri.path == "/complications/upcoming_appointment") {
+            if (event.type == DataEvent.TYPE_CHANGED &&
+                event.dataItem.uri.path == "/complications/upcoming_appointment"
+            ) {
                 val dataMap = DataMapItem.fromDataItem(event.dataItem).dataMap
 
                 val hasAppointment = dataMap.getBoolean("hasAppointment", false)

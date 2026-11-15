@@ -3,6 +3,7 @@ import java.util.Properties
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlint.gradle)
 }
 
 val localProperties = Properties()
@@ -32,7 +33,6 @@ android {
         targetSdk = 36
         versionCode = 15
         versionName = "1.7"
-
     }
 
     if (storeF != null && storeF.exists()) {
@@ -95,7 +95,8 @@ dependencies {
     implementation(libs.androidx.wear)
 
     // Tiles - These are the key changes
-    implementation(libs.androidx.tiles.material) // The material components for tiles (now using the single, correct alias)
+    // The material components for tiles (now using the single, correct alias)
+    implementation(libs.androidx.tiles.material)
     implementation(libs.horologist.tiles)
 
     // Protolayout (correctly declared)

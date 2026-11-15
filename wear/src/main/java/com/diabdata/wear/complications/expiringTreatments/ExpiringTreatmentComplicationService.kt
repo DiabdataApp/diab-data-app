@@ -8,12 +8,14 @@ import androidx.wear.watchface.complications.data.PlainComplicationText
 import androidx.wear.watchface.complications.data.RangedValueComplicationData
 import androidx.wear.watchface.complications.datasource.ComplicationRequest
 import androidx.wear.watchface.complications.datasource.SuspendingComplicationDataSourceService
+import com.diabdata.shared.R as shared
 import com.diabdata.shared.utils.dataTypes.AddableType
 import com.diabdata.shared.utils.imgUtils.toTreatmentIcon
-import com.diabdata.shared.R as shared
 
-class ExpiringTreatmentComplicationService :
-    SuspendingComplicationDataSourceService() {
+class ExpiringTreatmentComplicationService : SuspendingComplicationDataSourceService() {
+
+    private val daysLeftLabelRes =
+        shared.string.medications_wear_complication_expiring_treatments_plain_text_builder
 
     override suspend fun onComplicationRequest(request: ComplicationRequest): ComplicationData {
         val prefs = getSharedPreferences("complications_treatment_expiry", MODE_PRIVATE)
@@ -38,12 +40,13 @@ class ExpiringTreatmentComplicationService :
 
         val rangeValue: Float = treatmentElapsedLifespan.toFloat()
 
-
         return RangedValueComplicationData.Builder(
             value = rangeValue.coerceAtLeast(0f),
             min = 0f,
             max = if (totalLifespan > 0f) totalLifespan else 1f,
-            contentDescription = PlainComplicationText.Builder(getString(shared.string.medications_wear_complication_expiring_treatments_plain_text_builder))
+            contentDescription = PlainComplicationText.Builder(
+                getString(daysLeftLabelRes)
+            )
                 .build()
         )
             .setTitle(PlainComplicationText.Builder(daysCountText).build())
@@ -55,13 +58,14 @@ class ExpiringTreatmentComplicationService :
             .build()
     }
 
-    override fun getPreviewData(type: ComplicationType): ComplicationData {
-
-        return RangedValueComplicationData.Builder(
+    override fun getPreviewData(type: ComplicationType): ComplicationData =
+        RangedValueComplicationData.Builder(
             value = 2f,
             min = 0f,
             max = 3f,
-            contentDescription = PlainComplicationText.Builder(getString(shared.string.medications_wear_complication_expiring_treatments_plain_text_builder))
+            contentDescription = PlainComplicationText.Builder(
+                getString(daysLeftLabelRes)
+            )
                 .build()
         )
             .setTitle(PlainComplicationText.Builder("1D").build())
@@ -74,5 +78,4 @@ class ExpiringTreatmentComplicationService :
                 ).build()
             )
             .build()
-    }
 }

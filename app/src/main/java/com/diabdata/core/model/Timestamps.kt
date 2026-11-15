@@ -1,7 +1,6 @@
 package com.diabdata.core.model
 
 import java.time.LocalDate
-import java.time.LocalDateTime
 import java.time.ZoneId
 import kotlin.time.Clock
 import kotlin.time.Instant
@@ -19,6 +18,5 @@ fun nowMillisInLong(): Long {
     return now.toEpochMilliseconds()
 }
 
-fun Instant.toLocalDate(): LocalDate {
-    return LocalDate.from(this.toJavaInstant().atZone(ZoneId.systemDefault()))
-}
+fun Instant.toLocalDate(): LocalDate =
+    LocalDate.from(this.toJavaInstant().atZone(ZoneId.systemDefault()))

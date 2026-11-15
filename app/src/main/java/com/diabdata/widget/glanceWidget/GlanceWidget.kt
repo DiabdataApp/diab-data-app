@@ -32,10 +32,10 @@ import androidx.glance.text.TextStyle
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
+import com.diabdata.shared.R as shared
 import com.diabdata.shared.utils.dataTypes.AddableType
 import com.diabdata.shared.utils.dateUtils.toRelativeString
 import com.diabdata.shared.utils.dateUtils.toShortenedFormatLocalDate
-import com.diabdata.shared.utils.dateUtils.toShortenedFormatLocalDateTime
 import com.diabdata.widget.WidgetState
 import com.diabdata.widget.glanceWidget.utils.ColorVariant
 import com.diabdata.widget.glanceWidget.utils.getAppointmentTypeOrNull
@@ -44,7 +44,6 @@ import com.diabdata.widget.glanceWidget.utils.toColorProvider
 import com.diabdata.widget.workers.GlanceWidgetWorker
 import java.time.LocalDate
 import java.util.concurrent.TimeUnit
-import com.diabdata.shared.R as shared
 
 class GlanceWidgetReceiver : GlanceAppWidgetReceiver() {
     override val glanceAppWidget: GlanceAppWidget = GlanceWidget()
@@ -67,7 +66,8 @@ class GlanceWidgetReceiver : GlanceAppWidgetReceiver() {
         val workManager = WorkManager.getInstance(context)
 
         val workRequest = PeriodicWorkRequestBuilder<GlanceWidgetWorker>(
-            30, TimeUnit.MINUTES
+            30,
+            TimeUnit.MINUTES
         )
             .setInitialDelay(1, timeUnit = TimeUnit.MINUTES)
             .build()
@@ -123,7 +123,7 @@ class GlanceWidget : GlanceAppWidget() {
                 typeEnum?.let {
                     Column(
                         modifier = GlanceModifier.defaultWeight(),
-                        horizontalAlignment = Alignment.CenterHorizontally,
+                        horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         val baseBgColor = AddableType.APPOINTMENT.baseColor.copy(alpha = 0.2f)
 
@@ -136,7 +136,7 @@ class GlanceWidget : GlanceAppWidget() {
                                     ColorVariant.CIRCLE_ICON_ICON
                                 )
                             ),
-                            maxLines = 1,
+                            maxLines = 1
                         )
 
                         Spacer(modifier = GlanceModifier.height(4.dp))
@@ -165,7 +165,7 @@ class GlanceWidget : GlanceAppWidget() {
                                 fontWeight = FontWeight.Bold,
                                 color = GlanceTheme.colors.onSurface
                             ),
-                            maxLines = 1,
+                            maxLines = 1
                         )
                     }
                 }
@@ -189,7 +189,7 @@ class GlanceWidget : GlanceAppWidget() {
                                 fontWeight = FontWeight.Bold,
                                 color = it.baseColor.toColorProvider(ColorVariant.CIRCLE_ICON_ICON)
                             ),
-                            maxLines = 1,
+                            maxLines = 1
                         )
 
                         Spacer(modifier = GlanceModifier.height(4.dp))

@@ -8,6 +8,8 @@ import com.diabdata.core.database.DiabDataDatabase
 import com.diabdata.core.model.Hba1c
 import com.diabdata.core.model.nowMillis
 import com.diabdata.feature.hba1c.data.HBA1CDao
+import java.io.IOException
+import java.time.LocalDate
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.After
@@ -15,8 +17,6 @@ import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import java.io.IOException
-import java.time.LocalDate
 
 /**
  * Tests for [HBA1CDao] found at [com.diabdata.feature.hba1c.data.HBA1CDao].
@@ -69,7 +69,7 @@ class Hba1cDaoTest {
     @Throws(Exception::class)
     fun insertAndUpdateHba1c() = runBlocking {
         val hba1c: Hba1c = Hba1c(
-            id=1,
+            id = 1,
             date = today,
             createdAt = now,
             isArchived = false,
@@ -196,7 +196,6 @@ class Hba1cDaoTest {
         val third = today.minusDays(16).minusMonths(8)
         val fourth = today.minusDays(22).minusMonths(1)
 
-
         val hba1cs: List<Hba1c> = listOf(
             Hba1c(
                 date = third,
@@ -248,7 +247,6 @@ class Hba1cDaoTest {
         val second = today.minusDays(8).minusMonths(2)
         val third = today.minusDays(16).minusMonths(8)
         val fourth = today.minusDays(22).minusMonths(1)
-
 
         val hba1cs: List<Hba1c> = listOf(
             Hba1c(

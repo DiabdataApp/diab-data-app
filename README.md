@@ -225,34 +225,72 @@ This project follows a **feature branch** workflow with three main branches:
 
 ### Branch naming convention
 
-- First letter of your first name, capitalized (e.g., `F`)
-- Your last name, in uppercase (e.g., `COSSU`)
-- A dash `-`
-- A short, capitalized identifier for the feature (spaces replaced by underscores)
+- First letter of your first name in lowercase (e.g., `f`)
+- Your last name in lowercase (e.g., `cossu`)
+- An underscore `_`
+- A short description or name for the feature in lowercase with underscores `_` to replace spaces
 
-**Example:** Florian Cossu working on updating the database → `FCOSSU-Database_migration`
+**Example:** Florian Cossu working on updating the database → `fcossu_database_migration`
+
+### Code style
+
+- The project uses ktlint, with the `android_studio` code style and 100 characters line length.
+- The rules can be found in `.editorconfig` that Android Studio applies automatically.
+- Before pushing always run the formatting command below and fix any blocking errors.
+
+```bash
+  ./gradlew ktlintFormat --continue
+```
+
+- And then run a lint check to ensure proper formatting before pushing:
+
+```bash
+  ./gradlew ktlintCheck --continue
+```
+
+- Improperly formatted code will make the CI tests fail.
+- (Bonus) don't forget to run the git blame ignore revs to skip over large reformatting commits
+
+```bash
+  git config blame.ignoreRevsFile .git-blame-ignore-revs
+```
 
 ### Workflow
 
 1. Create your Feature Branch from `dev`:
 
-  ```bash
+```bash
   git checkout dev
   git pull origin dev
-  git checkout -b FCOSSU-Database_migration
-  ```
+  git checkout -b fcossu_database_migration
+```
 
 2. Commit your changes:
 
-  ```bash
-  git commit -m 'Add some new feature'
-  ```
+```bash
+  git commit -m '[FEAT] Add database migration'
+```
+
+> [!NOTE]
+> Commit message you can use prefixes for the first line to
+> better convey what your changes focus on. Here's a list:
+>
+> - `[FIX]` for fixes
+>
+> Older commits may use variants (e.g. feature, refacto) ; please use the forms below for new commits.
+>
+> - `[FEAT]` for a new feature
+> - `[REFACTOR]` for code refactoring
+> - `[MAINTENANCE]` for maintenance updates such as dependencies updates / upgrades
+> - `[STYLE]` for code styling and linting
+> - `[TEST]` for changes that solely add test implementations
+> - `[DOCS]` for changes in documentation (READMEs, in code KDocs, etc)
 
 3. Push your branch and open a Pull Request → `dev`:
 
-  ```bash
-  git push origin FCOSSU-Database_migration
-  ```
+```bash
+git push origin fcossu_database_migration
+```
 
 4. Once the PR is reviewed and merged into `dev`:
     - CI tests run automatically
@@ -271,7 +309,7 @@ Google's [Material Symbols & Icons](https://fonts.google.com/icons?icon.size=24&
 The settings used to retrieve the SVG files are:
 
 | variant  | weight | grade | optical size | style                            |
-|:--------:|:------:|:-----:|:------------:|:---------------------------------|
+| :------: | :----: | :---: | :----------: | :------------------------------- |
 | Outlined |  400   |   0   |      24      | Material Symbols (new) - Rounded |
 |  Filled  |  400   |   0   |      24      | Material Symbols (new) - Rounded |
 

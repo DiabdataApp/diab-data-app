@@ -5,11 +5,11 @@ import androidx.work.WorkManager
 import androidx.work.await
 import com.diabdata.core.database.DataRepository
 import com.diabdata.core.database.DataViewModel
-import kotlinx.coroutines.flow.first
+import com.diabdata.shared.R as shared
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 import java.util.Locale
-import com.diabdata.shared.R as shared
+import kotlinx.coroutines.flow.first
 
 suspend fun scheduleAllReminders(context: Context, dataViewModel: DataViewModel) {
     val reminderOffsets = listOf(30, 14, 1)
@@ -30,7 +30,13 @@ suspend fun scheduleAllReminders(context: Context, dataViewModel: DataViewModel)
                 )
             )
             val content =
-                if (appointment.notes?.isNotBlank() == true) "$baseContent\n- ${appointment.notes}" else baseContent
+                if (appointment.notes?.isNotBlank() ==
+                    true
+                ) {
+                    "$baseContent\n- ${appointment.notes}"
+                } else {
+                    baseContent
+                }
 
             scheduleNotification(
                 context,
@@ -84,7 +90,13 @@ suspend fun scheduleAppointmentReminders(context: Context, dataRepository: DataR
                 )
             )
             val content =
-                if (appointment.notes?.isNotBlank() == true) "$baseContent\n- ${appointment.notes}" else baseContent
+                if (appointment.notes?.isNotBlank() ==
+                    true
+                ) {
+                    "$baseContent\n- ${appointment.notes}"
+                } else {
+                    baseContent
+                }
 
             scheduleNotification(
                 context,
@@ -97,7 +109,10 @@ suspend fun scheduleAppointmentReminders(context: Context, dataRepository: DataR
     }
 }
 
-suspend fun scheduleMedicationExpirationReminders(context: Context, dataRepository: DataRepository) {
+suspend fun scheduleMedicationExpirationReminders(
+    context: Context,
+    dataRepository: DataRepository
+) {
     val workManager = WorkManager.getInstance(context)
     workManager.cancelAllWorkByTag("treatments").await()
     workManager.pruneWork().await()

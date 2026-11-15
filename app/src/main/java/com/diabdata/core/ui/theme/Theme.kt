@@ -27,7 +27,7 @@ data class ExtendedColors(
     val betaContainer: Color,
     val onBetaContainer: Color,
     val releaseVersionContainer: Color,
-    val onReleaseVersionContainer: Color,
+    val onReleaseVersionContainer: Color
 )
 
 val LocalExtendedColors = staticCompositionLocalOf {
@@ -35,7 +35,7 @@ val LocalExtendedColors = staticCompositionLocalOf {
         betaContainer = Color.Unspecified,
         onBetaContainer = Color.Unspecified,
         releaseVersionContainer = Color.Unspecified,
-        onReleaseVersionContainer = Color.Unspecified,
+        onReleaseVersionContainer = Color.Unspecified
     )
 }
 
@@ -93,7 +93,7 @@ private val lightColorScheme = lightColorScheme(
     tertiaryFixed = TertiaryFixed,
     tertiaryFixedDim = TertiaryFixedDim,
     onTertiaryFixed = OnTertiaryFixed,
-    onTertiaryFixedVariant = OnTertiaryFixedVariant,
+    onTertiaryFixedVariant = OnTertiaryFixedVariant
 )
 
 private val darkColorScheme = darkColorScheme(
@@ -144,7 +144,7 @@ private val darkColorScheme = darkColorScheme(
     tertiaryFixed = TertiaryFixed,
     tertiaryFixedDim = TertiaryFixedDim,
     onTertiaryFixed = OnTertiaryFixed,
-    onTertiaryFixedVariant = OnTertiaryFixedVariant,
+    onTertiaryFixedVariant = OnTertiaryFixedVariant
 )
 
 @Composable
@@ -167,14 +167,14 @@ fun DiabDataTheme(
             betaContainer = BetaVersionColorDark,
             onBetaContainer = BetaVersionTextColorDark,
             releaseVersionContainer = ReleaseVersionColorDark,
-            onReleaseVersionContainer = ReleaseVersionTextColorDark,
+            onReleaseVersionContainer = ReleaseVersionTextColorDark
         )
     } else {
         ExtendedColors(
             betaContainer = BetaVersionColorLight,
             onBetaContainer = BetaVersionTextColorLight,
             releaseVersionContainer = ReleaseVersionColorLight,
-            onReleaseVersionContainer = ReleaseVersionTextColorLight,
+            onReleaseVersionContainer = ReleaseVersionTextColorLight
         )
     }
 

@@ -72,5 +72,5 @@ data class UserDetails(
 
     @SerializedName("updated_at")
     @ColumnInfo(defaultValue = "0")
-    val updatedAt: Instant = UNKNOWN_TIME_DEFAULT,
+    val updatedAt: Instant = UNKNOWN_TIME_DEFAULT
 )

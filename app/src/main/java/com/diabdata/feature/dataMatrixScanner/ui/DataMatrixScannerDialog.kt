@@ -56,7 +56,8 @@ fun DataMatrixScannerDialog(
                     width = 3.dp,
                     color = MaterialTheme.colorScheme.primary,
                     shape = RoundedCornerShape(24.dp)
-                )) {
+                )
+        ) {
             CameraPreview(
                 modifier = Modifier.matchParentSize(),
                 onBarcodeDetected = { rawValue ->
@@ -73,7 +74,8 @@ fun DataMatrixScannerDialog(
                             onDismiss()
                         }
                     }
-                })
+                }
+            )
         }
 
         Row(
@@ -99,7 +101,7 @@ fun DataMatrixScannerDialog(
 
 enum class ScannableTypes {
     MEDICATION,
-    DEVICE;
+    DEVICE
 }
 
 sealed class ScanResult {

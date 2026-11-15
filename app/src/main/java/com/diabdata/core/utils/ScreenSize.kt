@@ -5,7 +5,9 @@ import androidx.compose.runtime.Composable
 import androidx.window.core.layout.WindowSizeClass
 
 enum class ScreenSize {
-    LARGE, MEDIUM, COMPACT
+    LARGE,
+    MEDIUM,
+    COMPACT
 }
 
 @Composable

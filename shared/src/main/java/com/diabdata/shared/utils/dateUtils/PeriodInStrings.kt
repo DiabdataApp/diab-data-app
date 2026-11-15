@@ -18,10 +18,7 @@ import kotlin.math.abs
  * - "In 1 year and 1 month"
  * - Today, Tomorrow, Yesterday, etc.
  */
-fun Period.toLocalizedString(
-    context: Context,
-    referenceDate: LocalDate = LocalDate.now()
-): String {
+fun Period.toLocalizedString(context: Context, referenceDate: LocalDate = LocalDate.now()): String {
     val years = this.years
     val months = this.months
     val days = this.days
@@ -170,15 +167,13 @@ fun LocalDate.getRelativeStringFrom(
  * - "Tomorrow"
  * - "Yesterday"
  */
-fun getRelativeDayString(context: Context, daysFromNow: Int): String {
-    return when {
-        daysFromNow == 0 -> context.getString(R.string.date_today)
-        daysFromNow == 1 -> context.getString(R.string.date_tomorrow)
-        daysFromNow == -1 -> context.getString(R.string.date_yesterday)
-        daysFromNow > 1 -> context.getString(R.string.date_in_days, daysFromNow)
-        daysFromNow < -1 -> context.getString(R.string.date_days_ago, abs(daysFromNow))
-        else -> ""
-    }
+fun getRelativeDayString(context: Context, daysFromNow: Int): String = when {
+    daysFromNow == 0 -> context.getString(R.string.date_today)
+    daysFromNow == 1 -> context.getString(R.string.date_tomorrow)
+    daysFromNow == -1 -> context.getString(R.string.date_yesterday)
+    daysFromNow > 1 -> context.getString(R.string.date_in_days, daysFromNow)
+    daysFromNow < -1 -> context.getString(R.string.date_days_ago, abs(daysFromNow))
+    else -> ""
 }
 
 /**
@@ -190,15 +185,13 @@ fun getRelativeDayString(context: Context, daysFromNow: Int): String {
  * - "This month"
  * - "Next month"
  */
-fun getRelativeMonthString(context: Context, monthsFromNow: Int): String {
-    return when {
-        monthsFromNow == 0 -> context.getString(R.string.date_this_month)
-        monthsFromNow == 1 -> context.getString(R.string.date_next_month)
-        monthsFromNow == -1 -> context.getString(R.string.date_last_month)
-        monthsFromNow > 1 -> context.getString(R.string.date_in_months, monthsFromNow)
-        monthsFromNow < -1 -> context.getString(R.string.date_months_ago, abs(monthsFromNow))
-        else -> ""
-    }
+fun getRelativeMonthString(context: Context, monthsFromNow: Int): String = when {
+    monthsFromNow == 0 -> context.getString(R.string.date_this_month)
+    monthsFromNow == 1 -> context.getString(R.string.date_next_month)
+    monthsFromNow == -1 -> context.getString(R.string.date_last_month)
+    monthsFromNow > 1 -> context.getString(R.string.date_in_months, monthsFromNow)
+    monthsFromNow < -1 -> context.getString(R.string.date_months_ago, abs(monthsFromNow))
+    else -> ""
 }
 
 /**
@@ -210,15 +203,13 @@ fun getRelativeMonthString(context: Context, monthsFromNow: Int): String {
  * - "This year"
  * - "Next year"
  */
-fun getRelativeYearString(context: Context, yearsFromNow: Int): String {
-    return when {
-        yearsFromNow == 0 -> context.getString(R.string.date_this_year)
-        yearsFromNow == 1 -> context.getString(R.string.date_next_year)
-        yearsFromNow == -1 -> context.getString(R.string.date_last_year)
-        yearsFromNow > 1 -> context.getString(R.string.date_in_years, yearsFromNow)
-        yearsFromNow < -1 -> context.getString(R.string.date_years_ago, abs(yearsFromNow))
-        else -> ""
-    }
+fun getRelativeYearString(context: Context, yearsFromNow: Int): String = when {
+    yearsFromNow == 0 -> context.getString(R.string.date_this_year)
+    yearsFromNow == 1 -> context.getString(R.string.date_next_year)
+    yearsFromNow == -1 -> context.getString(R.string.date_last_year)
+    yearsFromNow > 1 -> context.getString(R.string.date_in_years, yearsFromNow)
+    yearsFromNow < -1 -> context.getString(R.string.date_years_ago, abs(yearsFromNow))
+    else -> ""
 }
 
 /**
@@ -267,17 +258,15 @@ fun Period.toCountString(context: Context): String {
     }
 
     if (parts.isEmpty()) {
-        return context.resources.getQuantityString(
-            R.string.date_zero_days,
-            0,
-            0
-        )
+        return context.resources.getString(R.string.date_zero_days)
     }
 
     return when (parts.size) {
         1 -> parts[0]
         2 -> "${parts[0]} ${context.getString(R.string.string_fragment_and)} ${parts[1]}"
-        3 -> "${parts[0]}, ${parts[1]} ${context.getString(R.string.string_fragment_and)} ${parts[2]}"
+        3 -> "${parts[0]}, ${parts[1]} ${context.getString(
+            R.string.string_fragment_and
+        )} ${parts[2]}"
         else -> parts[0]
     }
 }

@@ -11,43 +11,48 @@ import java.lang.reflect.Type
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
-import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 import kotlin.time.Instant
 
-class LocalDateAdapter : JsonSerializer<LocalDate>, JsonDeserializer<LocalDate> {
+class LocalDateAdapter :
+    JsonSerializer<LocalDate>,
+    JsonDeserializer<LocalDate> {
     private val formatter = DateTimeFormatter.ISO_LOCAL_DATE
 
     override fun serialize(
-        src: LocalDate?, typeOfSrc: Type?, context: JsonSerializationContext?
-    ): JsonElement {
-        return JsonPrimitive(src?.format(formatter))
-    }
+        src: LocalDate?,
+        typeOfSrc: Type?,
+        context: JsonSerializationContext?
+    ): JsonElement = JsonPrimitive(src?.format(formatter))
 
     override fun deserialize(
-        json: JsonElement?, typeOfT: Type?, context: JsonDeserializationContext?
-    ): LocalDate? {
-        return json?.asString?.let { LocalDate.parse(it, formatter) }
-    }
+        json: JsonElement?,
+        typeOfT: Type?,
+        context: JsonDeserializationContext?
+    ): LocalDate? = json?.asString?.let { LocalDate.parse(it, formatter) }
 }
 
-class LocalDateTimeAdapter : JsonSerializer<LocalDateTime>, JsonDeserializer<LocalDateTime> {
+class LocalDateTimeAdapter :
+    JsonSerializer<LocalDateTime>,
+    JsonDeserializer<LocalDateTime> {
     private val formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME
 
     override fun serialize(
-        src: LocalDateTime?, typeOfSrc: Type?, context: JsonSerializationContext?
-    ): JsonElement {
-        return JsonPrimitive(src?.format(formatter))
-    }
+        src: LocalDateTime?,
+        typeOfSrc: Type?,
+        context: JsonSerializationContext?
+    ): JsonElement = JsonPrimitive(src?.format(formatter))
 
     override fun deserialize(
-        json: JsonElement?, typeOfT: Type?, context: JsonDeserializationContext?
-    ): LocalDateTime? {
-        return json?.asString?.let { LocalDateTime.parse(it, formatter) }
-    }
+        json: JsonElement?,
+        typeOfT: Type?,
+        context: JsonDeserializationContext?
+    ): LocalDateTime? = json?.asString?.let { LocalDateTime.parse(it, formatter) }
 }
 
-class InstantAdapter : JsonSerializer<Instant>, JsonDeserializer<Instant> {
+class InstantAdapter :
+    JsonSerializer<Instant>,
+    JsonDeserializer<Instant> {
     /**
      * Converts a legacy backup date ("2026-01-15") to an [Instant] at midnight, local time.
      *
@@ -63,12 +68,16 @@ class InstantAdapter : JsonSerializer<Instant>, JsonDeserializer<Instant> {
         return Instant.fromEpochMilliseconds(millis)
     }
 
-    override fun serialize(src: Instant?, typeOfSrc: Type?, context: JsonSerializationContext?): JsonElement {
-        return JsonPrimitive(src?.toEpochMilliseconds())
-    }
+    override fun serialize(
+        src: Instant?,
+        typeOfSrc: Type?,
+        context: JsonSerializationContext?
+    ): JsonElement = JsonPrimitive(src?.toEpochMilliseconds())
 
     override fun deserialize(
-        json: JsonElement?, typeOfT: Type?, context: JsonDeserializationContext?
+        json: JsonElement?,
+        typeOfT: Type?,
+        context: JsonDeserializationContext?
     ): Instant? {
         val primitive = json as? JsonPrimitive
 

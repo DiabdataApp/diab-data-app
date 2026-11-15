@@ -1,17 +1,20 @@
 package com.diabdata.feature.dataMatrixScanner.utils
 
 data class MedicationInfo(
-    val gtin: String, val lot: String?, val expiration: String?, val serial: String?
+    val gtin: String,
+    val lot: String?,
+    val expiration: String?,
+    val serial: String?
 )
 
 fun parseMedication(raw: String): MedicationInfo {
     val cleaned = raw.trim()
 
     val regex = Regex(
-        "01(\\d{14})|" +                  // GTIN
-                "17(\\d{6})|" +                 // Expiration
-                "10(.*?)" + generateDataMatrixDelimiters(listOf("10")) + // Batch
-                "21(.*?)" + generateDataMatrixDelimiters(listOf("21")) // Serial
+        "01(\\d{14})|" + // GTIN
+            "17(\\d{6})|" + // Expiration
+            "10(.*?)" + generateDataMatrixDelimiters(listOf("10")) + // Batch
+            "21(.*?)" + generateDataMatrixDelimiters(listOf("21")) // Serial
     )
 
     var gtin: String? = null

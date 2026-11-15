@@ -3,10 +3,10 @@ package com.diabdata.widget
 import androidx.datastore.core.CorruptionException
 import androidx.datastore.core.Serializer
 import com.diabdata.core.utils.data.GsonFactory
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import java.io.InputStream
 import java.io.OutputStream
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 object WidgetStateSerializer : Serializer<WidgetState> {
     override val defaultValue: WidgetState = WidgetState()

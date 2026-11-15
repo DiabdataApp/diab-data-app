@@ -31,9 +31,9 @@ import com.diabdata.core.utils.ui.ColoredIconCircleProps
 import com.diabdata.core.utils.ui.SvgIcon
 import com.diabdata.core.utils.ui.darken
 import com.diabdata.core.utils.ui.getItemShape
+import com.diabdata.shared.R as shared
 import com.diabdata.shared.theme.DataIconColor
 import com.diabdata.shared.theme.NotificationIconColor
-import com.diabdata.shared.R as shared
 
 /**
  * A composable that renders a single card within a [CardsList] stack.
@@ -112,14 +112,18 @@ fun CardListItem(
     cardItem: CardItem,
     shape: Shape,
     modifier: Modifier = Modifier,
-    alignTop: Boolean = false,
+    alignTop: Boolean = false
 ) {
     val content: @Composable () -> Unit = {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 22.dp, vertical = 22.dp),
-            verticalAlignment = if (alignTop) Alignment.Top else Alignment.CenterVertically,
+            verticalAlignment = if (alignTop) {
+                Alignment.Top
+            } else {
+                Alignment.CenterVertically
+            },
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             LeadingSection(cardItem)
@@ -137,7 +141,11 @@ fun CardListItem(
         Surface(
             shape = shape,
             color = MaterialTheme.colorScheme.surface,
-            contentColor = if (cardItem.isDestructive) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurface,
+            contentColor = if (cardItem.isDestructive) {
+                MaterialTheme.colorScheme.error
+            } else {
+                MaterialTheme.colorScheme.onSurface
+            },
             modifier = modifier.fillMaxWidth(),
             onClick = onClick
         ) {
@@ -147,7 +155,11 @@ fun CardListItem(
         Surface(
             shape = shape,
             color = MaterialTheme.colorScheme.surface,
-            contentColor = if (cardItem.isDestructive) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurface,
+            contentColor = if (cardItem.isDestructive) {
+                MaterialTheme.colorScheme.error
+            } else {
+                MaterialTheme.colorScheme.onSurface
+            },
             modifier = modifier.fillMaxWidth()
         ) {
             content()
@@ -183,7 +195,11 @@ private fun TrailingSection(cardItem: CardItem) {
         if (cardItem.trailingIcon != null) {
             val trailingOnClick = cardItem.onTrailingIconClick ?: cardItem.onClick
             val iconColor =
-                if (cardItem.isDestructive) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurface
+                if (cardItem.isDestructive) {
+                    MaterialTheme.colorScheme.error
+                } else {
+                    MaterialTheme.colorScheme.onSurface
+                }
 
             if (trailingOnClick != null) {
                 IconButton(
@@ -223,7 +239,11 @@ private fun TrailingSection(cardItem: CardItem) {
             onCheckedChange = cardItem.onSwitchChange,
             colors = switchColors,
             thumbContent = {
-                val iconRes = if (cardItem.switchState) cardItem.trailingIcon else cardItem.uncheckedTrailingIcon
+                val iconRes = if (cardItem.switchState) {
+                    cardItem.trailingIcon
+                } else {
+                    cardItem.uncheckedTrailingIcon
+                }
                 if (iconRes != null) {
                     SvgIcon(
                         resId = iconRes,
@@ -241,14 +261,14 @@ private fun TrailingSection(cardItem: CardItem) {
     }
 }
 
-const val darkTheme = true
-const val locale = "fr"
+private const val PREVIEW_DARK_THEME = true
+private const val PREVIEW_LOCALE = "fr"
 
-@Preview(name = "ON", showBackground = true, locale = locale)
+@Preview(name = "ON", showBackground = true, locale = PREVIEW_LOCALE)
 @Composable
-fun CardListItemSwitch () {
+fun CardListItemSwitch() {
     var enableNotifications by remember { mutableStateOf(true) }
-    DiabDataTheme(dynamicColor = false, darkTheme = darkTheme) {
+    DiabDataTheme(dynamicColor = false, darkTheme = PREVIEW_DARK_THEME) {
         Box(
             modifier = Modifier
                 .background(MaterialTheme.colorScheme.surfaceContainer)

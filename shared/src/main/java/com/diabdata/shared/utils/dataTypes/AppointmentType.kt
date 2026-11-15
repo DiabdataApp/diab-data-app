@@ -23,6 +23,5 @@ enum class AppointmentType(
         iconFilledRes = R.drawable.stethoscope_filled_icon_vector
     );
 
-    fun displayName(context: Context): String =
-        context.getString(displayNameRes)
+    fun displayName(context: Context): String = context.getString(displayNameRes)
 }

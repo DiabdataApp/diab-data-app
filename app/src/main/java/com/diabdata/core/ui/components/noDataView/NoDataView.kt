@@ -20,8 +20,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.diabdata.core.utils.ui.SvgIcon
 import com.diabdata.core.ui.theme.DiabDataTheme
+import com.diabdata.core.utils.ui.SvgIcon
 import com.diabdata.shared.R as shared
 
 /**
@@ -74,8 +74,7 @@ enum class IconTypes(
         iconRes = shared.drawable.no_devices_icon_vector
     );
 
-    fun displayName(context: Context): String =
-        context.getString(displayNameRes)
+    fun displayName(context: Context): String = context.getString(displayNameRes)
 }
 
 @Preview(showBackground = true)

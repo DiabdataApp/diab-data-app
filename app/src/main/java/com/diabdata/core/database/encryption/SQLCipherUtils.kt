@@ -2,18 +2,19 @@ package com.diabdata.core.database.encryption
 
 import android.content.Context
 import android.util.Log
-import net.zetetic.database.sqlcipher.SQLiteDatabase
 import java.io.File
+import net.zetetic.database.sqlcipher.SQLiteDatabase
 
 class SQLCipherUtils {
 
     enum class State {
-        DOES_NOT_EXIST, UNENCRYPTED, ENCRYPTED
+        DOES_NOT_EXIST,
+        UNENCRYPTED,
+        ENCRYPTED
     }
 
-    fun getDatabaseState(context: Context, dbName: String): State {
-        return getDatabaseState(context.getDatabasePath(dbName))
-    }
+    fun getDatabaseState(context: Context, dbName: String): State =
+        getDatabaseState(context.getDatabasePath(dbName))
 
     private fun getDatabaseState(dbPath: File): State {
         Log.d("SQLCipher", "Checking database state: ${dbPath.absolutePath}")
@@ -23,8 +24,12 @@ class SQLCipherUtils {
         }
         return try {
             SQLiteDatabase.openDatabase(
-                dbPath.absolutePath, "", null,
-                SQLiteDatabase.OPEN_READONLY, null, null
+                dbPath.absolutePath,
+                "",
+                null,
+                SQLiteDatabase.OPEN_READONLY,
+                null,
+                null
             ).use { db ->
                 db.version
                 Log.d("SQLCipher", "Database opened without passphrase → UNENCRYPTED")
@@ -36,4 +41,3 @@ class SQLCipherUtils {
         }
     }
 }
-

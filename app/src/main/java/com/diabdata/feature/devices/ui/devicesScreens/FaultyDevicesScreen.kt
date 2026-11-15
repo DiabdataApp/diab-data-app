@@ -34,32 +34,30 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.diabdata.core.database.DataViewModel
 import com.diabdata.core.model.MedicalDevice
-import com.diabdata.shared.utils.dataTypes.AddableType
-import com.diabdata.shared.utils.dataTypes.MedicalDeviceInfoType
-import com.diabdata.shared.utils.dateUtils.shortenedFormatLocalDate
-import com.diabdata.core.utils.ui.ColoredIconCircle
-import com.diabdata.feature.devices.ui.components.MedicalDeviceCardData
 import com.diabdata.core.ui.components.actionInput.ButtonType
-import com.diabdata.core.ui.components.tables.DataTable
-import com.diabdata.core.ui.components.tables.DataTableDecoration
 import com.diabdata.core.ui.components.actionInput.FaultyToggleButton
-import com.diabdata.core.utils.ui.SvgIcon
 import com.diabdata.core.ui.components.noDataView.IconTypes
 import com.diabdata.core.ui.components.noDataView.NoDataView
+import com.diabdata.core.ui.components.tables.DataTable
+import com.diabdata.core.ui.components.tables.DataTableDecoration
+import com.diabdata.core.utils.ui.ColoredIconCircle
+import com.diabdata.core.utils.ui.SvgIcon
 import com.diabdata.core.utils.ui.darken
 import com.diabdata.core.utils.ui.getItemShape
 import com.diabdata.feature.devices.DevicesViewModel
-import kotlinx.coroutines.launch
+import com.diabdata.feature.devices.ui.components.MedicalDeviceCardData
+import com.diabdata.shared.R as shared
+import com.diabdata.shared.utils.dataTypes.AddableType
+import com.diabdata.shared.utils.dataTypes.MedicalDeviceInfoType
+import com.diabdata.shared.utils.dateUtils.shortenedFormatLocalDate
 import java.time.LocalDate
 import kotlin.time.Instant
-import com.diabdata.shared.R as shared
+import kotlinx.coroutines.launch
 
 @Suppress("unused")
 @RequiresApi(Build.VERSION_CODES.P)
 @Composable
-fun FaultyDevices(
-    dataViewModel: DataViewModel
-) {
+fun FaultyDevices(dataViewModel: DataViewModel) {
     val devicesViewModel: DevicesViewModel = hiltViewModel()
     val faultyDevices by devicesViewModel.faultyDevices.collectAsState(initial = emptyList())
     val faultyCountsByBatches by devicesViewModel.faultyBatchNumbersTableData.collectAsState()
@@ -81,22 +79,21 @@ fun FaultyDevices(
     )
 }
 
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun FaultyDevicesScreen(
     faultyDevices: List<MedicalDevice>,
     faultyCountsByBatchNumbers: List<List<String>>,
     onMarkAsReported: (MedicalDevice) -> Unit,
-    onMarkAsFaulty: (MedicalDevice) -> Unit,
+    onMarkAsFaulty: (MedicalDevice) -> Unit
 ) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(0.dp),
+            .padding(0.dp)
     ) {
         Column(
             modifier = Modifier
-                .fillMaxSize(),
+                .fillMaxSize()
         ) {
             if (faultyDevices.isEmpty() && faultyCountsByBatchNumbers.isEmpty()) {
                 NoDataView(iconType = IconTypes.DEVICES)
@@ -113,7 +110,9 @@ fun FaultyDevicesScreen(
                             verticalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
                             Text(
-                                text = stringResource(shared.string.devices_device_screen_faulty_heading),
+                                text = stringResource(
+                                    shared.string.devices_device_screen_faulty_heading
+                                ),
                                 style = MaterialTheme.typography.headlineLarge,
                                 color = MaterialTheme.colorScheme.surfaceTint
                             )
@@ -130,7 +129,9 @@ fun FaultyDevicesScreen(
                             verticalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
                             Text(
-                                text = stringResource(shared.string.devices_device_screen_reported_heading),
+                                text = stringResource(
+                                    shared.string.devices_device_screen_reported_heading
+                                ),
                                 style = MaterialTheme.typography.headlineLarge,
                                 color = MaterialTheme.colorScheme.surfaceTint
                             )
@@ -218,7 +219,11 @@ fun DisplayCard(
         MedicalDeviceCardData(
             device = device,
             titleText = device.name.ifEmpty { device.deviceType.displayName(LocalContext.current) },
-            textColor = if (device.isLifeSpanOver) MaterialTheme.colorScheme.error else device.deviceType.baseColor,
+            textColor = if (device.isLifeSpanOver) {
+                MaterialTheme.colorScheme.error
+            } else {
+                device.deviceType.baseColor
+            },
             addableType = AddableType.DEVICE,
             isLifeSpanOver = device.isLifeSpanOver,
             iconRes = device.deviceType.iconRes,
@@ -273,7 +278,13 @@ fun DisplayCard(
                 ) {
                     ColoredIconCircle(
                         iconRes = card.iconRes,
-                        baseColor = if (card.textColor != primaryColor) card.textColor else card.addableType.baseColor,
+                        baseColor = if (card.textColor !=
+                            primaryColor
+                        ) {
+                            card.textColor
+                        } else {
+                            card.addableType.baseColor
+                        },
                         size = 40.dp,
                         iconSize = 25.dp
                     )
@@ -293,12 +304,12 @@ fun DisplayCard(
                             modifier = Modifier
                                 .fillMaxWidth(),
                             horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically,
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
                             FlowRow(
                                 modifier = Modifier.weight(1f),
                                 horizontalArrangement = Arrangement.spacedBy(8.dp),
-                                verticalArrangement = Arrangement.spacedBy(4.dp),
+                                verticalArrangement = Arrangement.spacedBy(4.dp)
                             ) {
                                 val space = 4.dp
 
@@ -355,14 +366,14 @@ fun DisplayCard(
                                 }
                             }
                             Row(
-                                horizontalArrangement = Arrangement.spacedBy(6.dp),
+                                horizontalArrangement = Arrangement.spacedBy(6.dp)
                             ) {
                                 FaultyToggleButton(
                                     isFaulty = card.device.isFaulty,
                                     isReported = card.device.isReported,
                                     onClick = { onMarkFaulty(card.device) },
                                     animatedContainerColor = animatedContainerColor,
-                                    animatedIconColor = animatedIconColor,
+                                    animatedIconColor = animatedIconColor
                                 )
 
                                 FaultyToggleButton(
@@ -371,7 +382,7 @@ fun DisplayCard(
                                     type = ButtonType.REPORT,
                                     onClick = { onMarkAsReported(card.device) },
                                     animatedContainerColor = animatedContainerColor,
-                                    animatedIconColor = animatedIconColor,
+                                    animatedIconColor = animatedIconColor
                                 )
                             }
                         }

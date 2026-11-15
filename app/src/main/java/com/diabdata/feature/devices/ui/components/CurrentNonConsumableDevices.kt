@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -39,18 +38,20 @@ import com.diabdata.core.utils.ui.SvgIcon
 import com.diabdata.core.utils.ui.darken
 import com.diabdata.core.utils.ui.getItemShape
 import com.diabdata.feature.devices.DevicesViewModel
+import com.diabdata.shared.R as shared
 import com.diabdata.shared.utils.dataTypes.AddableType
 import com.diabdata.shared.utils.dataTypes.MedicalDeviceInfoType
 import com.diabdata.shared.utils.dateUtils.shortenedFormatLocalDate
-import kotlinx.coroutines.launch
 import java.time.LocalDate
 import kotlin.time.Instant
-import com.diabdata.shared.R as shared
+import kotlinx.coroutines.launch
 
 @Composable
 fun CurrentNonConsumableDevicesList() {
     val devicesViewModel: DevicesViewModel = hiltViewModel()
-    val currentDevices by devicesViewModel.nonConsumableDevices.collectAsState(initial = emptyList())
+    val currentDevices by devicesViewModel.nonConsumableDevices.collectAsState(
+        initial = emptyList()
+    )
     val showSection = currentDevices.isNotEmpty()
     val coroutineScope = rememberCoroutineScope()
 
@@ -65,26 +66,31 @@ fun CurrentNonConsumableDevicesList() {
                         )
                     )
                 }
-            },
+            }
         )
     }
 }
 
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun CurrentNonConsumableDevicesCards(
     devices: List<MedicalDevice>,
-    onMarkFaulty: (MedicalDevice) -> Unit = {},
+    onMarkFaulty: (MedicalDevice) -> Unit = {}
 ) {
     val primaryColor = MaterialTheme.colorScheme.primary
 
-    if (devices.isEmpty()) return
+    if (devices.isEmpty()) {
+        return
+    }
 
     val cards = devices.map { device ->
         MedicalDeviceCardData(
             device = device,
             titleText = device.name.ifEmpty { device.deviceType.displayName(LocalContext.current) },
-            textColor = if (device.isLifeSpanOver) MaterialTheme.colorScheme.error else device.deviceType.baseColor,
+            textColor = if (device.isLifeSpanOver) {
+                MaterialTheme.colorScheme.error
+            } else {
+                device.deviceType.baseColor
+            },
             addableType = AddableType.DEVICE,
             isLifeSpanOver = device.isLifeSpanOver,
             iconRes = device.deviceType.iconRes,
@@ -97,7 +103,9 @@ fun CurrentNonConsumableDevicesCards(
 
     Column(modifier = Modifier.fillMaxSize()) {
         Text(
-            text = stringResource(shared.string.devices_home_section_current_non_consumable_devices_title),
+            text = stringResource(
+                shared.string.devices_home_section_current_non_consumable_devices_title
+            ),
             style = MaterialTheme.typography.headlineLarge,
             color = MaterialTheme.colorScheme.surfaceTint
         )
@@ -141,7 +149,13 @@ fun CurrentNonConsumableDevicesCards(
                 ) {
                     ColoredIconCircle(
                         iconRes = card.iconRes,
-                        baseColor = if (card.textColor != primaryColor) card.textColor else card.addableType.baseColor,
+                        baseColor = if (card.textColor !=
+                            primaryColor
+                        ) {
+                            card.textColor
+                        } else {
+                            card.addableType.baseColor
+                        },
                         size = 40.dp,
                         iconSize = 25.dp
                     )
@@ -161,12 +175,12 @@ fun CurrentNonConsumableDevicesCards(
                             modifier = Modifier
                                 .fillMaxWidth(),
                             horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically,
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
                             FlowRow(
                                 modifier = Modifier.weight(1f),
                                 horizontalArrangement = Arrangement.spacedBy(8.dp),
-                                verticalArrangement = Arrangement.spacedBy(4.dp),
+                                verticalArrangement = Arrangement.spacedBy(4.dp)
                             ) {
                                 val space = 4.dp
 
@@ -228,7 +242,7 @@ fun CurrentNonConsumableDevicesCards(
                                 isReported = card.device.isReported,
                                 onClick = { onMarkFaulty(card.device) },
                                 animatedContainerColor = animatedContainerColor,
-                                animatedIconColor = animatedIconColor,
+                                animatedIconColor = animatedIconColor
                             )
                         }
                         Row(
@@ -245,13 +259,17 @@ fun CurrentNonConsumableDevicesCards(
                     }
                 }
             }
-            if (index != cards.size - 1) Spacer(Modifier.height(3.dp))
+            if (index != cards.size - 1) {
+                Spacer(Modifier.height(3.dp))
+            }
         }
     }
 }
 
 @Preview(
-    showBackground = true, locale = "en", showSystemUi = false,
+    showBackground = true,
+    locale = "en",
+    showSystemUi = false,
     wallpaper = Wallpapers.NONE,
     uiMode = Configuration.UI_MODE_TYPE_NORMAL
 )

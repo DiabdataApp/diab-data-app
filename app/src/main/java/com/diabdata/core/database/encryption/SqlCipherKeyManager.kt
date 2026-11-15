@@ -5,8 +5,6 @@ import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
 import android.util.Base64
 import androidx.core.content.edit
-import net.zetetic.database.sqlcipher.SQLiteDatabase
-import net.zetetic.database.sqlcipher.SupportOpenHelperFactory
 import java.io.File
 import java.security.KeyStore
 import java.security.SecureRandom
@@ -14,12 +12,12 @@ import javax.crypto.Cipher
 import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
 import javax.crypto.spec.GCMParameterSpec
+import net.zetetic.database.sqlcipher.SQLiteDatabase
+import net.zetetic.database.sqlcipher.SupportOpenHelperFactory
 
 private const val DB_NAME = "diabdata_database"
 
-class SqlCipherKeyManager(
-    private val context: Context,
-) {
+class SqlCipherKeyManager(private val context: Context) {
     val sqlCipherPrefs = context.getSharedPreferences("sqlcipher_prefs", Context.MODE_PRIVATE)
     private val keyStore: KeyStore = KeyStore.getInstance("AndroidKeyStore").apply { load(null) }
 
@@ -45,7 +43,6 @@ class SqlCipherKeyManager(
                 .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE).build()
             keyGenerator.init(keyGenSpec)
             keyGenerator.generateKey()
-
         } else {
         }
     }
@@ -107,9 +104,12 @@ class SqlCipherKeyManager(
         val decryptedKeyBytes = getDecryptedSqlCipherKey("sqlcipher_keystore_key", encryptedKey, iv)
         val hexPassphrase = decryptedKeyBytes.joinToString("") { "%02x".format(it) }
 
-
         SQLiteDatabase.openOrCreateDatabase(
-            dbTemp.absolutePath, hexPassphrase, null, null, null
+            dbTemp.absolutePath,
+            hexPassphrase,
+            null,
+            null,
+            null
         ).use { db ->
             db.execSQL("ATTACH DATABASE '${dbPath.absolutePath}' AS plaintext KEY ''")
             db.rawQuery("SELECT sqlcipher_export('main', 'plaintext')", null)?.use { cursor ->
@@ -117,7 +117,6 @@ class SqlCipherKeyManager(
             }
             db.execSQL("DETACH DATABASE plaintext")
         }
-
 
         dbPath.delete()
         File(dbPath.absolutePath + "-shm").delete()

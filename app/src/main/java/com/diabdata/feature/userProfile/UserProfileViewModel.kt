@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.diabdata.core.database.DataRepository
 import com.diabdata.core.model.UserDetails
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -15,8 +16,6 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.io.File
-import javax.inject.Inject
 
 @HiltViewModel
 class UserProfileViewModel @Inject constructor(
@@ -53,7 +52,6 @@ class UserProfileViewModel @Inject constructor(
         repository.addProfilePhotoPath(path)
     }
 
-    suspend fun getProfilePhotoPath(): String? {
-        return repository.getUserDetails().first()?.profilePhotoPath
-    }
+    suspend fun getProfilePhotoPath(): String? =
+        repository.getUserDetails().first()?.profilePhotoPath
 }

@@ -10,6 +10,8 @@ import com.diabdata.core.model.nowMillis
 import com.diabdata.core.model.nowMillisInLong
 import com.diabdata.feature.treatments.data.TreatmentDao
 import com.diabdata.shared.utils.dataTypes.TreatmentType
+import java.io.IOException
+import java.time.LocalDate
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.After
@@ -17,8 +19,6 @@ import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import java.io.IOException
-import java.time.LocalDate
 
 /**
  * Tests for [TreatmentDao] found at [com.diabdata.feature.treatments.data.TreatmentDao].

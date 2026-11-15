@@ -43,9 +43,15 @@ fun Context.createNotification(
     val safeChannelDescription = channelDescription ?: ""
 
     val (notifImportance, notifPriority) = when (importance) {
-        NotificationImportance.HIGH -> NotificationManager.IMPORTANCE_HIGH to NotificationCompat.PRIORITY_HIGH
-        NotificationImportance.LOW -> NotificationManager.IMPORTANCE_LOW to NotificationCompat.PRIORITY_LOW
-        NotificationImportance.MIN -> NotificationManager.IMPORTANCE_MIN to NotificationCompat.PRIORITY_MIN
+        NotificationImportance.HIGH ->
+            NotificationManager.IMPORTANCE_HIGH to
+                NotificationCompat.PRIORITY_HIGH
+        NotificationImportance.LOW ->
+            NotificationManager.IMPORTANCE_LOW to
+                NotificationCompat.PRIORITY_LOW
+        NotificationImportance.MIN ->
+            NotificationManager.IMPORTANCE_MIN to
+                NotificationCompat.PRIORITY_MIN
         else -> NotificationManager.IMPORTANCE_DEFAULT to NotificationCompat.PRIORITY_DEFAULT
     }
 
@@ -68,5 +74,8 @@ fun Context.createNotification(
 }
 
 enum class NotificationImportance {
-    MIN, LOW, DEFAULT, HIGH
+    MIN,
+    LOW,
+    DEFAULT,
+    HIGH
 }

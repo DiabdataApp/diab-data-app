@@ -18,14 +18,14 @@ import com.diabdata.core.database.converters.toEntity
 import com.diabdata.core.model.Treatment
 import com.diabdata.core.model.newEntryUuid
 import com.diabdata.core.model.nowMillis
-import com.diabdata.shared.utils.dataTypes.AddableType
-import com.diabdata.shared.utils.dataTypes.TreatmentType
 import com.diabdata.core.ui.components.actionInput.EnumDropdown
 import com.diabdata.core.ui.components.addDataPopup.BasePopupLayout
-import com.diabdata.core.ui.components.date_components.DateSelector
-import kotlinx.coroutines.launch
-import java.time.LocalDate
+import com.diabdata.core.ui.components.dateComponents.DateSelector
 import com.diabdata.shared.R as shared
+import com.diabdata.shared.utils.dataTypes.AddableType
+import com.diabdata.shared.utils.dataTypes.TreatmentType
+import java.time.LocalDate
+import kotlinx.coroutines.launch
 
 @Composable
 fun TreatmentPopup(
@@ -52,7 +52,13 @@ fun TreatmentPopup(
 
     BasePopupLayout(
         title = stringResource(
-            if (toUpdate == null) shared.string.popup_title_add else shared.string.popup_title_update,
+            if (toUpdate ==
+                null
+            ) {
+                shared.string.popup_title_add
+            } else {
+                shared.string.popup_title_update
+            },
             AddableType.TREATMENT.getDisplayName(context)
         ),
         icon = AddableType.TREATMENT.iconRes,

@@ -13,18 +13,15 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class ScannerViewModel @Inject constructor(
-    val repository: DataRepository
-): ViewModel() {
+class ScannerViewModel @Inject constructor(val repository: DataRepository) : ViewModel() {
     // Section for scanned medication
     var prefilledTreatment: Treatment? by mutableStateOf(null)
     fun updatePrefilledTreatment(t: Treatment?) {
         prefilledTreatment = t
     }
 
-    suspend fun getMedicationByGtin(gtin: String): Medication? {
-        return repository.findMedicationByCode(gtin)
-    }
+    suspend fun getMedicationByGtin(gtin: String): Medication? =
+        repository.findMedicationByCode(gtin)
 
     // Section for scanned medical devices
     var prefilledMedicalDevice: MedicalDevice? by mutableStateOf(null)
@@ -33,7 +30,6 @@ class ScannerViewModel @Inject constructor(
         prefilledMedicalDevice = m
     }
 
-    suspend fun getMedicalDeviceByCode(code: String): MedicalDeviceInfoEntity? {
-        return repository.findMedicalDeviceByCode(code)
-    }
+    suspend fun getMedicalDeviceByCode(code: String): MedicalDeviceInfoEntity? =
+        repository.findMedicalDeviceByCode(code)
 }

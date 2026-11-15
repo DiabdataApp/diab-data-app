@@ -28,13 +28,13 @@ import com.diabdata.feature.treatments.data.TreatmentDao
 import com.diabdata.feature.userProfile.data.UserDetailsDao
 import com.diabdata.feature.weight.data.WeightDao
 import com.diabdata.shared.utils.dataTypes.MedicalDeviceInfoType
+import java.io.File
+import java.time.LocalDate
+import java.time.LocalDateTime
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
-import java.io.File
-import java.time.LocalDate
-import java.time.LocalDateTime
 
 class DataRepository(
     private val weightDao: WeightDao,
@@ -47,7 +47,7 @@ class DataRepository(
     private val medicalDeviceInfo: MedicalDevicesInfoDao,
     private val userDetailsDao: UserDetailsDao,
     private val userPreferencesDao: UserPreferencesDao,
-    val database: DiabDataDatabase,
+    val database: DiabDataDatabase
 ) {
     // ----------------
     // Weight
@@ -112,9 +112,8 @@ class DataRepository(
     fun getAllAppointments(): Flow<List<Appointment>> = appointmentDao.getAllAppointmentsFlow()
 
     /** Flow of upcoming appointments starting today */
-    fun getUpcomingAppointments(): Flow<List<Appointment>> {
-        return appointmentDao.getUpcomingAppointmentsFlow(LocalDateTime.now())
-    }
+    fun getUpcomingAppointments(): Flow<List<Appointment>> =
+        appointmentDao.getUpcomingAppointmentsFlow(LocalDateTime.now())
 
     /** Delete an Appointment record by Id**/
     suspend fun deleteAppointment(id: Int) = appointmentDao.deleteById(id)
@@ -142,8 +141,7 @@ class DataRepository(
     // Medication
     // ----------------
     /** Find a medication by its code (GTIN or CIP) */
-    suspend fun findMedicationByCode(code: String): Medication? =
-        medicationDao.findByCode(code)
+    suspend fun findMedicationByCode(code: String): Medication? = medicationDao.findByCode(code)
 
     // ----------------
     // Important Dates
@@ -157,8 +155,7 @@ class DataRepository(
         importantDateDao.update(importantDate)
 
     /** Flow of all diagnosis dates */
-    fun getAllImportantDates(): Flow<List<ImportantDate>> =
-        importantDateDao.getAllImportantDates()
+    fun getAllImportantDates(): Flow<List<ImportantDate>> = importantDateDao.getAllImportantDates()
 
     /** Delete a diagnosis date record by Id**/
     suspend fun deleteImportantDate(id: Int) = importantDateDao.deleteById(id)
@@ -238,8 +235,7 @@ class DataRepository(
     suspend fun insertOrUpdate(preferences: UserPreferences) =
         userPreferencesDao.insertOrUpdate(preferences)
 
-    fun getUserPreferences(): Flow<UserPreferences?> =
-        userPreferencesDao.getUserPreferences()
+    fun getUserPreferences(): Flow<UserPreferences?> = userPreferencesDao.getUserPreferences()
 
     suspend fun setAutoBackupEnabled(enabled: Boolean) =
         userPreferencesDao.setAutoBackupEnabled(enabled)
@@ -250,14 +246,11 @@ class DataRepository(
     suspend fun enableAppointmentReminder(enabled: Boolean) =
         userPreferencesDao.enableAppointmentReminder(enabled)
 
-    suspend fun setBackupFrequency(frequency: String) =
-        userPreferencesDao.setFrequency(frequency)
+    suspend fun setBackupFrequency(frequency: String) = userPreferencesDao.setFrequency(frequency)
 
-    suspend fun setBackupPath(path: String) =
-        userPreferencesDao.setBackupPath(path)
+    suspend fun setBackupPath(path: String) = userPreferencesDao.setBackupPath(path)
 
-    suspend fun setLastBackupUpdate(date: String) =
-        userPreferencesDao.setLastBackupDate(date)
+    suspend fun setLastBackupUpdate(date: String) = userPreferencesDao.setLastBackupDate(date)
 
     suspend fun isExpirationReminderEnabled(): Boolean =
         userPreferencesDao.isExpirationReminderEnabled()
@@ -268,15 +261,14 @@ class DataRepository(
     suspend fun restorePreferences(preferences: UserPreferences) =
         userPreferencesDao.insertOrUpdate(preferences)
 
-    suspend fun resetBackupPreferences() =
-        userPreferencesDao.resetBackupPreferences()
+    suspend fun resetBackupPreferences() = userPreferencesDao.resetBackupPreferences()
 
     /** Delete a devices record by Id**/
     suspend fun deleteDevice(id: Int) = medicalDevicesDao.deleteById(id)
 
-    //-----------------
+    // -----------------
     // ImEx utils
-    //-----------------
+    // -----------------
     /** Export all data as a JSON string */
     suspend fun exportDataAsJsonString(): String {
         val gson = GsonFactory.create(prettyPrint = true)
@@ -289,7 +281,6 @@ class DataRepository(
         val medicalDevices = getAllDevices().first()
         val userDetails = getUserDetails().first()
         val userPreferences = getUserPreferences().first()
-
 
         val exportData = ExportData(
             weights = weights,
@@ -324,20 +315,30 @@ class DataRepository(
      */
     suspend fun importWeights(weights: List<Weight>) = withContext(Dispatchers.IO) {
         weights.forEach { backupEntry ->
-            val backupUuid: String? = backupEntry.entryUuid   // Gson may leave it null for old backups
+            // Gson may leave it null for old backups
+            val backupUuid: String? = backupEntry.entryUuid
             val hasUuid = !backupUuid.isNullOrBlank()
 
             val localEntry = when {
                 hasUuid -> weightDao.getByUuid(backupEntry.entryUuid)
-                else -> weightDao.getByContent(backupEntry.createdAt, backupEntry.date, backupEntry.value)
+                else -> weightDao.getByContent(
+                    backupEntry.createdAt,
+                    backupEntry.date,
+                    backupEntry.value
+                )
             }
 
             val uuidForInsert = if (hasUuid) backupUuid else newEntryUuid()
 
             when {
-                localEntry == null -> insertWeight(backupEntry.copy(id = 0, entryUuid = uuidForInsert))
-                backupEntry.updatedAt > localEntry.updatedAt -> updateWeight(backupEntry.copy(id = localEntry.id, entryUuid = localEntry.entryUuid))
-                else -> Unit // local entry is same or newer: keep it
+                localEntry == null -> insertWeight(
+                    backupEntry.copy(id = 0, entryUuid = uuidForInsert)
+                )
+                backupEntry.updatedAt > localEntry.updatedAt -> updateWeight(
+                    backupEntry.copy(id = localEntry.id, entryUuid = localEntry.entryUuid)
+                )
+                // local entry is same or newer: keep it
+                else -> Unit
             }
         }
     }
@@ -351,20 +352,30 @@ class DataRepository(
      */
     suspend fun importHba1c(hba1c: List<Hba1c>) = withContext(Dispatchers.IO) {
         hba1c.forEach { backupEntry ->
-            val backupUuid: String? = backupEntry.entryUuid   // Gson may leave it null for old backups
+            // Gson may leave it null for old backups
+            val backupUuid: String? = backupEntry.entryUuid
             val hasUuid = !backupUuid.isNullOrBlank()
 
             val localEntry = when {
                 hasUuid -> hba1cDao.getByUuid(backupEntry.entryUuid)
-                else -> hba1cDao.getByContent(backupEntry.createdAt, backupEntry.date, backupEntry.value)
+                else -> hba1cDao.getByContent(
+                    backupEntry.createdAt,
+                    backupEntry.date,
+                    backupEntry.value
+                )
             }
 
             val uuidForInsert = if (hasUuid) backupUuid else newEntryUuid()
 
             when {
-                localEntry == null -> insertHba1c(backupEntry.copy(id = 0, entryUuid = uuidForInsert))
-                backupEntry.updatedAt > localEntry.updatedAt -> updateHBA1C(backupEntry.copy(id = localEntry.id, entryUuid = localEntry.entryUuid))
-                else -> Unit // local entry is same or newer: keep it
+                localEntry == null -> insertHba1c(
+                    backupEntry.copy(id = 0, entryUuid = uuidForInsert)
+                )
+                backupEntry.updatedAt > localEntry.updatedAt -> updateHBA1C(
+                    backupEntry.copy(id = localEntry.id, entryUuid = localEntry.entryUuid)
+                )
+                // local entry is same or newer: keep it
+                else -> Unit
             }
         }
     }
@@ -378,20 +389,31 @@ class DataRepository(
      */
     suspend fun importAppointments(appointments: List<Appointment>) = withContext(Dispatchers.IO) {
         appointments.forEach { backupEntry ->
-            val backupUuid: String? = backupEntry.entryUuid   // Gson may leave it null for old backups
+            // Gson may leave it null for old backups
+            val backupUuid: String? = backupEntry.entryUuid
+
             val hasUuid = !backupUuid.isNullOrBlank()
 
             val localEntry = when {
                 hasUuid -> appointmentDao.getByUuid(backupEntry.entryUuid)
-                else -> appointmentDao.getByContent(backupEntry.createdAt, backupEntry.date, backupEntry.type)
+                else -> appointmentDao.getByContent(
+                    backupEntry.createdAt,
+                    backupEntry.date,
+                    backupEntry.type
+                )
             }
 
             val uuidForInsert = if (hasUuid) backupUuid else newEntryUuid()
 
             when {
-                localEntry == null -> insertAppointment(backupEntry.copy(id = 0, entryUuid = uuidForInsert))
-                backupEntry.updatedAt > localEntry.updatedAt -> updateAppointment(backupEntry.copy(id = localEntry.id, entryUuid = localEntry.entryUuid))
-                else -> Unit // local entry is same or newer: keep it
+                localEntry == null -> insertAppointment(
+                    backupEntry.copy(id = 0, entryUuid = uuidForInsert)
+                )
+                backupEntry.updatedAt > localEntry.updatedAt -> updateAppointment(
+                    backupEntry.copy(id = localEntry.id, entryUuid = localEntry.entryUuid)
+                )
+                // local entry is same or newer: keep it
+                else -> Unit
             }
         }
     }
@@ -405,20 +427,31 @@ class DataRepository(
      */
     suspend fun importTreatments(treatments: List<Treatment>) = withContext(Dispatchers.IO) {
         treatments.forEach { backupEntry ->
-            val backupUuid: String? = backupEntry.entryUuid   // Gson may leave it null for old backups
+            // Gson may leave it null for old backups
+            val backupUuid: String? = backupEntry.entryUuid
             val hasUuid = !backupUuid.isNullOrBlank()
 
             val localEntry = when {
                 hasUuid -> treatmentDao.getByUuid(backupEntry.entryUuid)
-                else -> treatmentDao.getByContent(backupEntry.createdAt, backupEntry.name, backupEntry.expirationDate, backupEntry.type)
+                else -> treatmentDao.getByContent(
+                    backupEntry.createdAt,
+                    backupEntry.name,
+                    backupEntry.expirationDate,
+                    backupEntry.type
+                )
             }
 
             val uuidForInsert = if (hasUuid) backupUuid else newEntryUuid()
 
             when {
-                localEntry == null -> insertTreatment(backupEntry.copy(id = 0, entryUuid = uuidForInsert))
-                backupEntry.updatedAt > localEntry.updatedAt -> updateTreatment(backupEntry.copy(id = localEntry.id, entryUuid = localEntry.entryUuid))
-                else -> Unit // local entry is same or newer: keep it
+                localEntry == null -> insertTreatment(
+                    backupEntry.copy(id = 0, entryUuid = uuidForInsert)
+                )
+                backupEntry.updatedAt > localEntry.updatedAt -> updateTreatment(
+                    backupEntry.copy(id = localEntry.id, entryUuid = localEntry.entryUuid)
+                )
+                // local entry is same or newer: keep it
+                else -> Unit
             }
         }
     }
@@ -433,20 +466,30 @@ class DataRepository(
     suspend fun importImportantDates(importantDates: List<ImportantDate>) =
         withContext(Dispatchers.IO) {
             importantDates.forEach { backupEntry ->
-                val backupUuid: String? = backupEntry.entryUuid   // Gson may leave it null for old backups
+                // Gson may leave it null for old backups
+                val backupUuid: String? = backupEntry.entryUuid
                 val hasUuid = !backupUuid.isNullOrBlank()
 
                 val localEntry = when {
                     hasUuid -> importantDateDao.getByUuid(backupEntry.entryUuid)
-                    else -> importantDateDao.getByContent(backupEntry.createdAt, backupEntry.date, backupEntry.importantDate)
+                    else -> importantDateDao.getByContent(
+                        backupEntry.createdAt,
+                        backupEntry.date,
+                        backupEntry.importantDate
+                    )
                 }
 
                 val uuidForInsert = if (hasUuid) backupUuid else newEntryUuid()
 
                 when {
-                    localEntry == null -> insertImportantDate(backupEntry.copy(id = 0, entryUuid = uuidForInsert))
-                    backupEntry.updatedAt > localEntry.updatedAt -> updateImportantDate(backupEntry.copy(id = localEntry.id, entryUuid = localEntry.entryUuid))
-                    else -> Unit // local entry is same or newer: keep it
+                    localEntry == null -> insertImportantDate(
+                        backupEntry.copy(id = 0, entryUuid = uuidForInsert)
+                    )
+                    backupEntry.updatedAt > localEntry.updatedAt -> updateImportantDate(
+                        backupEntry.copy(id = localEntry.id, entryUuid = localEntry.entryUuid)
+                    )
+                    // local entry is same or newer: keep it
+                    else -> Unit
                 }
             }
         }
@@ -461,20 +504,31 @@ class DataRepository(
     suspend fun importMedicalDevices(medicalDevices: List<MedicalDevice>) =
         withContext(Dispatchers.IO) {
             medicalDevices.forEach { backupEntry ->
-                val backupUuid: String? = backupEntry.entryUuid   // Gson may leave it null for old backups
+                // Gson may leave it null for old backups
+                val backupUuid: String? = backupEntry.entryUuid
                 val hasUuid = !backupUuid.isNullOrBlank()
 
                 val localEntry = when {
                     hasUuid -> medicalDevicesDao.getByUuid(backupEntry.entryUuid)
-                    else -> medicalDevicesDao.getByContent(backupEntry.createdAt, backupEntry.date, backupEntry.deviceType, backupEntry.batchNumber)
+                    else -> medicalDevicesDao.getByContent(
+                        backupEntry.createdAt,
+                        backupEntry.date,
+                        backupEntry.deviceType,
+                        backupEntry.batchNumber
+                    )
                 }
 
                 val uuidForInsert = if (hasUuid) backupUuid else newEntryUuid()
 
                 when {
-                    localEntry == null -> insertDevice(backupEntry.copy(id = 0, entryUuid = uuidForInsert))
-                    backupEntry.updatedAt > localEntry.updatedAt -> updateDevice(backupEntry.copy(id = localEntry.id, entryUuid = localEntry.entryUuid))
-                    else -> Unit // local entry is same or newer: keep it
+                    localEntry == null -> insertDevice(
+                        backupEntry.copy(id = 0, entryUuid = uuidForInsert)
+                    )
+                    backupEntry.updatedAt > localEntry.updatedAt -> updateDevice(
+                        backupEntry.copy(id = localEntry.id, entryUuid = localEntry.entryUuid)
+                    )
+                    // local entry is same or newer: keep it
+                    else -> Unit
                 }
             }
         }

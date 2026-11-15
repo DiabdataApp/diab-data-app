@@ -1,4 +1,4 @@
-package com.diabdata.core.ui.components.date_components
+package com.diabdata.core.ui.components.dateComponents
 
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.DateRangePicker
@@ -8,10 +8,10 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDateRangePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
+import com.diabdata.shared.R as shared
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
-import com.diabdata.shared.R as shared
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -19,7 +19,7 @@ fun DateRangeModal(
     initialStartDate: LocalDate? = null,
     initialEndDate: LocalDate? = null,
     onDismiss: () -> Unit,
-    onDateRangeSelected: (LocalDate, LocalDate) -> Unit,
+    onDateRangeSelected: (LocalDate, LocalDate) -> Unit
 ) {
     val state = rememberDateRangePickerState(
         initialSelectedStartDateMillis = initialStartDate?.atStartOfDay(ZoneId.systemDefault())

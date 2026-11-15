@@ -42,21 +42,21 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.diabdata.core.model.UserDetails
 import com.diabdata.core.model.nowMillis
 import com.diabdata.core.ui.components.actionInput.EnumDropdown
-import com.diabdata.core.ui.components.date_components.DateSelector
+import com.diabdata.core.ui.components.dateComponents.DateSelector
 import com.diabdata.feature.userProfile.UserProfileViewModel
+import com.diabdata.shared.R as shared
 import com.diabdata.shared.utils.dataTypes.BloodType
 import com.diabdata.shared.utils.dataTypes.DiabetesType
 import com.diabdata.shared.utils.dataTypes.Gender
 import com.diabdata.shared.utils.dataTypes.GlucoseUnit
 import java.time.LocalDate
-import com.diabdata.shared.R as shared
 
 @Composable
-fun UserDetailsScreen(
-    onNavigateBack: () -> Unit
-) {
+fun UserDetailsScreen(onNavigateBack: () -> Unit) {
     val userProfileViewModel: UserProfileViewModel = hiltViewModel()
-    val userDetails by userProfileViewModel.userDetails.collectAsStateWithLifecycle(initialValue = null)
+    val userDetails by userProfileViewModel.userDetails.collectAsStateWithLifecycle(
+        initialValue = null
+    )
 
     UserDetailsView(
         userDetails = userDetails ?: UserDetails(),
@@ -93,20 +93,38 @@ fun UserDetailsView(
     var bloodType by remember(userDetails) { mutableStateOf(userDetails.bloodType) }
     var diabetesType by remember(userDetails) { mutableStateOf(userDetails.diabetesType) }
     var diagnosisDate by remember(userDetails) { mutableStateOf(userDetails.diagnosisDate) }
-    var endocrinologist by remember(userDetails) { mutableStateOf(userDetails.endocrinologist.orEmpty()) }
-    var generalPractitioner by remember(userDetails) { mutableStateOf(userDetails.generalPractitioner.orEmpty()) }
-    var ophthalmologist by remember(userDetails) { mutableStateOf(userDetails.ophthalmologist.orEmpty()) }
+    var endocrinologist by remember(userDetails) {
+        mutableStateOf(userDetails.endocrinologist.orEmpty())
+    }
+    var generalPractitioner by remember(userDetails) {
+        mutableStateOf(userDetails.generalPractitioner.orEmpty())
+    }
+    var ophthalmologist by remember(userDetails) {
+        mutableStateOf(userDetails.ophthalmologist.orEmpty())
+    }
     var cardiologist by remember(userDetails) { mutableStateOf(userDetails.cardiologist.orEmpty()) }
     var nephrologist by remember(userDetails) { mutableStateOf(userDetails.nephrologist.orEmpty()) }
-    var insulinPumpModel by remember(userDetails) { mutableStateOf(userDetails.insulinPumpModel.orEmpty()) }
+    var insulinPumpModel by remember(userDetails) {
+        mutableStateOf(userDetails.insulinPumpModel.orEmpty())
+    }
     var cgmModel by remember(userDetails) { mutableStateOf(userDetails.cgmModel.orEmpty()) }
     var insulinType by remember(userDetails) { mutableStateOf(userDetails.insulinType.orEmpty()) }
-    var basalInsulinType by remember(userDetails) { mutableStateOf(userDetails.basalInsulinType.orEmpty()) }
-    var targetGlucoseMin by remember(userDetails) { mutableStateOf(userDetails.targetGlucoseMin?.toString().orEmpty()) }
-    var targetGlucoseMax by remember(userDetails) { mutableStateOf(userDetails.targetGlucoseMax?.toString().orEmpty()) }
+    var basalInsulinType by remember(userDetails) {
+        mutableStateOf(userDetails.basalInsulinType.orEmpty())
+    }
+    var targetGlucoseMin by remember(userDetails) {
+        mutableStateOf(userDetails.targetGlucoseMin?.toString().orEmpty())
+    }
+    var targetGlucoseMax by remember(userDetails) {
+        mutableStateOf(userDetails.targetGlucoseMax?.toString().orEmpty())
+    }
     var glucoseUnit by remember(userDetails) { mutableStateOf(userDetails.glucoseUnit) }
-    var emergencyContactName by remember(userDetails) { mutableStateOf(userDetails.emergencyContactName.orEmpty()) }
-    var emergencyContactPhone by remember(userDetails) { mutableStateOf(userDetails.emergencyContactPhone.orEmpty()) }
+    var emergencyContactName by remember(userDetails) {
+        mutableStateOf(userDetails.emergencyContactName.orEmpty())
+    }
+    var emergencyContactPhone by remember(userDetails) {
+        mutableStateOf(userDetails.emergencyContactPhone.orEmpty())
+    }
 
     val photoPickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia()
@@ -147,11 +165,13 @@ fun UserDetailsView(
                     }
                 },
                 actions = {
-                    TextButton(onClick = { onSave(
-                        buildUpdatedUserDetails().copy(
-                            updatedAt = nowMillis()
+                    TextButton(onClick = {
+                        onSave(
+                            buildUpdatedUserDetails().copy(
+                                updatedAt = nowMillis()
+                            )
                         )
-                    ) }) {
+                    }) {
                         Text(stringResource(shared.string.common_save))
                     }
                 }
@@ -182,7 +202,9 @@ fun UserDetailsView(
                         size = 96.dp,
                         onClick = {
                             photoPickerLauncher.launch(
-                                PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                                PickVisualMediaRequest(
+                                    ActivityResultContracts.PickVisualMedia.ImageOnly
+                                )
                             )
                         }
                     )
@@ -247,14 +269,16 @@ fun UserDetailsView(
                     options = BloodType.entries,
                     selected = bloodType,
                     displayName = { it.displayName(context) },
-                    onSelectedChange = { bloodType = it },
+                    onSelectedChange = { bloodType = it }
                 )
             }
 
             // ═══════════════════════════
             //  ABOUT DIABETES
             // ═══════════════════════════
-            item { SectionHeader(stringResource(shared.string.profile_user_diabetes_details_section)) }
+            item {
+                SectionHeader(stringResource(shared.string.profile_user_diabetes_details_section))
+            }
 
             item {
                 EnumDropdown(
@@ -262,7 +286,7 @@ fun UserDetailsView(
                     options = DiabetesType.entries,
                     selected = diabetesType,
                     displayName = { it.displayName(context) },
-                    onSelectedChange = { diabetesType = it },
+                    onSelectedChange = { diabetesType = it }
                 )
             }
 
@@ -283,7 +307,9 @@ fun UserDetailsView(
                 OutlinedTextField(
                     value = endocrinologist,
                     onValueChange = { endocrinologist = it },
-                    label = { Text(stringResource(shared.string.profile_user_endocrinologist_name_label)) },
+                    label = {
+                        Text(stringResource(shared.string.profile_user_endocrinologist_name_label))
+                    },
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true,
                     shape = MaterialTheme.shapes.small
@@ -294,7 +320,13 @@ fun UserDetailsView(
                 OutlinedTextField(
                     value = generalPractitioner,
                     onValueChange = { generalPractitioner = it },
-                    label = { Text(stringResource(shared.string.profile_user_general_practitioner_name_label)) },
+                    label = {
+                        Text(
+                            stringResource(
+                                shared.string.profile_user_general_practitioner_name_label
+                            )
+                        )
+                    },
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true,
                     shape = MaterialTheme.shapes.small
@@ -305,7 +337,9 @@ fun UserDetailsView(
                 OutlinedTextField(
                     value = ophthalmologist,
                     onValueChange = { ophthalmologist = it },
-                    label = { Text(stringResource(shared.string.profile_user_ophthalmologist_name_label)) },
+                    label = {
+                        Text(stringResource(shared.string.profile_user_ophthalmologist_name_label))
+                    },
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true,
                     shape = MaterialTheme.shapes.small
@@ -316,7 +350,9 @@ fun UserDetailsView(
                 OutlinedTextField(
                     value = cardiologist,
                     onValueChange = { cardiologist = it },
-                    label = { Text(stringResource(shared.string.profile_user_cardiologist_name_label)) },
+                    label = {
+                        Text(stringResource(shared.string.profile_user_cardiologist_name_label))
+                    },
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true,
                     shape = MaterialTheme.shapes.small
@@ -327,7 +363,9 @@ fun UserDetailsView(
                 OutlinedTextField(
                     value = nephrologist,
                     onValueChange = { nephrologist = it },
-                    label = { Text(stringResource(shared.string.profile_user_nephrologist_name_label)) },
+                    label = {
+                        Text(stringResource(shared.string.profile_user_nephrologist_name_label))
+                    },
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true,
                     shape = MaterialTheme.shapes.small
@@ -343,7 +381,9 @@ fun UserDetailsView(
                 OutlinedTextField(
                     value = insulinPumpModel,
                     onValueChange = { insulinPumpModel = it },
-                    label = { Text(stringResource(shared.string.profile_user_insulin_pump_model_label)) },
+                    label = {
+                        Text(stringResource(shared.string.profile_user_insulin_pump_model_label))
+                    },
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true,
                     shape = MaterialTheme.shapes.small
@@ -376,7 +416,9 @@ fun UserDetailsView(
                 OutlinedTextField(
                     value = basalInsulinType,
                     onValueChange = { basalInsulinType = it },
-                    label = { Text(stringResource(shared.string.profile_user_basal_insulin_type_label)) },
+                    label = {
+                        Text(stringResource(shared.string.profile_user_basal_insulin_type_label))
+                    },
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true,
                     shape = MaterialTheme.shapes.small
@@ -396,7 +438,11 @@ fun UserDetailsView(
                     OutlinedTextField(
                         value = targetGlucoseMin,
                         onValueChange = { targetGlucoseMin = it },
-                        label = { Text(stringResource(shared.string.profile_user_target_glucose_min_label)) },
+                        label = {
+                            Text(
+                                stringResource(shared.string.profile_user_target_glucose_min_label)
+                            )
+                        },
                         modifier = Modifier.weight(1f),
                         singleLine = true,
                         shape = MaterialTheme.shapes.small,
@@ -405,7 +451,11 @@ fun UserDetailsView(
                     OutlinedTextField(
                         value = targetGlucoseMax,
                         onValueChange = { targetGlucoseMax = it },
-                        label = { Text(stringResource(shared.string.profile_user_target_glucose_max_label)) },
+                        label = {
+                            Text(
+                                stringResource(shared.string.profile_user_target_glucose_max_label)
+                            )
+                        },
                         modifier = Modifier.weight(1f),
                         singleLine = true,
                         shape = MaterialTheme.shapes.small,
@@ -420,20 +470,26 @@ fun UserDetailsView(
                     options = GlucoseUnit.entries,
                     selected = glucoseUnit,
                     displayName = { it.displayName(context) },
-                    onSelectedChange = { glucoseUnit = it },
+                    onSelectedChange = { glucoseUnit = it }
                 )
             }
 
             // ═══════════════════════════
             //  EMERGENCY CONTACT
             // ═══════════════════════════
-            item { SectionHeader(stringResource(shared.string.profile_user_emergency_contact_section)) }
+            item {
+                SectionHeader(stringResource(shared.string.profile_user_emergency_contact_section))
+            }
 
             item {
                 OutlinedTextField(
                     value = emergencyContactName,
                     onValueChange = { emergencyContactName = it },
-                    label = { Text(stringResource(shared.string.profile_user_emergency_contact_name_label)) },
+                    label = {
+                        Text(
+                            stringResource(shared.string.profile_user_emergency_contact_name_label)
+                        )
+                    },
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true,
                     shape = MaterialTheme.shapes.small
@@ -444,7 +500,11 @@ fun UserDetailsView(
                 OutlinedTextField(
                     value = emergencyContactPhone,
                     onValueChange = { emergencyContactPhone = it },
-                    label = { Text(stringResource(shared.string.profile_user_emergency_contact_phone_label)) },
+                    label = {
+                        Text(
+                            stringResource(shared.string.profile_user_emergency_contact_phone_label)
+                        )
+                    },
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true,
                     shape = MaterialTheme.shapes.small,
@@ -482,7 +542,7 @@ fun UserDetailsViewEmptyPreview() {
         userDetails = UserDetails(),
         onSave = {},
         onProfilePhotoPicked = {},
-        onNavigateBack = {},
+        onNavigateBack = {}
     )
 }
 
@@ -515,6 +575,6 @@ fun UserDetailsViewFilledPreview() {
         ),
         onSave = {},
         onProfilePhotoPicked = {},
-        onNavigateBack = {},
+        onNavigateBack = {}
     )
 }

@@ -17,9 +17,7 @@ import com.diabdata.feature.treatments.ui.UpcomingTreatmentExpirationDates
 
 @SuppressLint("DefaultLocale")
 @Composable
-fun LatestMeasurements(
-    viewModel: DataViewModel
-) {
+fun LatestMeasurements(viewModel: DataViewModel) {
     Column(
         modifier = Modifier
             .padding(20.dp)
@@ -40,7 +38,6 @@ fun LatestMeasurements(
         }
         if (availability.hasTreatments) {
             UpcomingTreatmentExpirationDates(viewModel)
-
         }
     }
 }

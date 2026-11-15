@@ -14,10 +14,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.diabdata.shared.R
-import com.diabdata.shared.utils.dataTypes.AddableType
-import com.diabdata.core.utils.ui.ColoredIconCircleProps
 import com.diabdata.core.ui.theme.DiabDataTheme
+import com.diabdata.core.utils.ui.ColoredIconCircleProps
+import com.diabdata.shared.R.drawable as icons
+import com.diabdata.shared.utils.dataTypes.AddableType
 
 @Preview(showBackground = true, name = "CardsList - Simple")
 @Composable
@@ -34,20 +34,20 @@ fun CardsListSimplePreview() {
                 header = "Paramètres",
                 cards = listOf(
                     CardItem(
-                        leadingIcon = R.drawable.notification_active_icon_vector,
+                        leadingIcon = icons.notification_active_icon_vector,
                         content = { Text("Notifications") },
                         switchState = notificationsEnabled,
                         onSwitchChange = { notificationsEnabled = it }
                     ),
                     CardItem(
-                        leadingIcon = R.drawable.app_version_icon_vector,
+                        leadingIcon = icons.app_version_icon_vector,
                         content = {
                             Column {
                                 Text("Version", style = MaterialTheme.typography.bodyLarge)
                                 Text("1.0.0", style = MaterialTheme.typography.bodySmall)
                             }
                         },
-                        trailingIcon = R.drawable.arrow_right_icon_vector,
+                        trailingIcon = icons.arrow_right_icon_vector,
                         onTrailingIconClick = { }
                     )
                 )
@@ -69,7 +69,7 @@ fun CardsListSinglePreview() {
                 cards = listOf(
                     CardItem(
                         leadingColoredCircleIcon = ColoredIconCircleProps(
-                            iconRes = R.drawable.stethoscope_icon_vector,
+                            iconRes = icons.stethoscope_icon_vector,
                             baseColor = AddableType.APPOINTMENT.baseColor,
                             size = null,
                             iconSize = null
@@ -86,7 +86,7 @@ fun CardsListSinglePreview() {
                                 )
                             }
                         },
-                        trailingIcon = R.drawable.arrow_right_icon_vector,
+                        trailingIcon = icons.arrow_right_icon_vector,
                         onTrailingIconClick = { }
                     )
                 )
@@ -109,7 +109,7 @@ fun CardsListPaginatedPreview() {
                 cards = listOf(
                     CardItem(
                         leadingColoredCircleIcon = ColoredIconCircleProps(
-                            iconRes = R.drawable.weight_icon_vector,
+                            iconRes = icons.weight_icon_vector,
                             baseColor = AddableType.WEIGHT.baseColor,
                             size = null,
                             iconSize = null
@@ -122,7 +122,7 @@ fun CardsListPaginatedPreview() {
                     ),
                     CardItem(
                         leadingColoredCircleIcon = ColoredIconCircleProps(
-                            iconRes = R.drawable.weight_icon_vector,
+                            iconRes = icons.weight_icon_vector,
                             baseColor = AddableType.WEIGHT.baseColor,
                             size = null,
                             iconSize = null
@@ -135,7 +135,7 @@ fun CardsListPaginatedPreview() {
                     ),
                     CardItem(
                         leadingColoredCircleIcon = ColoredIconCircleProps(
-                            iconRes = R.drawable.weight_icon_vector,
+                            iconRes = icons.weight_icon_vector,
                             baseColor = AddableType.WEIGHT.baseColor,
                             size = null,
                             iconSize = null
@@ -148,7 +148,7 @@ fun CardsListPaginatedPreview() {
                     ),
                     CardItem(
                         leadingColoredCircleIcon = ColoredIconCircleProps(
-                            iconRes = R.drawable.weight_icon_vector,
+                            iconRes = icons.weight_icon_vector,
                             baseColor = AddableType.WEIGHT.baseColor,
                             size = null,
                             iconSize = null
@@ -161,7 +161,7 @@ fun CardsListPaginatedPreview() {
                     ),
                     CardItem(
                         leadingColoredCircleIcon = ColoredIconCircleProps(
-                            iconRes = R.drawable.weight_icon_vector,
+                            iconRes = icons.weight_icon_vector,
                             baseColor = AddableType.WEIGHT.baseColor,
                             size = null,
                             iconSize = null
@@ -174,7 +174,7 @@ fun CardsListPaginatedPreview() {
                     ),
                     CardItem(
                         leadingColoredCircleIcon = ColoredIconCircleProps(
-                            iconRes = R.drawable.weight_icon_vector,
+                            iconRes = icons.weight_icon_vector,
                             baseColor = AddableType.WEIGHT.baseColor,
                             size = null,
                             iconSize = null
@@ -187,7 +187,7 @@ fun CardsListPaginatedPreview() {
                     ),
                     CardItem(
                         leadingColoredCircleIcon = ColoredIconCircleProps(
-                            iconRes = R.drawable.weight_icon_vector,
+                            iconRes = icons.weight_icon_vector,
                             baseColor = AddableType.WEIGHT.baseColor,
                             size = null,
                             iconSize = null
@@ -217,13 +217,13 @@ fun CardsListFullPreview() {
             modifier = Modifier.padding(16.dp)
         ) {
             Column(verticalArrangement = Arrangement.spacedBy(24.dp)) {
-
                 // Stack 1 — Rappels
                 CardsList(
                     header = "Rappels",
                     cards = listOf(
                         CardItem(
-                            leadingIcon = R.drawable.continuous_glucose_monitoring_system_sensor_icon_vector,
+                            leadingIcon = icons
+                                .continuous_glucose_monitoring_system_sensor_icon_vector,
                             content = {
                                 Column {
                                     Text(
@@ -240,7 +240,7 @@ fun CardsListFullPreview() {
                             onSwitchChange = { rappelCapteur = it }
                         ),
                         CardItem(
-                            leadingIcon = R.drawable.wired_patch_icon_vector,
+                            leadingIcon = icons.wired_patch_icon_vector,
                             content = {
                                 Column {
                                     Text("Cathéter", style = MaterialTheme.typography.bodyLarge)
@@ -254,7 +254,7 @@ fun CardsListFullPreview() {
                             onSwitchChange = { rappelCatheter = it }
                         ),
                         CardItem(
-                            leadingIcon = R.drawable.fast_acting_insulin_syringe_icon_vector,
+                            leadingIcon = icons.fast_acting_insulin_syringe_icon_vector,
                             content = {
                                 Column {
                                     Text(
@@ -279,7 +279,7 @@ fun CardsListFullPreview() {
                     pageSize = 2,
                     cards = listOf(
                         CardItem(
-                            leadingIcon = R.drawable.weight_icon_vector,
+                            leadingIcon = icons.weight_icon_vector,
                             content = {
                                 Column(modifier = Modifier.padding(vertical = 8.dp)) {
                                     Text("01/06/2025 — 72.5 kg")
@@ -287,7 +287,7 @@ fun CardsListFullPreview() {
                             }
                         ),
                         CardItem(
-                            leadingIcon = R.drawable.weight_icon_vector,
+                            leadingIcon = icons.weight_icon_vector,
                             content = {
                                 Column(modifier = Modifier.padding(vertical = 8.dp)) {
                                     Text("01/05/2025 — 73.0 kg")
@@ -295,7 +295,7 @@ fun CardsListFullPreview() {
                             }
                         ),
                         CardItem(
-                            leadingIcon = R.drawable.weight_icon_vector,
+                            leadingIcon = icons.weight_icon_vector,
                             content = {
                                 Column(modifier = Modifier.padding(vertical = 8.dp)) {
                                     Text("01/04/2025 — 73.8 kg")
@@ -303,7 +303,7 @@ fun CardsListFullPreview() {
                             }
                         ),
                         CardItem(
-                            leadingIcon = R.drawable.weight_icon_vector,
+                            leadingIcon = icons.weight_icon_vector,
                             content = {
                                 Column(modifier = Modifier.padding(vertical = 8.dp)) {
                                     Text("01/03/2025 — 74.2 kg")

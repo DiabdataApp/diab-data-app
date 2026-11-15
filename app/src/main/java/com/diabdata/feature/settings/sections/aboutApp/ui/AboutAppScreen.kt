@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Arrangement.spacedBy
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -30,7 +29,6 @@ import com.diabdata.BuildConfig
 import com.diabdata.core.ui.theme.DiabDataTheme
 import com.diabdata.core.ui.theme.ExtendedTheme
 import com.diabdata.core.ui.theme.GoogleSansFlexFontFamily
-import com.diabdata.feature.settings.sections.dataSettings.ui.components.locale
 import com.diabdata.feature.settings.ui.components.AppInfoCard
 import com.diabdata.feature.settings.ui.components.changelog.ChangelogDialog
 import com.diabdata.feature.settings.ui.components.licenses.LicensesDialog
@@ -69,7 +67,9 @@ fun AboutAppSettingScreen() {
     }
 }
 
-@Preview(name = "Interactive", showBackground = true, locale = locale)
+private const val PREVIEW_LOCALE = "fr"
+
+@Preview(name = "Interactive", showBackground = true, locale = PREVIEW_LOCALE)
 @Composable
 fun AboutAppSettingScreenInteractivePreview() {
     var darkTheme by remember { mutableStateOf(false) }
@@ -79,7 +79,7 @@ fun AboutAppSettingScreenInteractivePreview() {
         Box(
             modifier = Modifier
                 .background(MaterialTheme.colorScheme.surfaceContainer)
-                .padding(24.dp),
+                .padding(24.dp)
         ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -106,7 +106,7 @@ fun AboutAppSettingScreenInteractivePreview() {
                             color = MaterialTheme.colorScheme.onSurface,
                             style = MaterialTheme.typography.labelLarge,
                             fontFamily = GoogleSansFlexFontFamily,
-                            fontWeight = FontWeight(800),
+                            fontWeight = FontWeight(800)
                         )
                         Switch(
                             checked = darkTheme,
@@ -124,7 +124,7 @@ fun AboutAppSettingScreenInteractivePreview() {
                             color = MaterialTheme.colorScheme.onSurface,
                             style = MaterialTheme.typography.labelLarge,
                             fontFamily = GoogleSansFlexFontFamily,
-                            fontWeight = FontWeight(800),
+                            fontWeight = FontWeight(800)
                         )
                         Switch(
                             checked = betaMode,

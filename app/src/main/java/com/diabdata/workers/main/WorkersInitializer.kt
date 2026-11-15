@@ -21,22 +21,26 @@ object WorkersInitializer {
 
         val periodicDeviceExpiryComplicationWork =
             PeriodicWorkRequestBuilder<ExpiringDevicesComplicationUpdateWorker>(
-                30, TimeUnit.MINUTES
+                30,
+                TimeUnit.MINUTES
             ).build()
 
         val periodicUpcomingAppointmentComplicationWork =
             PeriodicWorkRequestBuilder<UpcomingAppointmentComplicationUpdateWorker>(
-                12, TimeUnit.HOURS
+                12,
+                TimeUnit.HOURS
             ).build()
 
         val periodicTreatmentExpiryWorkPolicy =
             PeriodicWorkRequestBuilder<ExpiringTreatmentComplicationUpdateWorker>(
-                12, TimeUnit.HOURS
+                12,
+                TimeUnit.HOURS
             ).build()
 
         val periodicGlanceTileWork =
             PeriodicWorkRequestBuilder<GlanceTileUpdateWorker>(
-                12, TimeUnit.HOURS
+                12,
+                TimeUnit.HOURS
             ).build()
 
         workManager.enqueueUniquePeriodicWork(
@@ -69,10 +73,14 @@ object WorkersInitializer {
 
         // Glance widget
         val glanceWork =
-            OneTimeWorkRequestBuilder<GlanceWidgetWorker>().setExpedited(OutOfQuotaPolicy.RUN_AS_NON_EXPEDITED_WORK_REQUEST)
+            OneTimeWorkRequestBuilder<GlanceWidgetWorker>().setExpedited(
+                OutOfQuotaPolicy.RUN_AS_NON_EXPEDITED_WORK_REQUEST
+            )
                 .build()
         workManager.enqueueUniqueWork(
-            "glance_widget_update_once", ExistingWorkPolicy.REPLACE, glanceWork
+            "glance_widget_update_once",
+            ExistingWorkPolicy.REPLACE,
+            glanceWork
         )
 
         // Wear OS complications

@@ -8,6 +8,8 @@ import com.diabdata.core.database.DiabDataDatabase
 import com.diabdata.core.model.Weight
 import com.diabdata.core.model.nowMillis
 import com.diabdata.feature.weight.data.WeightDao
+import java.io.IOException
+import java.time.LocalDate
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.After
@@ -15,8 +17,6 @@ import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import java.io.IOException
-import java.time.LocalDate
 
 /**
  * Tests for [WeightDao] found at [com.diabdata.feature.weight.data.WeightDao].
@@ -25,7 +25,7 @@ import java.time.LocalDate
 class WeightDaoTest {
     private lateinit var weightDao: WeightDao
     private lateinit var db: DiabDataDatabase
-    
+
     val today: LocalDate = LocalDate.now()
     val now = nowMillis()
 
@@ -191,12 +191,11 @@ class WeightDaoTest {
     @Throws(Exception::class)
     fun getWeightsSince() = runBlocking {
         val endDate = today.minusMonths(3)
-        
+
         val first = today.minusDays(3)
         val second = today.minusDays(8).minusMonths(2)
         val third = today.minusDays(16).minusMonths(8)
         val fourth = today.minusDays(22).minusMonths(1)
-
 
         val weights: List<Weight> = listOf(
             Weight(
@@ -249,7 +248,6 @@ class WeightDaoTest {
         val second = today.minusDays(8).minusMonths(2)
         val third = today.minusDays(16).minusMonths(8)
         val fourth = today.minusDays(22).minusMonths(1)
-
 
         val weights: List<Weight> = listOf(
             Weight(

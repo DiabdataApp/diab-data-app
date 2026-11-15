@@ -12,16 +12,16 @@ import com.diabdata.core.backup.BackupScheduleCoordinator
 import com.diabdata.core.database.DataRepository
 import com.diabdata.core.notifications.NotificationImportance
 import com.diabdata.core.notifications.showNotification
-import com.diabdata.shared.R
+import com.diabdata.shared.R.string as strings
 import com.diabdata.shared.utils.utils.uriStringToReadablePath
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
-import kotlinx.coroutines.flow.first
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.util.Date
 import java.util.Locale
 import kotlin.coroutines.cancellation.CancellationException
+import kotlinx.coroutines.flow.first
 
 /**
  * [CoroutineWorker] that performs a scheduled automatic backup, writing it to the user's configured
@@ -40,12 +40,16 @@ class BackupWorker @AssistedInject constructor(
      * Logs [technicalMessage] and notifies the user with the localized string identified by
      * [messageResId], then reports this work run as failed.
      */
-    private fun failWithNotification (technicalMessage: String, localisedString: Int): Result {
+    private fun failWithNotification(technicalMessage: String, localisedString: Int): Result {
         Log.w(tag, technicalMessage)
         applicationContext.showNotification(
-            title = applicationContext.getString(R.string.settings_notifications_scheduled_backup_error_title),
+            title = applicationContext.getString(
+                strings.settings_notifications_scheduled_backup_error_title
+            ),
             content = applicationContext.getString(localisedString),
-            channelName = applicationContext.getString(R.string.settings_notifications_scheduled_data_backup_channel_name),
+            channelName = applicationContext.getString(
+                strings.settings_notifications_scheduled_data_backup_channel_name
+            ),
             importance = NotificationImportance.DEFAULT
         )
 
@@ -65,14 +69,14 @@ class BackupWorker @AssistedInject constructor(
             val prefs = dataRepository.getUserPreferences().first() ?: run {
                 return failWithNotification(
                     "No preferences found, skipping",
-                    R.string.settings_notifications_scheduled_backup_no_preferences_error
+                    strings.settings_notifications_scheduled_backup_no_preferences_error
                 )
             }
 
             val backupPath = prefs.backupPath ?: run {
                 return failWithNotification(
                     "No backup path configured, skipping",
-                    R.string.settings_notifications_scheduled_backup_undefined_backup_directory_error
+                    strings.settings_notifications_scheduled_backup_undefined_backup_directory_error
                 )
             }
 
@@ -85,7 +89,13 @@ class BackupWorker @AssistedInject constructor(
             val date = dateFormat.format(Date())
             val readableDate = readableDateFormat.format(Date())
 
-            val fileName = "diabdata_backup_${date}.zip"
+            val fileName = "diabdata_backup_$date.zip"
+
+            val backupFileCreationError =
+                strings.settings_notifications_scheduled_backup_file_creation_error
+
+            val backupPathAccessErrorText =
+                strings.settings_notifications_scheduled_backup_file_access_error
 
             val docUri = DocumentsContract.createDocument(
                 applicationContext.contentResolver,
@@ -98,7 +108,7 @@ class BackupWorker @AssistedInject constructor(
             ) ?: run {
                 return failWithNotification(
                     "createDocument returned null",
-                    R.string.settings_notifications_scheduled_backup_file_creation_error
+                    backupFileCreationError
                 )
             }
 
@@ -106,12 +116,16 @@ class BackupWorker @AssistedInject constructor(
                 ?: run {
                     return failWithNotification(
                         "openOutputStream returned null",
-                        R.string.settings_notifications_scheduled_backup_file_access_error
+                        backupPathAccessErrorText
                     )
                 }
 
             outputStream.use {
-                backupArchiveManager.writeBackup(it, isScheduledBackup = true, isEncrypted = isEncrypted).getOrThrow()
+                backupArchiveManager.writeBackup(
+                    it,
+                    isScheduledBackup = true,
+                    isEncrypted = isEncrypted
+                ).getOrThrow()
             }
 
             dataRepository.setLastBackupUpdate(
@@ -119,29 +133,37 @@ class BackupWorker @AssistedInject constructor(
             )
 
             applicationContext.showNotification(
-                title = applicationContext.getString(R.string.settings_notifications_scheduled_backup_success_title),
+                title = applicationContext.getString(
+                    strings.settings_notifications_scheduled_backup_success_title
+                ),
                 content = applicationContext.getString(
-                    R.string.settings_notifications_scheduled_backup_success,
+                    strings.settings_notifications_scheduled_backup_success,
                     backupPath.uriStringToReadablePath(applicationContext),
                     readableDate
                 ),
-                channelName = applicationContext.getString(R.string.settings_notifications_scheduled_data_backup_channel_name),
+                channelName = applicationContext.getString(
+                    strings.settings_notifications_scheduled_data_backup_channel_name
+                ),
                 importance = NotificationImportance.LOW
             )
 
             Result.success()
         } catch (e: CancellationException) {
             throw e
-        // Permission issues won't resolve by retrying, unlike transient I/O failures below.
+            // Permission issues won't resolve by retrying, unlike transient I/O failures below.
         } catch (e: SecurityException) {
             Log.e(tag, "Permission denied", e)
             applicationContext.showNotification(
-                title = applicationContext.getString(R.string.settings_notifications_scheduled_backup_error_title),
+                title = applicationContext.getString(
+                    strings.settings_notifications_scheduled_backup_error_title
+                ),
                 content = applicationContext.getString(
-                    R.string.settings_notifications_scheduled_backup_error_permission_denied,
+                    strings.settings_notifications_scheduled_backup_error_permission_denied,
                     e.message.toString()
                 ),
-                channelName = applicationContext.getString(R.string.settings_notifications_scheduled_data_backup_channel_name),
+                channelName = applicationContext.getString(
+                    strings.settings_notifications_scheduled_data_backup_channel_name
+                ),
                 importance = NotificationImportance.DEFAULT
             )
             Result.failure()
@@ -150,13 +172,21 @@ class BackupWorker @AssistedInject constructor(
             val errorDetail =
                 "${e.javaClass.simpleName}: ${e.message}\nat ${e.stackTrace.firstOrNull()}"
             applicationContext.showNotification(
-                title = applicationContext.getString(R.string.settings_notifications_scheduled_backup_error_title),
+                title = applicationContext.getString(
+                    strings.settings_notifications_scheduled_backup_error_title
+                ),
                 content = errorDetail,
-                channelName = applicationContext.getString(R.string.settings_notifications_scheduled_data_backup_channel_name),
+                channelName = applicationContext.getString(
+                    strings.settings_notifications_scheduled_data_backup_channel_name
+                ),
                 importance = NotificationImportance.DEFAULT
             )
 
-            if (runAttemptCount < 3) Result.retry() else Result.failure()
+            if (runAttemptCount < 3) {
+                Result.retry()
+            } else {
+                Result.failure()
+            }
         }
     }
 }

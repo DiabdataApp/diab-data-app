@@ -8,15 +8,43 @@ import androidx.wear.watchface.complications.data.PlainComplicationText
 import androidx.wear.watchface.complications.data.ShortTextComplicationData
 import androidx.wear.watchface.complications.datasource.ComplicationRequest
 import androidx.wear.watchface.complications.datasource.SuspendingComplicationDataSourceService
+import com.diabdata.shared.R as shared
 import com.diabdata.shared.utils.dataTypes.AppointmentType
 import com.diabdata.shared.utils.imgUtils.toAppointmentIcon
-import com.diabdata.shared.R as shared
 
 class UpcomingAppointmentComplicationService : SuspendingComplicationDataSourceService() {
+
+    private fun appointmentInXDaysLabel(days: Int): String = resources.getString(
+        shared
+            .string
+            .appointments_wear_complication_upcoming_appointment_in_days_text_description,
+        days.toString()
+    )
 
     override suspend fun onComplicationRequest(request: ComplicationRequest): ComplicationData {
         val prefs = getSharedPreferences("complications_upcoming_appointment", MODE_PRIVATE)
         val hasAppointment = prefs.getBoolean("hasAppointment", false)
+
+        val appointmentTodayLabel =
+            resources.getString(
+                shared
+                    .string
+                    .appointments_wear_complication_upcoming_appointment_today_text_description
+            )
+
+        val appointmentTomorrowLabel =
+            resources.getString(
+                shared
+                    .string
+                    .appointments_wear_complication_upcoming_appointment_tomorrow_text_description
+            )
+
+        val noAppointmentsLabel =
+            resources.getString(
+                shared
+                    .string
+                    .appointments_wear_complication_no_upcoming_appointment_text_description
+            )
 
         val daysCountText: String
         val doctor: String
@@ -42,18 +70,14 @@ class UpcomingAppointmentComplicationService : SuspendingComplicationDataSourceS
             }
 
             contentDescription = when (daysBeforeAppointment) {
-                0 -> resources.getString(shared.string.appointments_wear_complication_upcoming_appointment_today_text_description)
-                1 -> resources.getString(shared.string.appointments_wear_complication_upcoming_appointment_tomorrow_text_description)
-                else -> resources.getString(
-                    shared.string.appointments_wear_complication_upcoming_appointment_in_days_text_description,
-                    daysBeforeAppointment.toString()
-                )
+                0 -> appointmentTodayLabel
+                1 -> appointmentTomorrowLabel
+                else -> appointmentInXDaysLabel(daysBeforeAppointment)
             }
         } else {
             daysCountText = "--"
             doctor = ""
-            contentDescription =
-                resources.getString(shared.string.appointments_wear_complication_no_upcoming_appointment_text_description)
+            contentDescription = noAppointmentsLabel
             iconRes = AppointmentType.APPOINTMENT.iconFilledRes
         }
 
@@ -76,14 +100,11 @@ class UpcomingAppointmentComplicationService : SuspendingComplicationDataSourceS
             .build()
     }
 
-    override fun getPreviewData(type: ComplicationType): ComplicationData {
-        return ShortTextComplicationData.Builder(
+    override fun getPreviewData(type: ComplicationType): ComplicationData =
+        ShortTextComplicationData.Builder(
             text = PlainComplicationText.Builder("3d").build(),
             contentDescription = PlainComplicationText.Builder(
-                resources.getString(
-                    shared.string.appointments_wear_complication_upcoming_appointment_in_days_text_description,
-                    "3"
-                )
+                appointmentInXDaysLabel(3)
             ).build()
         )
             .setTitle(PlainComplicationText.Builder("Dr. Doe").build())
@@ -96,5 +117,4 @@ class UpcomingAppointmentComplicationService : SuspendingComplicationDataSourceS
                 ).build()
             )
             .build()
-    }
 }

@@ -1,4 +1,4 @@
-package com.diabdata.core.ui.components.date_components
+package com.diabdata.core.ui.components.dateComponents
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.clickable
@@ -25,17 +25,17 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalLocale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import com.diabdata.shared.R as shared
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
-import java.util.Locale
-import com.diabdata.shared.R as shared
 
 @Composable
 fun DateSelector(
@@ -46,7 +46,10 @@ fun DateSelector(
     isEndDate: Boolean = false,
     @StringRes labelRes: Int? = null
 ) {
-    val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy", Locale.getDefault())
+    val locale = LocalLocale.current.platformLocale
+    val formatter = remember(locale) {
+        DateTimeFormatter.ofPattern("dd/MM/yyyy", locale)
+    }
 
     var dateText by remember { mutableStateOf(TextFieldValue(date.format(formatter))) }
     var showModal by remember { mutableStateOf(false) }
@@ -57,11 +60,13 @@ fun DateSelector(
 
     val labelText = if (labelRes != null) {
         stringResource(labelRes)
-    } else when {
-        isExpiryDate -> stringResource(shared.string.popup_placeholder_expiration_date)
-        isStartDate -> stringResource(shared.string.popup_placeholder_start_date)
-        isEndDate -> stringResource(shared.string.popup_placeholder_end_date)
-        else -> stringResource(shared.string.popup_placeholder_date)
+    } else {
+        when {
+            isExpiryDate -> stringResource(shared.string.popup_placeholder_expiration_date)
+            isStartDate -> stringResource(shared.string.popup_placeholder_start_date)
+            isEndDate -> stringResource(shared.string.popup_placeholder_end_date)
+            else -> stringResource(shared.string.popup_placeholder_date)
+        }
     }
 
     OutlinedTextField(
@@ -107,10 +112,7 @@ fun DateSelector(
 }
 
 @Composable
-fun DatePickerModal(
-    onDateSelected: (Long?) -> Unit,
-    onDismiss: () -> Unit
-) {
+fun DatePickerModal(onDateSelected: (Long?) -> Unit, onDismiss: () -> Unit) {
     val datePickerState = rememberDatePickerState()
 
     DatePickerDialog(
@@ -139,7 +141,11 @@ fun DateTimeSelector(
     onDateTimeSelected: (LocalDateTime) -> Unit,
     @StringRes labelRes: Int? = null
 ) {
-    val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm", Locale.getDefault())
+    val locale = LocalLocale.current.platformLocale
+    val formatter = remember(locale) {
+        DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm", locale)
+    }
+
     var dateTimeText by remember { mutableStateOf(TextFieldValue(dateTime.format(formatter))) }
     var showDateModal by remember { mutableStateOf(false) }
     var showTimeModal by remember { mutableStateOf(false) }
@@ -189,7 +195,7 @@ fun DateTimeSelector(
                     selectedDate = Instant.ofEpochMilli(it)
                         .atZone(ZoneId.systemDefault())
                         .toLocalDate()
-                    showTimeModal = true  // → passe à l'étape 2
+                    showTimeModal = true // → passe à l'étape 2
                 }
                 showDateModal = false
             },

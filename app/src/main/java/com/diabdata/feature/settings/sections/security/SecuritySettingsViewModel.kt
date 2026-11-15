@@ -5,13 +5,13 @@ import androidx.lifecycle.viewModelScope
 import com.diabdata.core.backup.encryption.BackupEncryptionKeyManager
 import com.diabdata.core.database.DataRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
-import javax.inject.Inject
 
 @HiltViewModel
 class SecuritySettingsViewModel @Inject constructor(

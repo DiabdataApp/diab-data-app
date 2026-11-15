@@ -1,6 +1,5 @@
 package com.diabdata
 
-import android.app.Application
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -17,17 +16,14 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsControllerCompat
-import androidx.lifecycle.ViewModelProvider
-import com.diabdata.core.database.DataRepository
 import com.diabdata.core.database.DataViewModel
-import com.diabdata.core.database.DiabDataDatabase
 import com.diabdata.core.ui.theme.DiabDataTheme
 import com.diabdata.core.utils.PermissionManager
 import dagger.hilt.android.AndroidEntryPoint
+import kotlin.getValue
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlin.getValue
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {

@@ -80,21 +80,26 @@ fun <T> EnumDropdown(
                     IconButton(onClick = { query = "" }) {
                         Icon(
                             imageVector = Icons.Outlined.Search,
-                            contentDescription = stringResource(shared.string.popup_placeholder_search)
+                            contentDescription = stringResource(
+                                shared.string.popup_placeholder_search
+                            )
                         )
                     }
                 }
             },
             label = { Text(label) },
-            placeholder = { if (isSearchable) Text(stringResource(shared.string.popup_placeholder_search)) },
+            placeholder = {
+                if (isSearchable) Text(stringResource(shared.string.popup_placeholder_search))
+            },
             readOnly = !isSearchable,
             trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
             modifier = Modifier
                 .menuAnchor(
-                    type = if (isSearchable)
+                    type = if (isSearchable) {
                         ExposedDropdownMenuAnchorType.PrimaryEditable
-                    else
-                        ExposedDropdownMenuAnchorType.PrimaryNotEditable,
+                    } else {
+                        ExposedDropdownMenuAnchorType.PrimaryNotEditable
+                    },
                     enabled = true
                 )
                 .fillMaxWidth(),

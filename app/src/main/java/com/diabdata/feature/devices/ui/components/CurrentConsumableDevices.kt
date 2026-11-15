@@ -45,19 +45,21 @@ import com.diabdata.core.utils.ui.SvgIcon
 import com.diabdata.core.utils.ui.darken
 import com.diabdata.core.utils.ui.getItemShape
 import com.diabdata.feature.devices.DevicesViewModel
+import com.diabdata.shared.R as shared
 import com.diabdata.shared.utils.dataTypes.AddableType
 import com.diabdata.shared.utils.dataTypes.MedicalDeviceInfoType
 import com.diabdata.shared.utils.dateUtils.shortenedFormatLocalDate
-import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
 import kotlin.time.Instant
-import com.diabdata.shared.R as shared
+import kotlinx.coroutines.launch
 
 @Composable
 fun CurrentConsumableDevicesList() {
     val devicesViewModel: DevicesViewModel = hiltViewModel()
-    val currentDevices by devicesViewModel.currentConsumableDevices.collectAsState(initial = emptyList())
+    val currentDevices by devicesViewModel.currentConsumableDevices.collectAsState(
+        initial = emptyList()
+    )
     val coroutineScope = rememberCoroutineScope()
 
     val filteredDevices = currentDevices
@@ -109,7 +111,9 @@ fun CurrentConsumableDevicesCards(
 ) {
     val primaryColor = MaterialTheme.colorScheme.primary
 
-    if (devices.isEmpty()) return
+    if (devices.isEmpty()) {
+        return
+    }
 
     val today = LocalDate.now()
 
@@ -117,7 +121,11 @@ fun CurrentConsumableDevicesCards(
         MedicalDeviceCardData(
             device = device,
             titleText = device.name.ifEmpty { device.deviceType.displayName(LocalContext.current) },
-            textColor = if (device.isLifeSpanOver) MaterialTheme.colorScheme.error else device.deviceType.baseColor,
+            textColor = if (device.isLifeSpanOver) {
+                MaterialTheme.colorScheme.error
+            } else {
+                device.deviceType.baseColor
+            },
             addableType = AddableType.DEVICE,
             isLifeSpanOver = device.isLifeSpanOver,
             iconRes = device.deviceType.iconRes,
@@ -130,7 +138,9 @@ fun CurrentConsumableDevicesCards(
 
     Column(modifier = Modifier.fillMaxSize()) {
         Text(
-            text = stringResource(shared.string.devices_home_section_current_consumable_devices_title),
+            text = stringResource(
+                shared.string.devices_home_section_current_consumable_devices_title
+            ),
             style = MaterialTheme.typography.headlineLarge,
             color = MaterialTheme.colorScheme.surfaceTint
         )
@@ -174,7 +184,13 @@ fun CurrentConsumableDevicesCards(
                 ) {
                     ColoredIconCircle(
                         iconRes = card.iconRes,
-                        baseColor = if (card.textColor != primaryColor) card.textColor else card.addableType.baseColor,
+                        baseColor = if (card.textColor !=
+                            primaryColor
+                        ) {
+                            card.textColor
+                        } else {
+                            card.addableType.baseColor
+                        },
                         size = 40.dp,
                         iconSize = 25.dp
                     )
@@ -195,12 +211,12 @@ fun CurrentConsumableDevicesCards(
                                 .fillMaxWidth()
                                 .padding(bottom = 4.dp),
                             horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically,
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
                             FlowRow(
                                 modifier = Modifier.weight(1f),
                                 horizontalArrangement = Arrangement.spacedBy(8.dp),
-                                verticalArrangement = Arrangement.spacedBy(4.dp),
+                                verticalArrangement = Arrangement.spacedBy(4.dp)
                             ) {
                                 val space = 4.dp
 
@@ -257,7 +273,7 @@ fun CurrentConsumableDevicesCards(
                                 }
                             }
 
-                            Row (
+                            Row(
                                 horizontalArrangement = Arrangement.spacedBy(6.dp),
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
@@ -297,11 +313,13 @@ fun CurrentConsumableDevicesCards(
                                 SvgIcon(
                                     resId = shared.drawable.warning_icon_vector,
                                     color = MedicalDeviceInfoType.WIRELESS_PATCH.baseColor,
-                                    modifier = Modifier.size(20.dp),
+                                    modifier = Modifier.size(20.dp)
                                 )
                                 Text(
-                                    text = stringResource(shared.string.devices_device_replacement_warning),
-                                    color = card.device.deviceType.baseColor,
+                                    text = stringResource(
+                                        shared.string.devices_device_replacement_warning
+                                    ),
+                                    color = card.device.deviceType.baseColor
                                 )
                             } else {
                                 Text(
@@ -318,7 +336,11 @@ fun CurrentConsumableDevicesCards(
                                 LinearProgressIndicator(
                                     progress = { progress },
                                     modifier = Modifier.weight(1f),
-                                    color = if (card.isLifeSpanOver) MaterialTheme.colorScheme.error else card.textColor,
+                                    color = if (card.isLifeSpanOver) {
+                                        MaterialTheme.colorScheme.error
+                                    } else {
+                                        card.textColor
+                                    },
                                     trackColor = MaterialTheme.colorScheme.surfaceVariant
                                 )
                                 Text(
@@ -337,7 +359,9 @@ fun CurrentConsumableDevicesCards(
 }
 
 @Preview(
-    showBackground = true, locale = "en", showSystemUi = false,
+    showBackground = true,
+    locale = "en",
+    showSystemUi = false,
     wallpaper = Wallpapers.NONE,
     uiMode = Configuration.UI_MODE_TYPE_NORMAL
 )

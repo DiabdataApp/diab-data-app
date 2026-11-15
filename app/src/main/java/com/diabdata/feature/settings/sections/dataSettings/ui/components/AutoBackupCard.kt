@@ -27,7 +27,6 @@ import androidx.compose.material3.ButtonGroupDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItemDefaults
-import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SegmentedListItem
 import androidx.compose.material3.Switch
@@ -57,9 +56,9 @@ import com.diabdata.core.ui.theme.DiabDataTheme
 import com.diabdata.core.ui.theme.GoogleSansFlexFontFamily
 import com.diabdata.core.utils.ui.SvgIcon
 import com.diabdata.feature.settings.sections.dataSettings.BackupStatusState
+import com.diabdata.shared.R as shared
 import com.diabdata.shared.utils.dataTypes.BackupFrequency
 import com.diabdata.shared.utils.utils.uriStringToReadablePath
-import com.diabdata.shared.R as shared
 
 @Composable
 fun AutoBackupCard(
@@ -71,7 +70,7 @@ fun AutoBackupCard(
     onPathChange: (String) -> Unit,
     onResetButtonClick: () -> Unit,
     backupStatusState: BackupStatusState,
-    isBackupEnabled: Boolean = false,
+    isBackupEnabled: Boolean = false
 ) {
     var expanded by rememberSaveable { mutableStateOf(true) }
     val numChildren = 6
@@ -80,7 +79,8 @@ fun AutoBackupCard(
     // File picker launcher
     val context = LocalContext.current
     val folderPickerLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.OpenDocumentTree(), onResult = { uri: Uri? ->
+        contract = ActivityResultContracts.OpenDocumentTree(),
+        onResult = { uri: Uri? ->
             uri?.let {
                 context.contentResolver.takePersistableUriPermission(
                     it,
@@ -88,7 +88,8 @@ fun AutoBackupCard(
                 )
                 onPathChange(it.toString())
             }
-        })
+        }
+    )
 
     val containerColor = MaterialTheme.colorScheme.surface
     val containerContentColor = MaterialTheme.colorScheme.onSurface
@@ -103,22 +104,36 @@ fun AutoBackupCard(
         label = "chevronRotation"
     )
 
-    val toggleScheduledBackupText = if (isBackupEnabled) stringResource(shared.string.settings_set_data_backup_scheduler_disable_label) else stringResource(shared.string.settings_set_data_backup_scheduler_enable_label)
+    val toggleScheduledBackupText = if (isBackupEnabled) {
+        stringResource(
+            shared.string.settings_set_data_backup_scheduler_disable_label
+        )
+    } else {
+        stringResource(shared.string.settings_set_data_backup_scheduler_enable_label)
+    }
 
     Column(
-        verticalArrangement = spacedBy(ListItemDefaults.SegmentedGap),
+        verticalArrangement = spacedBy(ListItemDefaults.SegmentedGap)
     ) {
         SegmentedListItem(
             onClick = { expanded = !expanded },
             modifier = Modifier.semantics {
-                stateDescription = if (expanded) "Expanded" else "Collapsed"
+                stateDescription = if (expanded) {
+                    "Expanded"
+                } else {
+                    "Collapsed"
+                }
             },
-            shapes = if (expanded) ListItemDefaults.segmentedShapes(
-                index = 0,
-                count = itemCount,
-            ) else ListItemDefaults.segmentedShapes(0, 1).copy(
-                shape = RoundedCornerShape(15.dp)
-            ),
+            shapes = if (expanded) {
+                ListItemDefaults.segmentedShapes(
+                    index = 0,
+                    count = itemCount
+                )
+            } else {
+                ListItemDefaults.segmentedShapes(0, 1).copy(
+                    shape = RoundedCornerShape(15.dp)
+                )
+            },
             leadingContent = {
                 SvgIcon(
                     resId = shared.drawable.save_clock_icon_vector,
@@ -128,7 +143,8 @@ fun AutoBackupCard(
             },
             trailingContent = {
                 IconButton(
-                    onClick = { expanded = !expanded }, modifier = Modifier.size(24.dp)
+                    onClick = { expanded = !expanded },
+                    modifier = Modifier.size(24.dp)
                 ) {
                     SvgIcon(
                         resId = shared.drawable.arrow_down_icon_vector,
@@ -149,16 +165,15 @@ fun AutoBackupCard(
                 containerColor = containerColor,
                 headlineColor = containerContentColor,
                 supportingColor = containerContentColor
-            ),
+            )
         )
 
         AnimatedVisibility(
             visible = expanded,
             enter = expandVertically(MaterialTheme.motionScheme.slowSpatialSpec()),
-            exit = shrinkVertically(MaterialTheme.motionScheme.slowSpatialSpec()),
+            exit = shrinkVertically(MaterialTheme.motionScheme.slowSpatialSpec())
         ) {
             Column(verticalArrangement = spacedBy(ListItemDefaults.SegmentedGap)) {
-
                 // 2. Schedule frequency choice
                 SegmentedListItem(
                     shapes = ListItemDefaults.segmentedShapes(index = 2, count = itemCount),
@@ -176,7 +191,9 @@ fun AutoBackupCard(
                     ),
                     content = {
                         Text(
-                            text = stringResource(shared.string.settings_set_data_backup_frequency_label),
+                            text = stringResource(
+                                shared.string.settings_set_data_backup_frequency_label
+                            )
                         )
                     },
                     supportingContent = {
@@ -184,7 +201,9 @@ fun AutoBackupCard(
                             Modifier
                                 .padding(horizontal = 8.dp)
                                 .fillMaxWidth(),
-                            horizontalArrangement = spacedBy(ButtonGroupDefaults.ConnectedSpaceBetween),
+                            horizontalArrangement = spacedBy(
+                                ButtonGroupDefaults.ConnectedSpaceBetween
+                            )
                         ) {
                             BackupFrequency.entries.forEachIndexed { index, freq ->
                                 ToggleButton(
@@ -192,14 +211,21 @@ fun AutoBackupCard(
                                     onCheckedChange = { onFrequencyChange(freq) },
                                     shapes = when (index) {
                                         0 -> ButtonGroupDefaults.connectedLeadingButtonShapes()
-                                        BackupFrequency.entries.lastIndex -> ButtonGroupDefaults.connectedTrailingButtonShapes()
+                                        BackupFrequency.entries.lastIndex ->
+                                            ButtonGroupDefaults.connectedTrailingButtonShapes()
                                         else -> ButtonGroupDefaults.connectedMiddleButtonShapes()
                                     },
                                     modifier = Modifier
                                         .semantics {
                                             role = Role.RadioButton
                                         }
-                                        .weight(if (frequency == freq) 1.2f else 0.8f),
+                                        .weight(
+                                            if (frequency == freq) {
+                                                1.2f
+                                            } else {
+                                                0.8f
+                                            }
+                                        )
                                 ) {
                                     Text(
                                         text = stringResource(freq.labelRes),
@@ -211,7 +237,8 @@ fun AutoBackupCard(
                                 }
                             }
                         }
-                    })
+                    }
+                )
 
                 // 3. Backup folder choice
                 SegmentedListItem(
@@ -230,7 +257,9 @@ fun AutoBackupCard(
                     ),
                     content = {
                         Text(
-                            text = stringResource(shared.string.settings_set_data_backup_path_label),
+                            text = stringResource(
+                                shared.string.settings_set_data_backup_path_label
+                            ),
                             fontFamily = GoogleSansFlexFontFamily
                         )
                     },
@@ -238,7 +267,7 @@ fun AutoBackupCard(
                         if (!backupPath.isNullOrBlank()) {
                             Row(
                                 verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = spacedBy(8.dp),
+                                horizontalArrangement = spacedBy(8.dp)
                             ) {
                                 Text(
                                     text = backupPath.uriStringToReadablePath(context),
@@ -246,11 +275,11 @@ fun AutoBackupCard(
                                     maxLines = 1,
                                     overflow = TextOverflow.Ellipsis,
                                     modifier = Modifier.weight(1f),
-                                    fontFamily = GoogleSansFlexFontFamily,
+                                    fontFamily = GoogleSansFlexFontFamily
                                 )
                                 IconButton(
                                     onClick = { folderPickerLauncher.launch(null) },
-                                    modifier = Modifier.size(24.dp),
+                                    modifier = Modifier.size(24.dp)
                                 ) {
                                     SvgIcon(
                                         resId = shared.drawable.folder_swap_icon_vector,
@@ -260,23 +289,27 @@ fun AutoBackupCard(
                                 }
                             }
                         } else {
+                            val backupFolderIcon =
+                                shared.drawable.backup_folder_settings_icon_vector
                             Row(
                                 horizontalArrangement = Arrangement.Center
                             ) {
                                 Button(
-                                    onClick = { folderPickerLauncher.launch(null) },
+                                    onClick = { folderPickerLauncher.launch(null) }
                                 ) {
                                     Row(
                                         verticalAlignment = Alignment.CenterVertically,
-                                        horizontalArrangement = spacedBy(8.dp),
+                                        horizontalArrangement = spacedBy(8.dp)
                                     ) {
                                         SvgIcon(
-                                            resId = shared.drawable.backup_folder_settings_icon_vector,
+                                            resId = backupFolderIcon,
                                             modifier = Modifier.size(20.dp),
                                             color = MaterialTheme.colorScheme.onPrimary
                                         )
                                         Text(
-                                            text = stringResource(shared.string.settings_set_data_backup_path),
+                                            text = stringResource(
+                                                shared.string.settings_set_data_backup_path
+                                            ),
                                             style = MaterialTheme.typography.labelSmall,
                                             fontFamily = GoogleSansFlexFontFamily
                                         )
@@ -284,7 +317,8 @@ fun AutoBackupCard(
                                 }
                             }
                         }
-                    })
+                    }
+                )
 
                 // 4. Last backup info
                 SegmentedListItem(
@@ -303,20 +337,25 @@ fun AutoBackupCard(
                     ),
                     content = {
                         Text(
-                            text = stringResource(shared.string.settings_scheduled_data_backup_status_label),
+                            text = stringResource(
+                                shared.string.settings_scheduled_data_backup_status_label
+                            ),
                             style = MaterialTheme.typography.titleMedium,
                             fontFamily = GoogleSansFlexFontFamily
                         )
                     },
                     supportingContent = {
-                        if (backupStatusState.lastBackupDate != null && backupStatusState.nextBackupEstimate != null) {
+                        if (backupStatusState.lastBackupDate != null &&
+                            backupStatusState.nextBackupEstimate != null
+                        ) {
                             // If we have previous and next scheduled backup dates
                             val dates = listOf(
                                 Triple(
                                     backupStatusState.lastBackupDate,
                                     shared.drawable.last_backup_icon_vector,
                                     shared.string.settings_set_data_backup_history_last_label
-                                ), Triple(
+                                ),
+                                Triple(
                                     backupStatusState.nextBackupEstimate,
                                     shared.drawable.next_backup_icon_vector,
                                     shared.string.settings_set_data_backup_history_next_label
@@ -346,7 +385,13 @@ fun AutoBackupCard(
                                     }
                                 }
                             }
-                        } else if (backupStatusState.lastBackupDate?.isNotBlank() == true || backupStatusState.nextBackupEstimate?.isNotBlank() == true) {
+                        } else if (backupStatusState.lastBackupDate?.isNotBlank() == true ||
+                            backupStatusState.nextBackupEstimate?.isNotBlank() == true
+                        ) {
+                            val historyLastLabel =
+                                shared.string.settings_set_data_backup_history_last_label
+                            val historyNextLabel =
+                                shared.string.settings_set_data_backup_history_next_label
                             // If we only have one of the two
                             Row(
                                 horizontalArrangement = spacedBy(4.dp),
@@ -354,14 +399,16 @@ fun AutoBackupCard(
                             ) {
                                 if (backupStatusState.lastBackupDate?.isNotBlank() == true) {
                                     Text(
-                                        text = stringResource(shared.string.settings_set_data_backup_history_last_label),
+                                        text = stringResource(historyLastLabel),
                                         fontFamily = GoogleSansFlexFontFamily
                                     )
 
                                     Text(backupStatusState.lastBackupDate)
-                                } else if (backupStatusState.nextBackupEstimate?.isNotBlank() == true) {
+                                } else if (backupStatusState.nextBackupEstimate?.isNotBlank() ==
+                                    true
+                                ) {
                                     Text(
-                                        text = stringResource(shared.string.settings_set_data_backup_history_next_label),
+                                        text = stringResource(historyNextLabel),
                                         fontFamily = GoogleSansFlexFontFamily
                                     )
 
@@ -375,10 +422,11 @@ fun AutoBackupCard(
                             // If we don't have any backup dates
                             Text(
                                 text = stringResource(shared.string.settings_no_data_backup_file),
-                                fontFamily = GoogleSansFlexFontFamily,
+                                fontFamily = GoogleSansFlexFontFamily
                             )
                         }
-                    })
+                    }
+                )
 
                 // 5. Backup activation switch
                 SegmentedListItem(
@@ -406,7 +454,11 @@ fun AutoBackupCard(
                             checked = isBackupEnabled,
                             onCheckedChange = onEnabledChange,
                             thumbContent = {
-                                val iconRes = if (isBackupEnabled) shared.drawable.play_arrow_icon_vector else shared.drawable.pause_outlined_icon_vector
+                                val iconRes = if (isBackupEnabled) {
+                                    shared.drawable.play_arrow_icon_vector
+                                } else {
+                                    shared.drawable.pause_outlined_icon_vector
+                                }
                                 SvgIcon(
                                     resId = iconRes,
                                     modifier = Modifier.size(SwitchDefaults.IconSize),
@@ -418,7 +470,7 @@ fun AutoBackupCard(
                                 )
                             }
                         )
-                    },
+                    }
                 )
 
                 // 6. Reset button
@@ -448,7 +500,8 @@ fun AutoBackupCard(
                     },
                     trailingContent = {
                         IconButton(
-                            onClick = { expanded = !expanded }, modifier = Modifier.size(24.dp)
+                            onClick = { expanded = !expanded },
+                            modifier = Modifier.size(24.dp)
                         ) {
                             SvgIcon(
                                 resId = shared.drawable.arrow_right_icon_vector,
@@ -456,36 +509,40 @@ fun AutoBackupCard(
                                 modifier = Modifier.size(24.dp)
                             )
                         }
-                    },
+                    }
                 )
             }
         }
     }
 }
 
-const val locale = "fr"
-const val testData = false
-const val testBackupPath = "content://com.android.externalstorage.documents/tree/primary%3ADiabdata"
-val backupStatusState = BackupStatusState("30 juil. 2026", "31/08/26 16h30")
+private const val PREVIEW_LOCALE = "fr"
+private const val PREVIEW_TEST_DATA = false
+private const val PREVIEW_BACKUP_PATH =
+    "content://com.android.externalstorage.documents/tree/primary%3ADiabdata"
+val backupStatusState =
+    BackupStatusState("30 juil. 2026", "31/08/26 16h30")
 val emptyBackupStatusState = BackupStatusState(null, null)
 val withNextBackupDate = BackupStatusState(null, "30 juil. 2026")
 
 @Preview(
     name = "ON",
     showBackground = true,
-    locale = locale,
+    locale = PREVIEW_LOCALE,
     device = "id:pixel_8_pro",
     showSystemUi = true
 )
 @Composable
 fun TwoToneInfoRowPreview() {
-
     var darkTheme by remember { mutableStateOf(false) }
 
     var frequency by remember { mutableStateOf<BackupFrequency?>(BackupFrequency.DAILY) }
     var backupPath by remember {
-        @Suppress("SimplifyBooleanWithConstants") mutableStateOf(testBackupPath.takeIf { it.isNotBlank() && testData }
-            ?: "")
+        @Suppress("SimplifyBooleanWithConstants")
+        mutableStateOf(
+            PREVIEW_BACKUP_PATH.takeIf { it.isNotBlank() && PREVIEW_TEST_DATA }
+                ?: ""
+        )
     }
     var enableAutoBackup by remember { mutableStateOf(false) }
 
@@ -511,13 +568,18 @@ fun TwoToneInfoRowPreview() {
                     onFrequencyChange = { frequency = it },
                     onPathChange = { backupPath = it },
                     onResetButtonClick = { backupPath = "" },
-                    backupStatusState = if (testData) backupStatusState else emptyBackupStatusState
+                    backupStatusState = if (PREVIEW_TEST_DATA) {
+                        backupStatusState
+                    } else {
+                        emptyBackupStatusState
+                    }
                 )
 
                 Column(
                     modifier = Modifier
                         .background(
-                            MaterialTheme.colorScheme.surface, shape = RoundedCornerShape(16.dp)
+                            MaterialTheme.colorScheme.surface,
+                            shape = RoundedCornerShape(16.dp)
                         )
                         .padding(vertical = 12.dp, horizontal = 32.dp),
                     verticalArrangement = spacedBy(8.dp)
@@ -532,7 +594,7 @@ fun TwoToneInfoRowPreview() {
                             color = MaterialTheme.colorScheme.onSurface,
                             style = MaterialTheme.typography.labelLarge,
                             fontFamily = GoogleSansFlexFontFamily,
-                            fontWeight = FontWeight(800),
+                            fontWeight = FontWeight(800)
                         )
                         Switch(
                             checked = darkTheme,
@@ -551,7 +613,8 @@ fun TwoToneInfoRowPreview() {
                                         modifier = Modifier.size(20.dp)
                                     )
                                 }
-                            })
+                            }
+                        )
                     }
                 }
             }

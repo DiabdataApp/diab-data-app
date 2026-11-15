@@ -8,9 +8,7 @@ import com.diabdata.shared.utils.dataTypes.TreatmentType
 import java.io.InputStream
 import java.security.MessageDigest
 
-class MedicationInitializer(
-    private val context: Context, private val db: DiabDataDatabase
-) {
+class MedicationInitializer(private val context: Context, private val db: DiabDataDatabase) {
 
     suspend fun initialize() {
         val prefs = context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)

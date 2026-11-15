@@ -15,5 +15,5 @@ data class MedicalDeviceCardData(
     val date: LocalDate,
     val lifeSpanEndDate: LocalDate,
     val lifeSpan: Int,
-    val batchNumber: String,
+    val batchNumber: String
 )

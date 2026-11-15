@@ -37,7 +37,7 @@ private val avatarColors = listOf(
     Color(0xFF4DB6AC),
     Color(0xFF81C784),
     Color(0xFFAED581),
-    Color(0xFFFF8A65),
+    Color(0xFFFF8A65)
 )
 
 @Composable
@@ -75,8 +75,11 @@ fun UserAvatar(
             .padding(5.dp)
             .clip(CircleShape)
             .then(
-                if (!hasPhoto) Modifier.background(backgroundColor)
-                else Modifier
+                if (!hasPhoto) {
+                    Modifier.background(backgroundColor)
+                } else {
+                    Modifier
+                }
             )
             .clickable(onClick = onClick),
         contentAlignment = Alignment.Center

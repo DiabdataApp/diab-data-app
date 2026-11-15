@@ -1,12 +1,15 @@
 package com.diabdata.feature.settings.imEx
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.diabdata.core.backup.BackupArchiveManager
 import com.diabdata.core.backup.BackupImportException
 import com.diabdata.core.database.DataRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import java.io.ByteArrayInputStream
+import java.io.InputStream
+import java.io.OutputStream
+import javax.inject.Inject
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,10 +17,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.io.ByteArrayInputStream
-import java.io.InputStream
-import java.io.OutputStream
-import javax.inject.Inject
 
 /**
  * Handles backup export and import, bridging [BackupArchiveManager] with the import/export UI.
@@ -28,10 +27,10 @@ import javax.inject.Inject
  * and call [onPasswordSubmitted], or [onPasswordDialogDismissed] to cancel.
  */
 @HiltViewModel
-class ImExViewModel @Inject constructor (
+class ImExViewModel @Inject constructor(
     val repository: DataRepository,
     private val backupArchiveManager: BackupArchiveManager
-): ViewModel() {
+) : ViewModel() {
     private val _uiState = MutableStateFlow<ImportUiState>(ImportUiState.Idle)
 
     /** Current state of the ongoing (or last) import operation. */

@@ -1,7 +1,6 @@
 package com.diabdata.core.model
 
 import com.google.gson.annotations.SerializedName
-import java.time.ZonedDateTime
 
 data class BackupMetadata(
     val app: String = "diabdata",

@@ -35,7 +35,7 @@ enum class DeviceDestination(
     @param:StringRes val labelRes: Int,
     val route: String,
     @param:DrawableRes val iconRes: Int,
-    @param:DrawableRes val iconResFilled: Int,
+    @param:DrawableRes val iconResFilled: Int
 ) {
     OVERVIEW(
         shared.string.devices_device_screen_overview_tab,
@@ -54,9 +54,7 @@ enum class DeviceDestination(
 @Suppress("unused")
 @RequiresApi(Build.VERSION_CODES.P)
 @Composable
-fun DevicesScreen(
-    dataViewModel: DataViewModel, modifier: Modifier = Modifier
-) {
+fun DevicesScreen(dataViewModel: DataViewModel, modifier: Modifier = Modifier) {
     val navController = rememberNavController()
     val startDestination = DeviceDestination.OVERVIEW
 
@@ -89,17 +87,23 @@ fun DevicesScreen(
                         Text(
                             text = stringResource(id = destination.labelRes),
                             maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
+                            overflow = TextOverflow.Ellipsis
                         )
                     },
                     icon = {
-                        if (selectedDestination == index) SvgIcon(
-                            destination.iconResFilled, color = MaterialTheme.colorScheme.primary
-                        )
-                        else SvgIcon(
-                            destination.iconRes, color = MaterialTheme.colorScheme.onSurface
-                        )
-                    })
+                        if (selectedDestination == index) {
+                            SvgIcon(
+                                destination.iconResFilled,
+                                color = MaterialTheme.colorScheme.primary
+                            )
+                        } else {
+                            SvgIcon(
+                                destination.iconRes,
+                                color = MaterialTheme.colorScheme.onSurface
+                            )
+                        }
+                    }
+                )
             }
         }
 
@@ -126,7 +130,8 @@ fun DevicesScreen(
                 slideOutHorizontally(targetOffsetX = { it }, animationSpec = tween(300)) + fadeOut(
                     animationSpec = tween(300)
                 )
-            }) {
+            }
+        ) {
             composable(DeviceDestination.OVERVIEW.route) {
                 RecentDevicesScreen(dataViewModel = dataViewModel)
             }
