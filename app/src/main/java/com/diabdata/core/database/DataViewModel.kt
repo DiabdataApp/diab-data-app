@@ -371,40 +371,15 @@ class DataViewModel @Inject constructor(
         treatmentType: TreatmentType? = null,
         deviceType: MedicalDeviceInfoType? = null
     ): Int = when (addableType) {
-        AddableType.WEIGHT -> AddableType.WEIGHT.iconRes
-        AddableType.HBA1C -> AddableType.HBA1C.iconRes
-        AddableType.APPOINTMENT -> when (appointmentType) {
-            AppointmentType.ANNUAL_CHECKUP -> AppointmentType.ANNUAL_CHECKUP.iconRes
-            AppointmentType.APPOINTMENT -> AppointmentType.APPOINTMENT.iconRes
-            null -> R.drawable.event_icon_vector
-        }
-
-        AddableType.TREATMENT -> when (treatmentType) {
-            TreatmentType.FAST_ACTING_INSULIN_CARTRIDGE -> TreatmentType.FAST_ACTING_INSULIN_CARTRIDGE.iconRes
-            TreatmentType.FAST_ACTING_INSULIN_SYRINGE -> TreatmentType.FAST_ACTING_INSULIN_SYRINGE.iconRes
-            TreatmentType.FAST_ACTING_INSULIN_VIAL -> TreatmentType.FAST_ACTING_INSULIN_VIAL.iconRes
-            TreatmentType.SLOW_ACTING_INSULIN_CARTRIDGE -> TreatmentType.SLOW_ACTING_INSULIN_CARTRIDGE.iconRes
-            TreatmentType.SLOW_ACTING_INSULIN_SYRINGE -> TreatmentType.SLOW_ACTING_INSULIN_SYRINGE.iconRes
-            TreatmentType.SLOW_ACTING_INSULIN_VIAL -> TreatmentType.SLOW_ACTING_INSULIN_VIAL.iconRes
-            TreatmentType.B_KETONE_TEST_STRIP -> TreatmentType.B_KETONE_TEST_STRIP.iconRes
-            TreatmentType.BLOOD_GLUCOSE_TEST_STRIP -> TreatmentType.BLOOD_GLUCOSE_TEST_STRIP.iconRes
-            TreatmentType.GLUCAGON_SYRINGE -> TreatmentType.GLUCAGON_SYRINGE.iconRes
-            TreatmentType.GLUCAGON_SPRAY -> TreatmentType.GLUCAGON_SPRAY.iconRes
-            TreatmentType.UNKNOWN -> TreatmentType.UNKNOWN.iconRes
-            null -> R.drawable.medication_icon_vector
-        }
-
-        AddableType.IMPORTANT_DATE -> R.drawable.important_date_icon_vector
-
+        AddableType.APPOINTMENT -> appointmentType?.iconRes ?: R.drawable.event_icon_vector
+        AddableType.TREATMENT -> treatmentType?.iconRes ?: R.drawable.medication_icon_vector
         AddableType.DEVICE -> when (deviceType) {
-            MedicalDeviceInfoType.WIRELESS_PATCH -> MedicalDeviceInfoType.WIRELESS_PATCH.iconRes
-            MedicalDeviceInfoType.WIRED_PATCH -> MedicalDeviceInfoType.WIRED_PATCH.iconRes
-            MedicalDeviceInfoType.CONTINUOUS_GLUCOSE_MONITORING_SYSTEM_SENSOR -> MedicalDeviceInfoType.CONTINUOUS_GLUCOSE_MONITORING_SYSTEM_SENSOR.iconRes
-            MedicalDeviceInfoType.CONTINUOUS_GLUCOSE_MONITORING_SYSTEM_TRANSMITTER -> MedicalDeviceInfoType.CONTINUOUS_GLUCOSE_MONITORING_SYSTEM_TRANSMITTER.iconRes
-            MedicalDeviceInfoType.WIRED_PUMP -> MedicalDeviceInfoType.WIRED_PUMP.iconRes
-            MedicalDeviceInfoType.WIRELESS_PATCH_REMOTE -> MedicalDeviceInfoType.WIRELESS_PATCH_REMOTE.iconRes
-            else -> R.drawable.devices_icon_vector
+            MedicalDeviceInfoType.UNKNOWN -> R.drawable.devices_icon_vector
+            null -> R.drawable.no_devices_icon_vector
+            else -> deviceType.iconRes
         }
+        AddableType.IMPORTANT_DATE -> R.drawable.important_date_icon_vector
+        AddableType.WEIGHT, AddableType.HBA1C -> addableType.iconRes
     }
 
     val allMixedEntries: Flow<List<MixedDbEntry>> = combine(
