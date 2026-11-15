@@ -236,7 +236,9 @@ class BackupArchiveManager @Inject constructor(
                     add(Triple("metadata.json", gson.toJson(backupMetadata).toByteArray(), false))
                 }
 
-                val photoToEncrypt: Triple<String, ByteArray, Boolean>? = userDetails?.profilePhotoPath?.let { path ->
+                val photoToEncrypt: Triple<String, ByteArray, Boolean>? = userDetails?.profilePhotoPath?.let {
+                        path
+                    ->
                     val photoFile = File(path)
                     if (photoFile.exists()) {
                         Triple(PROFILE_PHOTO_ENTRY, photoFile.readBytes(), isEncrypted)

@@ -95,7 +95,8 @@ dependencies {
     implementation(libs.androidx.wear)
 
     // Tiles - These are the key changes
-    implementation(libs.androidx.tiles.material) // The material components for tiles (now using the single, correct alias)
+    // The material components for tiles (now using the single, correct alias)
+    implementation(libs.androidx.tiles.material)
     implementation(libs.horologist.tiles)
 
     // Protolayout (correctly declared)

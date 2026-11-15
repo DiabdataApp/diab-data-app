@@ -315,7 +315,8 @@ class DataRepository(
      */
     suspend fun importWeights(weights: List<Weight>) = withContext(Dispatchers.IO) {
         weights.forEach { backupEntry ->
-            val backupUuid: String? = backupEntry.entryUuid // Gson may leave it null for old backups
+            // Gson may leave it null for old backups
+            val backupUuid: String? = backupEntry.entryUuid
             val hasUuid = !backupUuid.isNullOrBlank()
 
             val localEntry = when {
@@ -336,7 +337,8 @@ class DataRepository(
                 backupEntry.updatedAt > localEntry.updatedAt -> updateWeight(
                     backupEntry.copy(id = localEntry.id, entryUuid = localEntry.entryUuid)
                 )
-                else -> Unit // local entry is same or newer: keep it
+                // local entry is same or newer: keep it
+                else -> Unit
             }
         }
     }
@@ -350,7 +352,8 @@ class DataRepository(
      */
     suspend fun importHba1c(hba1c: List<Hba1c>) = withContext(Dispatchers.IO) {
         hba1c.forEach { backupEntry ->
-            val backupUuid: String? = backupEntry.entryUuid // Gson may leave it null for old backups
+            // Gson may leave it null for old backups
+            val backupUuid: String? = backupEntry.entryUuid
             val hasUuid = !backupUuid.isNullOrBlank()
 
             val localEntry = when {
@@ -371,7 +374,8 @@ class DataRepository(
                 backupEntry.updatedAt > localEntry.updatedAt -> updateHBA1C(
                     backupEntry.copy(id = localEntry.id, entryUuid = localEntry.entryUuid)
                 )
-                else -> Unit // local entry is same or newer: keep it
+                // local entry is same or newer: keep it
+                else -> Unit
             }
         }
     }
@@ -385,7 +389,9 @@ class DataRepository(
      */
     suspend fun importAppointments(appointments: List<Appointment>) = withContext(Dispatchers.IO) {
         appointments.forEach { backupEntry ->
-            val backupUuid: String? = backupEntry.entryUuid // Gson may leave it null for old backups
+            // Gson may leave it null for old backups
+            val backupUuid: String? = backupEntry.entryUuid
+
             val hasUuid = !backupUuid.isNullOrBlank()
 
             val localEntry = when {
@@ -406,7 +412,8 @@ class DataRepository(
                 backupEntry.updatedAt > localEntry.updatedAt -> updateAppointment(
                     backupEntry.copy(id = localEntry.id, entryUuid = localEntry.entryUuid)
                 )
-                else -> Unit // local entry is same or newer: keep it
+                // local entry is same or newer: keep it
+                else -> Unit
             }
         }
     }
@@ -420,7 +427,8 @@ class DataRepository(
      */
     suspend fun importTreatments(treatments: List<Treatment>) = withContext(Dispatchers.IO) {
         treatments.forEach { backupEntry ->
-            val backupUuid: String? = backupEntry.entryUuid // Gson may leave it null for old backups
+            // Gson may leave it null for old backups
+            val backupUuid: String? = backupEntry.entryUuid
             val hasUuid = !backupUuid.isNullOrBlank()
 
             val localEntry = when {
@@ -442,7 +450,8 @@ class DataRepository(
                 backupEntry.updatedAt > localEntry.updatedAt -> updateTreatment(
                     backupEntry.copy(id = localEntry.id, entryUuid = localEntry.entryUuid)
                 )
-                else -> Unit // local entry is same or newer: keep it
+                // local entry is same or newer: keep it
+                else -> Unit
             }
         }
     }
@@ -457,7 +466,8 @@ class DataRepository(
     suspend fun importImportantDates(importantDates: List<ImportantDate>) =
         withContext(Dispatchers.IO) {
             importantDates.forEach { backupEntry ->
-                val backupUuid: String? = backupEntry.entryUuid // Gson may leave it null for old backups
+                // Gson may leave it null for old backups
+                val backupUuid: String? = backupEntry.entryUuid
                 val hasUuid = !backupUuid.isNullOrBlank()
 
                 val localEntry = when {
@@ -478,7 +488,8 @@ class DataRepository(
                     backupEntry.updatedAt > localEntry.updatedAt -> updateImportantDate(
                         backupEntry.copy(id = localEntry.id, entryUuid = localEntry.entryUuid)
                     )
-                    else -> Unit // local entry is same or newer: keep it
+                    // local entry is same or newer: keep it
+                    else -> Unit
                 }
             }
         }
@@ -493,7 +504,8 @@ class DataRepository(
     suspend fun importMedicalDevices(medicalDevices: List<MedicalDevice>) =
         withContext(Dispatchers.IO) {
             medicalDevices.forEach { backupEntry ->
-                val backupUuid: String? = backupEntry.entryUuid // Gson may leave it null for old backups
+                // Gson may leave it null for old backups
+                val backupUuid: String? = backupEntry.entryUuid
                 val hasUuid = !backupUuid.isNullOrBlank()
 
                 val localEntry = when {
@@ -515,7 +527,8 @@ class DataRepository(
                     backupEntry.updatedAt > localEntry.updatedAt -> updateDevice(
                         backupEntry.copy(id = localEntry.id, entryUuid = localEntry.entryUuid)
                     )
-                    else -> Unit // local entry is same or newer: keep it
+                    // local entry is same or newer: keep it
+                    else -> Unit
                 }
             }
         }
