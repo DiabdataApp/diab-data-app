@@ -8,9 +8,9 @@ import com.diabdata.shared.R as shared
 
 /**
  * Represents a type of medical devices.
- * @param displayNameRes The string resource ID for the devices's display name.
- * @param baseColor The base color of the devices's icon.
- * @param iconRes The drawable resource ID for the devices's icon.
+ * @param displayNameRes The string resource ID for the device's display name.
+ * @param baseColor The base color of the device's icon.
+ * @param iconRes The drawable resource ID for the device's icon.
  */
 enum class MedicalDeviceInfoType(
     @param:StringRes
