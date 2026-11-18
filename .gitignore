@@ -60,3 +60,5 @@ captures/
 *.swp
 *.tmp
 /.artifacts/
+*PLAN.md
+*INVESTIGATION.md
