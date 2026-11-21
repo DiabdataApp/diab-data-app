@@ -36,6 +36,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.diabdata.R
 import com.diabdata.core.utils.ui.SvgIcon
+import com.diabdata.shared.R as shared
 import com.mikepenz.aboutlibraries.entity.Library
 import com.mikepenz.aboutlibraries.ui.compose.LibraryDefaults
 import com.mikepenz.aboutlibraries.ui.compose.android.produceLibraries
@@ -45,7 +46,6 @@ import com.mikepenz.aboutlibraries.ui.compose.m3.style.m3VariantColors
 import com.mikepenz.aboutlibraries.ui.compose.style.LicenseHueResolver
 import com.mikepenz.aboutlibraries.ui.compose.variant.LibrariesVariant
 import com.mikepenz.aboutlibraries.ui.compose.variant.LibraryActionKind
-import com.diabdata.shared.R as shared
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -108,7 +108,9 @@ fun LicensesDialog(onDismiss: () -> Unit) {
                     sheetLibrary = null,
                     onSheetLibraryChange = {},
                     onActionClick = { library, kind ->
-                        if (kind == LibraryActionKind.License && !library.licenses.firstOrNull()?.licenseContent.isNullOrBlank()) {
+                        if (kind == LibraryActionKind.License &&
+                            !library.licenses.firstOrNull()?.licenseContent.isNullOrBlank()
+                        ) {
                             libraryWithOpenLicense = library
                             true
                         } else {
@@ -122,7 +124,7 @@ fun LicensesDialog(onDismiss: () -> Unit) {
                         headerDivider = MaterialTheme.colorScheme.outline,
                         licenseBadgeContainer = MaterialTheme.colorScheme.primary,
                         licenseBadgeContent = MaterialTheme.colorScheme.onPrimary,
-                        licenseHueResolver = primaryLicenseHueResolver,
+                        licenseHueResolver = primaryLicenseHueResolver
                     ),
                     colors = LibraryDefaults.libraryColors(
                         libraryBackgroundColor = Color.Transparent,
