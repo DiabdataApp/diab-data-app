@@ -16,13 +16,16 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -34,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import com.diabdata.R
 import com.diabdata.core.utils.ui.SvgIcon
 import com.diabdata.shared.R as shared
+import com.mikepenz.aboutlibraries.entity.Library
 import com.mikepenz.aboutlibraries.ui.compose.LibraryDefaults
 import com.mikepenz.aboutlibraries.ui.compose.android.produceLibraries
 import com.mikepenz.aboutlibraries.ui.compose.m3.LibrariesContainer
@@ -41,7 +45,9 @@ import com.mikepenz.aboutlibraries.ui.compose.m3.libraryColors
 import com.mikepenz.aboutlibraries.ui.compose.m3.style.m3VariantColors
 import com.mikepenz.aboutlibraries.ui.compose.style.LicenseHueResolver
 import com.mikepenz.aboutlibraries.ui.compose.variant.LibrariesVariant
+import com.mikepenz.aboutlibraries.ui.compose.variant.LibraryActionKind
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LicensesDialog(onDismiss: () -> Unit) {
     val closeButtonText = stringResource(shared.string.common_close)
@@ -51,6 +57,7 @@ fun LicensesDialog(onDismiss: () -> Unit) {
     val maxHeight = with(density) { windowInfo.containerSize.height.toDp() * 0.6f }
     val primaryColor = MaterialTheme.colorScheme.primary
     val primaryLicenseHueResolver = remember(primaryColor) { LicenseHueResolver { primaryColor } }
+    var libraryWithOpenLicense by remember { mutableStateOf<Library?>(null) }
 
     Box(
         modifier = Modifier
@@ -96,6 +103,20 @@ fun LicensesDialog(onDismiss: () -> Unit) {
 
                 LibrariesContainer(
                     libraries = libraries,
+                    dialogLibrary = libraryWithOpenLicense,
+                    onDialogLibraryChange = { libraryWithOpenLicense = it },
+                    sheetLibrary = null,
+                    onSheetLibraryChange = {},
+                    onActionClick = { library, kind ->
+                        if (kind == LibraryActionKind.License &&
+                            !library.licenses.firstOrNull()?.licenseContent.isNullOrBlank()
+                        ) {
+                            libraryWithOpenLicense = library
+                            true
+                        } else {
+                            false
+                        }
+                    },
                     variant = LibrariesVariant.Refined,
                     variantColors = LibraryDefaults.m3VariantColors(
                         headerBackground = Color.Transparent,
@@ -107,7 +128,10 @@ fun LicensesDialog(onDismiss: () -> Unit) {
                     ),
                     colors = LibraryDefaults.libraryColors(
                         libraryBackgroundColor = Color.Transparent,
-                        libraryContentColor = MaterialTheme.colorScheme.onSurface
+                        libraryContentColor = MaterialTheme.colorScheme.onSurface,
+                        dialogBackgroundColor = MaterialTheme.colorScheme.surfaceContainerHigh,
+                        dialogContentColor = MaterialTheme.colorScheme.onSurface,
+                        dialogConfirmButtonColor = MaterialTheme.colorScheme.primary
                     ),
                     modifier = Modifier
                         .fillMaxWidth()

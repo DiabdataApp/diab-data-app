@@ -1,0 +1,21 @@
+{
+    "uniqueId": "com.google.material:material-symbols",
+    "name": "Google Material Symbols",
+    "description": "Material Symbols set by Google: some used as is, some adapted to the application's needs and some modified or recombined for DiabData",
+    "website": "https://fonts.google.com/icons",
+    "developers": [
+        {
+            "name": "Google"
+        }
+    ],
+    "organization": {
+        "name": "Google"
+    },
+    "scm": {
+        "connection": "scm:git:https://github.com/google/material-design-icons",
+        "url": "https://github.com/google/material-design-icons"
+    },
+    "licenses": [
+        "Apache-2.0"
+    ]
+}
