@@ -60,6 +60,7 @@ foundationLayout = "1.12.1"
 animationCore = "1.12.1"
 ktlintGradle = "14.2.0"
 wearComposeMaterial3 = "1.7.2"
+wearComposeNavigation = "1.7.2"
 
 [libraries]
 # Camera
@@ -182,6 +183,7 @@ androidx-room-testing = { group = "androidx.room", name = "room-testing", versio
 androidx-compose-foundation-layout = { group = "androidx.compose.foundation", name = "foundation-layout", version.ref = "foundationLayout" }
 androidx-compose-animation-core = { group = "androidx.compose.animation", name = "animation-core", version.ref = "animationCore" }
 androidx-wear-compose-material3 = { group = "androidx.wear.compose", name = "compose-material3", version.ref = "wearComposeMaterial3" }
+androidx-wear-compose-navigation = { group = "androidx.wear.compose", name = "compose-navigation", version.ref = "wearComposeNavigation" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

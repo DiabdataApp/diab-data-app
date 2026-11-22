@@ -88,6 +88,7 @@ android {
 dependencies {
     // Platform BOMs for consistent versions
     implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.wear.compose.navigation)
 
     // Compose
     implementation(libs.androidx.ui)

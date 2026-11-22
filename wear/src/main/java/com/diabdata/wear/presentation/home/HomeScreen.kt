@@ -20,41 +20,39 @@ import androidx.wear.compose.material3.Text
 import androidx.wear.compose.material3.TimeText
 import com.diabdata.wear.BuildConfig
 import com.diabdata.wear.R
-import com.diabdata.wear.presentation.theme.DiabDataTheme
 
 @Composable
 fun HomeScreen(onLicensesClick: () -> Unit) {
     val versionNumber = BuildConfig.VERSION_NAME
     val buildType = BuildConfig.BUILD_TYPE
-    DiabDataTheme {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colorScheme.background),
-            contentAlignment = Alignment.Center
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background),
+        contentAlignment = Alignment.Center
+    ) {
+        TimeText()
+        Column(
+            Modifier
+                .fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = spacedBy(10.dp)
         ) {
-            TimeText()
-            Column(
-                Modifier
-                    .fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = spacedBy(10.dp)
-            ) {
-                Image(
-                    painter = painterResource(
-                        com.diabdata.shared.R.drawable.ic_logo_outlined
-                    ),
-                    contentDescription = null,
-                    modifier = Modifier.size(30.dp)
-                )
-                Text(stringResource(R.string.version_label, versionNumber, buildType))
-                Button(
-                    onClick = {
-                        onLicensesClick()
-                    },
-                    label = { Text(stringResource(R.string.show_licenses_button_label)) }
-                )
-            }
+            Image(
+                painter = painterResource(
+                    com.diabdata.shared.R.drawable.ic_logo_outlined
+                ),
+                contentDescription = null,
+                modifier = Modifier.size(30.dp)
+            )
+            Text(stringResource(R.string.version_label, versionNumber, buildType))
+            Button(
+                onClick = {
+                    onLicensesClick()
+                },
+                label = { Text(stringResource(R.string.show_licenses_button_label)) }
+            )
         }
     }
 }
