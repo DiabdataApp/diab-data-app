@@ -1,0 +1,21 @@
+{
+    "uniqueId": "com.google.jsinterop:jsinterop-annotations",
+    "name": "JsInterop Annotations",
+    "description": "This library is included in Google Play services and provides annotations for Java ↔ JavaScript interoperability.",
+    "website": "https://github.com/google/jsinterop-annotations",
+    "developers": [
+        {
+            "name": "Google"
+        }
+    ],
+    "organization": {
+        "name": "Google"
+    },
+    "scm": {
+        "connection": "scm:git:https://github.com/google/jsinterop-annotations",
+        "url": "https://github.com/google/jsinterop-annotations"
+    },
+    "licenses": [
+        "Apache-2.0"
+    ]
+}
