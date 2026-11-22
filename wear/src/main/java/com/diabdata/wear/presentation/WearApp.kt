@@ -1,6 +1,7 @@
 package com.diabdata.wear.presentation
 
 import androidx.compose.runtime.Composable
+import androidx.wear.compose.material3.AppScaffold
 import androidx.wear.compose.navigation.SwipeDismissableNavHost
 import androidx.wear.compose.navigation.composable
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
@@ -13,12 +14,16 @@ fun WearApp() {
     DiabDataTheme {
         val navController = rememberSwipeDismissableNavController()
 
-        SwipeDismissableNavHost(navController, "home") {
-            composable("home") {
-                HomeScreen(onLicensesClick = { navController.navigate("licenses") })
-            }
-            composable("licenses") {
-                LicensesScreen()
+        AppScaffold {
+            SwipeDismissableNavHost(navController, "home") {
+                composable("home") {
+                    HomeScreen(
+                        onLicensesClick = { navController.navigate("licenses") }
+                    )
+                }
+                composable("licenses") {
+                    LicensesScreen()
+                }
             }
         }
     }
