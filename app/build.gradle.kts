@@ -101,7 +101,6 @@ android {
             excludes += setOf(
                 "META-INF/INDEX.LIST",
                 "META-INF/MANIFEST.MF",
-                "META-INF/io.netty.versions.properties",
                 "META-INF/license/**",
                 "META-INF/native-image/**"
             )
@@ -241,12 +240,6 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
-
-    // KTOR SERVER ON DEVICE [WILL BE DEPRECATED AFTER MIGRATION TO RELAY SERVER]
-    implementation(libs.ktor.server.core)
-    implementation(libs.ktor.server.netty)
-    implementation(libs.ktor.server.content.negotiation)
-    implementation(libs.ktor.server.cors)
 
     // KTOR CLIENT WEBSOCKET [FOR THE NEW RELAY SERVER SYSTEM]
     implementation(libs.ktor.client.core)
