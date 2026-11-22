@@ -1,0 +1,9 @@
+{
+    "uniqueId": "com.google.android.gms.thirdparty:jsr250-api",
+    "name": "JSR 250",
+    "description": "This library is included in Google Play services and provides the standard Java common annotations (@PostConstruct, @PreDestroy, @Resource…).",
+    "website": "https://jcp.org/en/jsr/detail?id=250",
+    "licenses": [
+        "Apache-2.0"
+    ]
+}
