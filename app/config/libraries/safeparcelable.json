@@ -1,5 +1,5 @@
 {
-    "uniqueId": "com.google.android.thirdparty.gms:safeparcelable",
+    "uniqueId": "com.google.android.gms.thirdparty:safeparcelable",
     "name": "SafeParcelable library",
     "description": "This library is included in Google Play services and is used internally to serialize objects.",
     "developers": [

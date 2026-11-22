@@ -1,5 +1,5 @@
 {
-    "uniqueId": "com.google.android.thirdparty.gms:gsfclient",
+    "uniqueId": "com.google.android.gms.thirdparty:gsfclient",
     "name": "gsfclient",
     "description": "This library is included in Google Play services and is an internal client for Google services.",
     "developers": [
