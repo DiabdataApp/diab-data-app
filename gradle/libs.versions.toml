@@ -22,7 +22,6 @@ composeBom = "2026.09.00"
 material = "1.14.0"
 material3Expressive = "1.5.0-beta01"
 navigationCompose = "2.10.2"
-protobufJavalite = "4.36.2"
 roomRuntime = "2.8.5"
 sqlcipherAndroid = "4.19.1"
 tilesTesting = "1.6.2"
@@ -108,10 +107,6 @@ androidx-watchface = { module = "androidx.wear.watchface:watchface", version.ref
 androidx-wear = { module = "androidx.wear:wear", version.ref = "wear" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
 ktor-serialization-gson = { module = "io.ktor:ktor-serialization-gson", version.ref = "ktor" }
-ktor-server-content-negotiation = { module = "io.ktor:ktor-server-content-negotiation", version.ref = "ktor" }
-ktor-server-core = { module = "io.ktor:ktor-server-core", version.ref = "ktor" }
-ktor-server-cors = { module = "io.ktor:ktor-server-cors", version.ref = "ktor" }
-ktor-server-netty = { module = "io.ktor:ktor-server-netty", version.ref = "ktor" }
 ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
 ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
 ktor-client-websockets = { module = "io.ktor:ktor-client-websockets", version.ref = "ktor" }
@@ -153,7 +148,6 @@ zxing-core = { group = "com.google.zxing", name = "core", version.ref = "zxing" 
 zxing-android-embedded = { module = "com.journeyapps:zxing-android-embedded", version.ref = "zxingAndroidEmbedded" }
 
 # Other
-protobuf-javalite = { module = "com.google.protobuf:protobuf-javalite", version.ref = "protobufJavalite" }
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 
 # Test
