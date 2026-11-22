@@ -81,6 +81,7 @@ android {
     useLibrary("wear-sdk")
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
@@ -96,6 +97,7 @@ dependencies {
 
     // Wear specific
     implementation(libs.androidx.core.splashscreen)
+    implementation(libs.androidx.wear.compose.material3)
     implementation(libs.horologist.compose.tools)
     implementation(libs.androidx.wear.tooling.preview)
     implementation(libs.play.services.wearable)
