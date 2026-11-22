@@ -1,5 +1,0 @@
-<resources>
-    <string name="hello_world">From the Square world,\nHello, %1$s!</string>
-    <string name="tile_label">Example tile</string>
-    <string name="complication_label">Devices expiring soon</string>
-</resources>
