@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlint.gradle)
+    alias(libs.plugins.aboutLibraries)
 }
 
 val localProperties = Properties()
@@ -71,15 +72,23 @@ android {
         }
     }
 
+    aboutLibraries {
+        collect {
+            configPath = file("config")
+        }
+    }
+
     useLibrary("wear-sdk")
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
 dependencies {
     // Platform BOMs for consistent versions
     implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.wear.compose.navigation)
 
     // Compose
     implementation(libs.androidx.ui)
@@ -89,6 +98,7 @@ dependencies {
 
     // Wear specific
     implementation(libs.androidx.core.splashscreen)
+    implementation(libs.androidx.wear.compose.material3)
     implementation(libs.horologist.compose.tools)
     implementation(libs.androidx.wear.tooling.preview)
     implementation(libs.play.services.wearable)
@@ -125,6 +135,10 @@ dependencies {
     debugImplementation(libs.androidx.tiles.renderer)
     debugImplementation(libs.tiles.tooling.preview)
 
+    // Licenses
+    implementation(libs.aboutlibraries.core)
+
+    // Tests
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
     testImplementation(libs.androidx.tiles.testing)

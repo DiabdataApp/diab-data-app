@@ -1,7 +1,9 @@
 package com.diabdata.wear.presentation.theme
 
 import androidx.compose.runtime.Composable
-import androidx.wear.compose.material.MaterialTheme
+import androidx.compose.ui.graphics.Color
+import androidx.wear.compose.material3.ColorScheme
+import androidx.wear.compose.material3.MaterialTheme
 
 @Composable
 fun DiabDataTheme(content: @Composable () -> Unit) {
@@ -10,6 +12,9 @@ fun DiabDataTheme(content: @Composable () -> Unit) {
      * See: https://developer.android.com/jetpack/compose/designsystems/custom
      */
     MaterialTheme(
-        content = content
+        content = content,
+        colorScheme = ColorScheme(
+            primary = Color(0xFF0DAEFF)
+        )
     )
 }

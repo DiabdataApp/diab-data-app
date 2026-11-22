@@ -3,4 +3,6 @@
     <string name="hello_world">From the Square world,\nHello, %1$s!</string>
     <string name="tile_label">Hello, %1$s!</string>
     <string name="complication_label">Appareils à remplacer</string>
+    <string name="version_label">"v%1$s (%2$s)"</string>
+    <string name="show_licenses_button_label">"Licences"</string>
 </resources>

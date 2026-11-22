@@ -1,0 +1,8 @@
+{
+    "uniqueId": "com.diabdata:third-party-notices",
+    "name": "Third-party notices",
+    "description": "This includes the NOTICE files for specific libraries that require them to be included.",
+    "licenses": [
+        "third-party-notices"
+    ]
+}

@@ -3,4 +3,6 @@
     <string name="tile_label">Example tile</string>
     <string name="complication_label">Devices expiring soon</string>
     <string name="app_name" translatable="false">Diabdata</string>
+    <string name="version_label">"v%1$s (%2$s)"</string>
+    <string name="show_licenses_button_label">"Licenses"</string>
 </resources>

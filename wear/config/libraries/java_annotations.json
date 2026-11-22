@@ -1,0 +1,16 @@
+{
+    "uniqueId": "com.google.android.gms.thirdparty:java-annotations",
+    "name": "java_annotations",
+    "description": "This library is included in Google Play services and provides internal Java annotations.",
+    "developers": [
+        {
+            "name": "Google"
+        }
+    ],
+    "organization": {
+        "name": "Google"
+    },
+    "licenses": [
+        "Apache-2.0"
+    ]
+}
