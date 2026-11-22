@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlint.gradle)
+    alias(libs.plugins.aboutLibraries)
 }
 
 val localProperties = Properties()
@@ -125,6 +126,10 @@ dependencies {
     debugImplementation(libs.androidx.tiles.renderer)
     debugImplementation(libs.tiles.tooling.preview)
 
+    // Licenses
+    implementation(libs.aboutlibraries.core)
+
+    // Tests
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
     testImplementation(libs.androidx.tiles.testing)
