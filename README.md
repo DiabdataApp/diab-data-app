@@ -334,6 +334,52 @@ jq -Rs '{hash: "OFL-1.1", name: "SIL Open Font License 1.1", url: "https://openf
   licenses/google_sans_flex_OFL.txt > app/config/licenses/OFL-1.1.json
 ```
 
+### Updating Google Play services
+
+Google Play services libraries (`com.google.android.gms:play-services-*`) bundle third-party open-source
+libraries. AboutLibraries only sees their POM, which declares the "Android Software Development Kit License",
+so their bundled libraries are declared manually in `app/config/libraries/`, with a `uniqueId` starting with
+`com.google.android.gms.thirdparty:` (or with their real Maven coordinates when they have some).
+
+Each `.aar` lists its bundled libraries in two files:
+
+- `third_party_licenses.json`: an index of `{"Library name": {"start": …, "length": …}}`
+- `third_party_licenses.txt`: all the license texts, one after the other
+
+**Whenever you update a Play services dependency:**
+
+1. Build once so Gradle downloads the new versions, then list every library bundled in the `.aar` files:
+
+```bash
+  find ~/.gradle/caches/modules-2/files-2.1/com.google.android.gms -name "play-services-*.aar" \
+    -exec sh -c 'unzip -p "$1" third_party_licenses.json | jq -r "keys[]"' _ {} \; | sort -u
+```
+
+The Gradle cache may still hold older versions: only the versions declared in `gradle/libs.versions.toml`
+matter.
+
+2. Compare the list with the licenses screen. A library is already covered if the app depends on it
+   directly (Guava, Kotlin, Dagger…) or if it has a manual entry in `app/config/libraries/`.
+
+3. For each missing library, read the start of its license text, using the `start` and `length` values
+   from the index (`tail` counts from 1, hence the `+ 1`):
+
+```bash
+  unzip -p <path/to/file.aar> third_party_licenses.txt | tail -c +$((start + 1)) | head -c "$length" | head -n 15
+```
+
+4. Add a manual entry in `app/config/libraries/`:
+    - **Apache 2.0**: use `"licenses": ["Apache-2.0"]`, its text is already bundled.
+    - **Any other license** (MIT, BSD…): also add a license file in `app/config/licenses/` with the full
+      text, copyright line included, and a **unique** `hash` (e.g. `MIT-animal-sniffer`). Never reuse a
+      generic hash like `MIT`: the plugin would merge it with the existing license and replace the text
+      shown for other libraries.
+
+5. Check the licenses screen: each new entry opens its license text, and existing entries are unchanged.
+
+Libraries currently declared manually for Play services: Animal Sniffer (MIT), apksig, gsfclient,
+java_annotations, JsInterop Annotations, JSR 250 and SafeParcelable library (Apache 2.0).
+
 <!-- ROADMAP -->
 
 ## Roadmap
