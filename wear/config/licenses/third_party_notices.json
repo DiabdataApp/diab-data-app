@@ -1,0 +1,5 @@
+{
+  "hash": "third-party-notices",
+  "name": "Third-party notices",
+  "content": "KOTLINX.COROUTINES\n==================\n\n(via androidx.concurrent:concurrent-futures-ktx 1.3.0)\nCopyright 2016-2024 JetBrains s.r.o and contributors"
+}

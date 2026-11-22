@@ -72,6 +72,12 @@ android {
         }
     }
 
+    aboutLibraries {
+        collect {
+            configPath = file("config")
+        }
+    }
+
     useLibrary("wear-sdk")
     buildFeatures {
         compose = true

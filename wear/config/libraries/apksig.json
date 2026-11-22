@@ -1,0 +1,17 @@
+{
+    "uniqueId": "com.android.tools.build:apksig",
+    "name": "apksig",
+    "description": "This library is included in Google Play services and is used to sign APK files.",
+    "website": "https://android.googlesource.com/platform/tools/apksig",
+    "developers": [
+        {
+            "name": "The Android Open Source Project"
+        }
+    ],
+    "organization": {
+        "name": "The Android Open Source Project"
+    },
+    "licenses": [
+        "Apache-2.0"
+    ]
+}

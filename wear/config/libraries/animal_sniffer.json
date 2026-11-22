@@ -1,0 +1,14 @@
+{
+    "uniqueId": "org.codehaus.mojo:animal-sniffer-annotations",
+    "name": "Animal Sniffer",
+    "description": "This library is included in Google Play services and is used to check the Java API compatibility.",
+    "website": "https://www.mojohaus.org/animal-sniffer/",
+    "developers": [
+        {
+            "name": "Kohsuke Kawaguchi and codehaus.org"
+        }
+    ],
+    "licenses": [
+        "MIT-animal-sniffer"
+    ]
+}
