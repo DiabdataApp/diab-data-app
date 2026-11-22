@@ -107,7 +107,6 @@ androidx-watchface = { module = "androidx.wear.watchface:watchface", version.ref
 androidx-wear = { module = "androidx.wear:wear", version.ref = "wear" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
 ktor-serialization-gson = { module = "io.ktor:ktor-serialization-gson", version.ref = "ktor" }
-ktor-server-content-negotiation = { module = "io.ktor:ktor-server-content-negotiation", version.ref = "ktor" }
 ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
 ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
 ktor-client-websockets = { module = "io.ktor:ktor-client-websockets", version.ref = "ktor" }
